@@ -90,7 +90,7 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/favicon.ico",
+              "src/RMS.png",
               "src/assets"
             ],
             "styles": [
@@ -101,5 +101,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "16cf4cef-81c1-4171-aa38-c228bf0e9adf"
   }
 }

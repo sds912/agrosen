@@ -1,5 +1,86 @@
-<div style="width: 1920px; height: 1205px; position: relative; background: #F7F9FA">
-    <app-menu></app-menu>
-    
-</div>
- <router-outlet></router-outlet>
+<!-- app.component.html or any relevant layout component -->
+<nz-layout>
+   <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+     <div class="logo text-center py-3">
+       <img src="assets/RMS.png" />
+     </div>
+     <ul nz-menu nzTheme="light" nzMode="inline">
+       <li nz-menu-item routerLink="/admin/dashboard">
+         <span nz-icon nzType="pie-chart"></span>
+         <span>Dashboard</span>
+       </li>
+       <li nz-submenu nzTitle="Alarmes" nzIcon="notification">
+         <ul>
+           <li nz-menu-item routerLink="/admin/alarmes">Toutes les alarmes</li>
+           <li nz-menu-item routerLink="/admin/alarmes?state=active">Alarmes en cours</li>
+           <li nz-menu-item routerLink="/admin/alarmes?state=closed">Alarmes fermées</li>
+         </ul>
+       </li>
+       <li nz-menu-item routerLink="/admin/lue">
+         <span nz-icon nzType="database"></span>
+         <span>Données lues</span>
+       </li>
+       <li nz-menu-item routerLink="/admin/map">
+         <span nz-icon nzType="flag"></span>
+         <span>Vue carte</span>
+       </li>
+       <li nz-menu-item routerLink="/admin/equipments">
+         <span nz-icon nzType="product"></span>
+         <span>Equipements</span>
+       </li>
+       <li nz-menu-item routerLink="/admin/sites">
+         <span nz-icon nzType="home"></span>
+         <span>Sites en service</span>
+       </li>
+       <li nz-submenu nzTitle="Reporting" nzIcon="team">
+         <ul>
+           <li nz-menu-item routerLink="/admin/reporting/item1">Item 1</li>
+           <li nz-menu-item routerLink="/admin/reporting/item2">Item 2</li>
+         </ul>
+       </li>
+     </ul>
+   </nz-sider>
+   <nz-layout>
+     <nz-header>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <span
+          
+         class="trigger"
+         nz-icon
+         [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+         (click)="isCollapsed = !isCollapsed"
+       ></span>
+        </div>
+        <div>
+          <a *ngIf="currentUser" nz-dropdown [nzDropdownMenu]="menu">
+            <div class="d-flex">
+              <div>
+                <nz-avatar nzIcon="user"  ></nz-avatar>
+              </div>
+              <div class="ms-2" style="color: #000000;font-weight: bold;">
+                {{currentUser!.username??"unknown"}}
+                <span nz-icon nzType="down"></span>
+              </div>
+            </div>
+            
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>Mon compte</li>
+              <li nz-menu-item nzDanger>Déconnexion</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+       
+       
+     </nz-header>
+     <nz-content>
+       <div class="inner-content">
+         <router-outlet></router-outlet>
+       </div>
+     </nz-content>
+   </nz-layout>
+ </nz-layout>
+ 

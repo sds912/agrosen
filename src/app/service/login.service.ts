@@ -1,6 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../environments/environment.development';
+import { Observable, tap } from 'rxjs';
+
+const apiBaseUrl = environment.BaseUrl;
 
 
 @Injectable({
@@ -11,13 +15,20 @@ export class LoginService {
   roles:any
   username:any
   accessToken!:any
- constructor(private http:HttpClient) { }
+  refreshToken!: any;
+  currentUser: any;
+ constructor(private http:HttpClient) { 
+  const accessToken = localStorage.getItem('access_token')??"";
+  const refreshToken = localStorage.getItem('refesh_token')??"";
+  this.setTokens(accessToken, refreshToken);
+  this.loardProfile(this.getAccessToken())
+ }
 
  public login(username : String , password : String){
        // let params= new HttpParams().set("username",username).set("password",password)
        let paramsMap = new Map<any,any>();
-         paramsMap.set('username',username);
-         paramsMap.set('password',password);
+         paramsMap.set('identifier',username);
+         paramsMap.set('pass',password);
 
      let params = new HttpParams();
      paramsMap.forEach((value: any, key: any) => {
@@ -26,15 +37,22 @@ export class LoginService {
   let options={
    headers: new HttpHeaders().set("Content-type","application/x-www-form-urlencoded")
  }
-        return this.http.post("http://localhost:8080/auth/login",params,options)
+
+        const data = {
+           'identifier': username,
+           'pass': password
+        }
+
+        
+        return this.http.post(`${apiBaseUrl}/auth/signin`,data);
  }
 
- public loardProfile(data:any){
+ public loardProfile(token:any){
    this.isAuthenticate=true;
-   this.accessToken = data['access-token']
-   let decodedJwt:any =jwtDecode(this.accessToken);
-   this.username=decodedJwt.sub;
-   this.roles=decodedJwt.scope;
+   let decodedJwt:any = jwtDecode(token);
+   this.username=decodedJwt.username;
+   this.roles=decodedJwt.role;
+   this.currentUser = decodedJwt;
    
  }
  public logout(){
@@ -42,9 +60,29 @@ export class LoginService {
   this.accessToken=undefined;
   this.username=undefined;
   this.roles=undefined;
-  window.localStorage.setItem("jwt-token",this.accessToken)
+  localStorage.clear();
   
  }
+
+ setTokens(accessToken: string, refreshToken: string): void {
+  this.accessToken = accessToken;
+  this.refreshToken = refreshToken;
+}
+
+getAccessToken(): string {
+  return this.accessToken;
+}
+
+getRefreshToken(): string {
+  return this.accessToken;
+}
+
+refreshAccessToken(): Observable<any> {
+  return this.http.post(`${apiBaseUrl}/api/auth/refresh-token`, { token: this.refreshToken })
+    .pipe(tap((response: any) => {
+      this.accessToken = response.accessToken;
+    }));
+}
 
  
 }

@@ -28,8 +28,10 @@ export class LoginComponent implements OnInit{
    let username=this.formLogin.value.username;
    let password= this.formLogin.value.password;
    this.authservice.login(username,password).subscribe({
-     next:data=>{
-       this.authservice.loardProfile(data)
+     next:(data: any)=>{
+      localStorage.setItem('access_token', data['access_token']);
+      localStorage.setItem('refresh_token', data['access_token']);
+       this.authservice.loardProfile(data['access_token'])
        this.router.navigateByUrl("/admin")
      },
      error:err=>{

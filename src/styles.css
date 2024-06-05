@@ -1,0 +1,51 @@
+html, body{
+    max-width: 100vw !important;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    height: 100vh;
+}
+
+.amin-main-layout{
+    width: 100vw !important; 
+    height: 100vh !important; 
+    position: relative; 
+    background: #F7F9FA;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    
+
+}
+
+.amin-main-layout .side-bar{
+
+    width: 300px;
+    background-color: white;
+    height: 100vh;
+    min-height: 100vh;
+
+}
+
+.amin-main-layout .body{
+    width: calc(100vw - 300px);
+    min-height: 100vh;
+}
+
+.ant-layout-header, .ant-layout-sider{
+    background-color: #FFFFFF;
+}
+
+.ant-layout-content{
+    min-height: calc(100vh - 64px);
+    background-color: #F7F9FA;
+    padding: 30px;
+}
+
+.ant-input{
+    font-weight: 500;
+}
+
+
+

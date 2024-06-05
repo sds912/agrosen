@@ -1,0 +1,164 @@
+
+<div class="container p-4" style="width: 100%;">
+    <form style="width: 100%;" nz-form [formGroup]="alarmForm!" (ngSubmit)="submitForm()">
+        <div class="d-flex justify-content-between">
+            <div class="alarm-tiket-form-left">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="number">Number</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The number is not valid">
+                        <input nz-input id="number" formControlName="number" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzRequired>Site</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+                        <nz-input-group nzPrefixIcon="search">
+                            <input type="text" nz-input [nzAutocomplete]="sites" formControlName="site" placeholder="Search...">
+                        </nz-input-group>
+                        <nz-autocomplete #sites>
+                            <nz-auto-option *ngFor="let option of filteredSites" [nzValue]="option.siteId" >{{ option.siteId }}</nz-auto-option>
+                        </nz-autocomplete>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10">Site Access Request</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+                        <nz-input-group nzPrefixIcon="search">
+                            <input type="text" nz-input [nzAutocomplete]="siteAccessRequest" formControlName="siteAccessRequest" placeholder="Search...">
+                        </nz-input-group>
+                        <nz-autocomplete #siteAccessRequest>
+                            <nz-auto-option *ngFor="let option of filteredSiteAccessRequests" [nzValue]="option">{{ option }}</nz-auto-option>
+                        </nz-autocomplete>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10">Priority</nz-form-label>
+                    <nz-form-control [nzXs]="14" nzErrorTip="The input is not valid">
+                        <nz-select name="select-validate" formControlName="priority">
+                            <nz-option nzValue="CRITICAL" nzLabel="CRITICAL"></nz-option>
+                            <nz-option nzValue="HIGH" nzLabel="HIGH"></nz-option>
+                            <nz-option nzValue="MODERATE" nzLabel="MODERATE"></nz-option>
+                            <nz-option nzValue="LOW" nzLabel="LOW"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10">Alarm Checklist</nz-form-label>
+                    <nz-form-control [nzXs]="14" nzErrorTip="The input is not valid">
+                        <label nz-checkbox formControlName="alarmChecklist"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10">P0P4Tab</nz-form-label>
+                    <nz-form-control [nzXs]="14" nzErrorTip="The input is not valid">
+                        <label nz-checkbox formControlName="p0P4Tab"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10">SWO auto Created</nz-form-label>
+                    <nz-form-control [nzXs]="14" nzErrorTip="The input is not valid">
+                        <label nz-checkbox formControlName="swoAutoCreated"></label>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10">Task Reference</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+                        <nz-input-group nzPrefixIcon="search">
+                            <input type="text" nz-input [nzAutocomplete]="taskRef" formControlName="taskReference" placeholder="Search...">
+                        </nz-input-group>
+                        <nz-autocomplete #taskRef>
+                            <nz-auto-option *ngFor="let option of filteredTaskRefs" [nzValue]="option">{{ option }}</nz-auto-option>
+                        </nz-autocomplete>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzFor="datePicker">Actuel WO Date</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-date-picker style="width: 100%;" formControlName="woDate" nzFormat="yyyy-MM-dd" nzShowTime></nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <div class="alarm-tiket-form-right">
+                <nz-form-item>
+                    <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="state">State</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+                        <input nz-input id="state" formControlName="state" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10">Assignment group</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+                        <nz-input-group nzPrefixIcon="search">
+                            <input type="text" nz-input [nzAutocomplete]="assignmentGroup" formControlName="assignmentGroup" placeholder="Search...">
+                        </nz-input-group>
+                        <nz-autocomplete #assignmentGroup>
+                            <nz-auto-option *ngFor="let option of filteredAssignmentGroups" [nzValue]="option.type">{{ option.type }}</nz-auto-option>
+                        </nz-autocomplete>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="10" nzRequired>Assigned to</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+                        <nz-input-group nzPrefixIcon="search">
+                            <input type="text" nz-input [nzAutocomplete]="assignedTo" formControlName="assignedTo" placeholder="Search...">
+                        </nz-input-group>
+                        <nz-autocomplete #assignedTo>
+                            <nz-auto-option *ngFor="let option of filteredAssignedTo" [nzValue]="option.firstName + ' ' + option.lastName">{{ option.firstName + " " + option.lastName }}</nz-auto-option>
+                        </nz-autocomplete>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                    <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="gpsLocation">GPS location</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+                        <input nz-input id="gpsLocation" formControlName="gpsLocation" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <nz-form-item style="width: 100%;">
+                <nz-form-label [nzSm]="4" nzFor="shortDescription">Short description</nz-form-label>
+                <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="The input is not valid">
+                    <input nz-input id="shortDescription" formControlName="shortDescription" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item style="width: 100%;">
+                <nz-form-label [nzSm]="4" nzFor="partShortDescription">Part Short description</nz-form-label>
+                <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="The input is not valid">
+                    <input nz-input id="partShortDescription" formControlName="partShortDescription" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item style="width: 100%;">
+                <nz-form-label [nzSm]="4" nzFor="description">Description</nz-form-label>
+                <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="The input is not valid">
+                    <textarea nz-input formControlName="description" placeholder="Autosize height with minimum and maximum number of lines" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item style="width: 100%;">
+                <nz-form-label [nzSm]="4" nzFor="workNote">Work Note</nz-form-label>
+                <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="The input is not valid">
+                    <textarea nz-input formControlName="workNote" placeholder="Autosize height with minimum and maximum number of lines" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <button nz-button class="login-form-button login-form-margin" >Submit</button>
+
+    </form>
+</div>

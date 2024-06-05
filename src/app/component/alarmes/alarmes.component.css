@@ -40,3 +40,31 @@ table{
   border-radius: 20px !important; 
   border: transparent !important;
 }
+
+.detail-btn{
+  background-color: #20B2E3;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  border-radius: 4px;
+
+}
+
+.edit-btn{
+  background-color: #FFA800;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  border-radius: 4px;
+
+
+}
+
+.delete-btn{
+  background-color: #F44336;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  border-radius: 4px;
+
+}

@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { donutModel } from '../model/donutModel';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.development';
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class DonutService {
-  private apiBaseUrl = 'http://localhost:8080'; 
+  private apiBaseUrl =  environment.BaseUrl; 
 
   constructor(private http: HttpClient) { }
     /* alarmeName:donutModel[]=[

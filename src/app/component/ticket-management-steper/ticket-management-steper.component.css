@@ -1,0 +1,79 @@
+.alarm-stepper{
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	
+}
+.open-step{
+	 flex: 1;
+	height: 40px;
+	background-color: #0766BE;
+	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
+	color: #FFFFFF;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+
+}
+.assigned-step{
+	 flex: 1;
+	height: 40px;
+	background-color: #DEDEDE;
+	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
+	color: #0766BE;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-right: 50px;
+    margin-left: -55px;
+
+
+}
+.progress-step{
+	 flex: 1;
+	height: 40px;
+	background-color: #C4C4C4;
+	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
+	color: #0766BE;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-right: 15px;
+    margin-left: -65px;
+   
+
+}
+.waiting-closure-step{
+	 flex: 1;
+	height: 40px;
+	background-color: #DEDEDE;
+	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
+	color: #0766BE;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-right: 15px;
+    margin-left: -55px;
+
+
+
+}
+
+.closed-step{
+	 flex: 1;
+	height: 40px;
+	background-color: #FFC107;
+	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
+	color: #0766BE;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-right: 50px;
+    margin-left: -60px;
+
+}
+
+.actve-step{
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}

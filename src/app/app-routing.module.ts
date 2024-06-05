@@ -9,6 +9,7 @@ import { AdminComponent } from './component/admin/admin.component';
 import { MapComponent } from './component/map/map.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { ChartjsComponent } from './component/chartjs/chartjs.component';
+import { AlarmTicketManagementComponent } from './pages/alarm-ticket-management/alarm-ticket-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo:"login", pathMatch:"full" },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent},
   { path: 'map', component: MapComponent},
   { path: 'chart', component: ChartjsComponent},
+  { path: 'alarms/ticket/new', component: AlarmTicketManagementComponent}
   ]},
  
 ];

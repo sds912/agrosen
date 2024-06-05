@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
 import { environment } from '../../../environments/environment.development';
-import { error } from '@ant-design/icons-angular';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
@@ -22,7 +20,11 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   filteredAssignmentGroups: any[] = [];
   filteredAssignedTo: any[] = [];
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private message: NzMessageService) {
+  constructor(
+    private fb: FormBuilder, 
+    private http: HttpClient, 
+    private message: NzMessageService) {
+
     this.alarmForm = this.fb.group({
       number: [null, [Validators.required]],
       site: [null, [Validators.required]],
@@ -52,10 +54,9 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     this.fetchSites();
     this.fetchNumber();
     this.alarmForm!.get('site')?.valueChanges.subscribe(value => {
-      const site = this.filteredSites.filter(v => v.siteId === value)[0];
+    const site = this.filteredSites.filter(v => v.siteId === value)[0];
 
-      
-      this.filteredAssignmentGroups = site.userGroups;
+    this.filteredAssignmentGroups = site.userGroups;
       if(this.filteredAssignmentGroups !== undefined && this.filteredAssignmentGroups.length === 1){
         this.alarmForm!.get('assignmentGroup')?.setValue(this.filteredAssignmentGroups[0].type)
       }
@@ -75,7 +76,6 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     
   }
   fetchSites(): void {
-    console.log('fetch')
     this.http.get<any>('http://62.171.177.19:3001/api/sites')
       .subscribe(
         (response: any) => {

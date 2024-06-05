@@ -47,6 +47,8 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { AlarmTicketListComponent } from './component/alarm-ticket-list/alarm-ticket-list.component';
 
 
 registerLocaleData(fr);
@@ -71,7 +73,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     AlarmTicketManagementComponent,
     AlarmTicketOpenFormComponent,
     TicketManagementSteperComponent,
-    DateFormatPipe
+    DateFormatPipe,
+    AlarmTicketListComponent
   ],
   imports: [
     BrowserModule,
@@ -98,7 +101,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzDropDownModule,
     NzAvatarModule,
     NzMessageModule,
-    NzCardModule
+    NzCardModule,
+    NzTabsModule
     
   ],
   providers: [

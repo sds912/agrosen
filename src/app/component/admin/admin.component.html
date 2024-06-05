@@ -16,6 +16,14 @@
            <li nz-menu-item routerLink="/admin/alarmes?state=closed">Alarmes fermées</li>
          </ul>
        </li>
+       <li nz-submenu nzTitle="Tickets" nzIcon="alert">
+        <ul>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']">Toutes les tickets</li>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'active' }">Tickets assignés</li>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'closed' }">Tickets en cours</li>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'closed' }">Tickets fermés</li>          
+        </ul>
+      </li>
        <li nz-menu-item routerLink="/admin/lue">
          <span nz-icon nzType="database"></span>
          <span>Données lues</span>
@@ -32,7 +40,7 @@
          <span nz-icon nzType="home"></span>
          <span>Sites en service</span>
        </li>
-       <li nz-submenu nzTitle="Reporting" nzIcon="team">
+       <li nz-submenu nzTitle="Reporting" nzIcon="bar-chart">
          <ul>
            <li nz-menu-item routerLink="/admin/reporting/item1">Item 1</li>
            <li nz-menu-item routerLink="/admin/reporting/item2">Item 2</li>

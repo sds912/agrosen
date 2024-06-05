@@ -1,6 +1,11 @@
 <div class="container">
-    <app-ticket-management-steper></app-ticket-management-steper>
+    <div *ngIf="type === 'open'">
+        <app-ticket-management-steper></app-ticket-management-steper>
+        <app-alarm-ticket-open-form></app-alarm-ticket-open-form>
+    </div>
 
-    <app-alarm-ticket-open-form></app-alarm-ticket-open-form>
-
+    <div *ngIf="type !== 'open'">
+        <app-alarm-ticket-list></app-alarm-ticket-list>
+    </div>
+    
 </div>

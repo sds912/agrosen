@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent},
   { path: 'map', component: MapComponent},
   { path: 'chart', component: ChartjsComponent},
-  { path: 'alarms/ticket/new', component: AlarmTicketManagementComponent}
+  { path: 'alarms/tickets', component: AlarmTicketManagementComponent}
   ]},
  
 ];

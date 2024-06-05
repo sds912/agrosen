@@ -89,10 +89,7 @@ export class AlarmesComponent implements OnInit {
 
   }
 
-  navigateToNewTicket(){
-    this.router.navigate(['admin/alarms/ticket/new'])
-  }
-
+ 
 
   listOfData: any[] = [
     {

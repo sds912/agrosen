@@ -1,0 +1,40 @@
+<nz-card style="width: 100%;" nzTitle="Tickets" [nzExtra]="extraTemplate">
+    <nz-card-tab>
+      <nz-tabset nzSize="large" [(nzSelectedIndex)]="index1">
+        <nz-tab nzTitle="SAR Task"></nz-tab>
+        <nz-tab nzTitle="Planned Downtowns"></nz-tab>
+      </nz-tabset>
+    </nz-card-tab>
+    <div>
+        <nz-table *ngIf="tickets.length > 0" #basicTable [nzData]="tickets">
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Priority</th>
+                <th>State</th>
+                <th>Assigned to</th>
+                <th>Short description</th>
+                <th>Task type</th>
+                <th>Aditionnal site visite required ?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of basicTable.data">
+                <td>{{ a.siteId }}</td>
+                <td>{{ a.priority}}</td>
+                <td>{{ ""}}</td>
+                <td>{{ a!.noc!.firstName + ' ' + a!.noc!.lastName }}</td>
+                <td>{{ a.shortDescription }}</td>
+                <td>{{ a.name }}</td>
+                <td>{{ a.dateEnd | dateFormat }}</td>
+                <td>{{ a.dateStart | dateFormat }}</td>
+                
+              </tr>
+            </tbody>
+          </nz-table>
+    </div>
+  </nz-card>
+  <ng-template #extraTemplate>
+    <button nz-button nzType="primary" (click)="navigateToNewTicket()">New</button>
+  </ng-template>
+ 

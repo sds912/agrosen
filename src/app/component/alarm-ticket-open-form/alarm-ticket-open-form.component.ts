@@ -29,7 +29,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       number: [null, [Validators.required]],
       site: [null, [Validators.required]],
       siteAccessRequest: [null, [Validators.required]],
-      priority: [null, [Validators.required]],
+      priority: ['CRITICAL', [Validators.required]],
       alarmChecklist: [false],
       p0P4Tab: [false],
       swoAutoCreated: [false],
@@ -88,7 +88,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
   fetchNumber(): void{
     console.log('fetch')
-    this.http.get<any>('http://62.171.177.19:3001/api/tickets/generate/site-access-request', {responseType: "json"})
+    this.http.get<any>('http://62.171.177.19:3001/api/tickets/generate/reference?type=SWO_TASK', {responseType: "json"})
       .subscribe(
         data => {console.log(data)},
         error => this.alarmForm!.get('number')?.setValue(error.error.text)

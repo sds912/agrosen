@@ -37,4 +37,10 @@ export class AlarmTicketListComponent implements OnInit {
     this.router.navigate(['admin/alarms/tickets'], { queryParams: { state: 'open' } });
   }
 
+  navigateToTicketDetails(id: string){
+    this.router.navigate(['admin/alarms/tickets'], { queryParams: { id: 'id' } });
+  }
+
+  
+
 }

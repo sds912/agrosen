@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-ticket-management-steper',
@@ -19,5 +19,5 @@ import { Component } from '@angular/core';
   ]
 })
 export class TicketManagementSteperComponent {
-
+  
 }

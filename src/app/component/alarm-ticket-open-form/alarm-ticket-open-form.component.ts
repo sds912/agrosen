@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { SiteService } from '../../service/site.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TicketService } from '../../service/ticket.service';
 
 @Component({
   selector: 'app-alarm-ticket-open-form',
@@ -19,11 +22,15 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   siteOptions: string[] = [];
   filteredAssignmentGroups: any[] = [];
   filteredAssignedTo: any[] = [];
+  ticket: any;
 
   constructor(
     private fb: FormBuilder, 
     private http: HttpClient, 
-    private message: NzMessageService) {
+    private route: ActivatedRoute,
+    private message: NzMessageService,
+    private ticketService: TicketService,
+     private siteService: SiteService) {
 
     this.alarmForm = this.fb.group({
       number: [null, [Validators.required]],
@@ -48,11 +55,35 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     this.searchControl.valueChanges.subscribe(value => {
       this.filteredSites = this.filterOptions(value!);
     });
+
+    console.log(this.ticket)
   }
 
   ngOnInit(): void {
-    this.fetchSites();
+    this.route.queryParamMap.subscribe(params => {
+    const id = params.get('id');
+    console.log(id)
+    this.ticketService.fetchTicketById(id!)
+    .subscribe(
+     response => {this.ticket = response,console.log(response)},
+     error => console.log(error)
+     
+    )
+
+    })
+    
+    if(this.ticket !== undefined){
+      console.log(this.ticket);
+      this.siteService.fetchTicketById(this.ticket[0]?.siteId).subscribe(
+        response => console.log(response),
+        error => console.log(error)
+        
+      )
+    } else{
     this.fetchNumber();
+
+    }
+    this.fetchSites();
     this.alarmForm!.get('site')?.valueChanges.subscribe(value => {
     const site = this.filteredSites.filter(v => v.siteId === value)[0];
 
@@ -145,7 +176,9 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       reference: this.alarmForm!.get('number')?.value,
       alarmCheckList: false,
       popFourTab: false,
-      siteId: "823b9d6b-91e5-4ca2-a6f1-16f19e28d721"
+      siteId: "823b9d6b-91e5-4ca2-a6f1-16f19e28d721",
+      shortDescription: this.alarmForm!.get('shortDescription')?.value,
+
     }
      
     this.http.post(`${environment.BaseUrl}/tickets`, data1)

@@ -20,7 +20,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let a of basicTable.data">
-                <td> <a href="{{'admin/alarms/tickets/'+ a.id}}" >{{ a.numero??"Numero" }}</a> </td>
+                <td> <a href="{{'admin/alarms/tickets?id='+ a.id}}" >{{ a.numero??"Numero" }}</a> </td>
                 <td>{{ a.priority}}</td>
                 <td>{{ ""}}</td>
                 <td>{{ a!.noc!.firstName + ' ' + a!.noc!.lastName }}</td>

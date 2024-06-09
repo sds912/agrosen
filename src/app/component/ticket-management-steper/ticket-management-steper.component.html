@@ -1,7 +1,8 @@
 <div class="d-flex alarm-stepper">
-	<div class="open-step active-step">Open</div>
-	<div class="assigned-step">Assigned</div>
-	<div class="progress-step">Work in progress</div>
-	<div class="waiting-closure-step">Waiting closure</div>
-	<div class="closed-step">Closed</div>
-</div>
+	<div class="open-step" [ngClass]="{ 'active-step': status === 'OPEN' }">Open</div>
+	<div class="assigned-step" [ngClass]="{ 'active-step': status === 'ASSIGNED' }">Assigned</div>
+	<div class="progress-step" [ngClass]="{ 'active-step': status === 'WORK_IN_PROGRESS' }">Work in progress</div>
+	<div class="waiting-closure-step" [ngClass]="{ 'active-step': status === 'WAITING_CLOSURE' }">Waiting closure</div>
+	<div class="closed-step" [ngClass]="{ 'active-step': status === 'CLOSED' }">Closed</div>
+  </div>
+  

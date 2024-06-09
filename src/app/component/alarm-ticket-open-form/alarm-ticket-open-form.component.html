@@ -1,12 +1,18 @@
-
-<div class="container p-4" style="width: 100%;">
+<div class="container p-3 pt-0" style="width: 100%;" *ngIf="displayForm">
     <form style="width: 100%;" nz-form [formGroup]="alarmForm!" (ngSubmit)="submitForm()">
-        <div class="d-flex justify-content-between">
+        <div class="text-end mb-2" style="margin-right: 60px;">
+            <button *ngIf="!displaySubmit" nz-button nzType="primary"
+                class="login-form-button login-form-margin">Accept</button>
+            <button *ngIf="displaySubmit" nz-button nzType="primary"
+                class="login-form-button login-form-margin">Submit</button>
+        </div>
+        <app-ticket-management-steper [status]="this.ticket?.status"></app-ticket-management-steper>
+        <div class="d-flex justify-content-between mt-3">
             <div class="alarm-tiket-form-left">
                 <nz-form-item>
                     <nz-form-label [nzSm]="10" [nzXs]="24" nzFor="number">Number</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The number is not valid">
-                        <input nz-input id="number" formControlName="number" />
+                        <input nz-input id="number" formControlName="number"  />
                     </nz-form-control>
                 </nz-form-item>
 
@@ -14,10 +20,15 @@
                     <nz-form-label [nzSpan]="10" nzRequired>Site</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
                         <nz-input-group nzPrefixIcon="search">
-                            <input type="text" nz-input [nzAutocomplete]="sites" formControlName="site" placeholder="Search...">
+                            <input type="text" nz-input [nzAutocomplete]="sites"
+                                [ngModel]="alarmForm!.get('site')?.value?.siteId" [disabled]="this.ticket !== undefined"
+                                [ngModelOptions]="{standalone: true}"
+                                (ngModelChange)="onSiteInput($event)" 
+                                [value]="alarmForm!.get('site')?.value?.siteId" placeholder="Search...">
                         </nz-input-group>
-                        <nz-autocomplete #sites>
-                            <nz-auto-option *ngFor="let option of filteredSites" [nzValue]="option.siteId" >{{ option.siteId }}</nz-auto-option>
+                        <nz-autocomplete #sites >
+                            <nz-auto-option  *ngFor="let option of filteredSites" [nzValue]="option"
+                                [nzLabel]="option.siteId">{{option.siteId}}</nz-auto-option>
                         </nz-autocomplete>
                     </nz-form-control>
                 </nz-form-item>
@@ -26,22 +37,21 @@
                     <nz-form-label [nzSpan]="10">Site Access Request</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
                         <nz-input-group nzPrefixIcon="search">
-                            <input type="text" nz-input [nzAutocomplete]="siteAccessRequest" formControlName="siteAccessRequest" placeholder="Search...">
+                            <input type="text" nz-input [nzAutocomplete]="siteAccessRequest"
+                                formControlName="siteAccessRequest" placeholder="Search...">
                         </nz-input-group>
                         <nz-autocomplete #siteAccessRequest>
-                            <nz-auto-option *ngFor="let option of filteredSiteAccessRequests" [nzValue]="option">{{ option }}</nz-auto-option>
+                            <nz-auto-option *ngFor="let option of filteredSiteAccessRequests" [nzValue]="option">{{
+                                option }}</nz-auto-option>
                         </nz-autocomplete>
                     </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item>
-                    <nz-form-label [nzSpan]="10">Priority</nz-form-label>
-                    <nz-form-control [nzXs]="14" nzErrorTip="The input is not valid">
+                    <nz-form-label nzRequired [nzSpan]="10">Priority</nz-form-label>
+                    <nz-form-control  [nzXs]="14" nzErrorTip="The input is not valid">
                         <nz-select name="select-validate" formControlName="priority">
-                            <nz-option nzValue="CRITICAL" nzLabel="CRITICAL"></nz-option>
-                            <nz-option nzValue="HIGH" nzLabel="HIGH"></nz-option>
-                            <nz-option nzValue="MODERATE" nzLabel="MODERATE"></nz-option>
-                            <nz-option nzValue="LOW" nzLabel="LOW"></nz-option>
+                            <nz-option *ngFor="let p of priorities" [nzValue]="p" [nzLabel]="p.name">{{p.name}}</nz-option>
                         </nz-select>
                     </nz-form-control>
                 </nz-form-item>
@@ -71,10 +81,12 @@
                     <nz-form-label [nzSpan]="10">Task Reference</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
                         <nz-input-group nzPrefixIcon="search">
-                            <input type="text" nz-input [nzAutocomplete]="taskRef" formControlName="taskReference" placeholder="Search...">
+                            <input type="text" nz-input [nzAutocomplete]="taskRef" formControlName="taskReference"
+                                placeholder="Search...">
                         </nz-input-group>
                         <nz-autocomplete #taskRef>
-                            <nz-auto-option *ngFor="let option of filteredTaskRefs" [nzValue]="option">{{ option }}</nz-auto-option>
+                            <nz-auto-option *ngFor="let option of filteredTaskRefs" [nzValue]="option">{{ option
+                                }}</nz-auto-option>
                         </nz-autocomplete>
                     </nz-form-control>
                 </nz-form-item>
@@ -82,7 +94,8 @@
                 <nz-form-item>
                     <nz-form-label [nzSpan]="10" nzFor="datePicker">Actuel WO Date</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24">
-                        <nz-date-picker style="width: 100%;" formControlName="woDate" nzFormat="yyyy-MM-dd" nzShowTime></nz-date-picker>
+                        <nz-date-picker style="width: 100%;" formControlName="woDate" nzFormat="yyyy-MM-dd"
+                            nzShowTime></nz-date-picker>
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -99,10 +112,16 @@
                     <nz-form-label [nzSpan]="10">Assignment group</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
                         <nz-input-group nzPrefixIcon="search">
-                            <input type="text" nz-input [nzAutocomplete]="assignmentGroup" formControlName="assignmentGroup" placeholder="Search...">
+                            <input type="text" nz-input [nzAutocomplete]="assignmentGroup"
+                            [disabled]="this.ticket !== undefined"
+                            [ngModel]="alarmForm!.get('assignmentGroup')?.value?.type"
+                            [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="onAssignmentGroupInput($event)" 
+                            [value]="alarmForm!.get('assignmentGroup')?.value?.siteId" placeholder="Search...">
                         </nz-input-group>
                         <nz-autocomplete #assignmentGroup>
-                            <nz-auto-option *ngFor="let option of filteredAssignmentGroups" [nzValue]="option.type">{{ option.type }}</nz-auto-option>
+                            <nz-auto-option *ngFor="let option of filteredAssignmentGroups" [nzValue]="option"
+                                [nzLabel]="option.type">{{ option.type }}</nz-auto-option>
                         </nz-autocomplete>
                     </nz-form-control>
                 </nz-form-item>
@@ -111,10 +130,16 @@
                     <nz-form-label [nzSpan]="10" nzRequired>Assigned to</nz-form-label>
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
                         <nz-input-group nzPrefixIcon="search">
-                            <input type="text" nz-input [nzAutocomplete]="assignedTo" formControlName="assignedTo" placeholder="Search...">
+                            <input type="text" nz-input [nzAutocomplete]="assignedTo"
+                            [disabled]="this.ticket !== undefined"
+                            [ngModel]="alarmForm!.get('assignedTo')?.value?.role"
+                            [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="onAssignedToInput($event)" 
+                            [value]="alarmForm!.get('assignedTo')?.value?.role" placeholder="Search...">
                         </nz-input-group>
                         <nz-autocomplete #assignedTo>
-                            <nz-auto-option *ngFor="let option of filteredAssignedTo" [nzValue]="option.firstName + ' ' + option.lastName">{{ option.firstName + " " + option.lastName }}</nz-auto-option>
+                            <nz-auto-option *ngFor="let option of filteredAssignedTo" [nzValue]="option"
+                                [nzLabel]="option.role">{{ option.role }}</nz-auto-option>
                         </nz-autocomplete>
                     </nz-form-control>
                 </nz-form-item>
@@ -146,19 +171,20 @@
             <nz-form-item style="width: 100%;">
                 <nz-form-label [nzSm]="4" nzFor="description">Description</nz-form-label>
                 <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="The input is not valid">
-                    <textarea nz-input formControlName="description" placeholder="Autosize height with minimum and maximum number of lines" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                    <textarea nz-input formControlName="description"
+                        placeholder="Autosize height with minimum and maximum number of lines"
+                        [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
                 </nz-form-control>
             </nz-form-item>
 
             <nz-form-item style="width: 100%;">
                 <nz-form-label [nzSm]="4" nzFor="workNote">Work Note</nz-form-label>
                 <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="The input is not valid">
-                    <textarea nz-input formControlName="workNote" placeholder="Autosize height with minimum and maximum number of lines" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+                    <textarea nz-input formControlName="workNote"
+                        placeholder="Autosize height with minimum and maximum number of lines"
+                        [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
                 </nz-form-control>
             </nz-form-item>
         </div>
-
-        <button nz-button class="login-form-button login-form-margin" >Submit</button>
-
     </form>
 </div>

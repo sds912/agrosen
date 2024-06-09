@@ -7,13 +7,35 @@ import { SiteService } from '../../service/site.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TicketService } from '../../service/ticket.service';
 
+
+
 @Component({
   selector: 'app-alarm-ticket-open-form',
   templateUrl: './alarm-ticket-open-form.component.html',
   styleUrls: ['./alarm-ticket-open-form.component.css']
 })
 export class AlarmTicketOpenFormComponent implements OnInit {
-  
+
+  priorities: any[] = [
+    {
+      name: 'CRITICAL',
+      value: '1'
+    },
+    {
+      name: 'HIGH',
+      value: '2'
+    },
+    {
+      name: 'MODERATE',
+      value: '3'
+    },
+    {
+      name: 'LOW',
+      value: '4'
+    }
+
+  ]
+
   alarmForm?: FormGroup;
   searchControl = this.fb.control('');
   filteredSites: any[] = [];
@@ -23,111 +45,152 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   filteredAssignmentGroups: any[] = [];
   filteredAssignedTo: any[] = [];
   ticket: any;
+  displaySubmit: boolean = true;
+  displayForm: boolean = false;
 
   constructor(
-    private fb: FormBuilder, 
-    private http: HttpClient, 
+    private fb: FormBuilder,
+    private http: HttpClient,
     private route: ActivatedRoute,
+    private router: Router,
     private message: NzMessageService,
     private ticketService: TicketService,
-     private siteService: SiteService) {
+    private siteService: SiteService) {
 
     this.alarmForm = this.fb.group({
       number: [null, [Validators.required]],
       site: [null, [Validators.required]],
-      siteAccessRequest: [null, [Validators.required]],
-      priority: ['CRITICAL', [Validators.required]],
+      siteAccessRequest: [null, []],
+      priority: ['1', [Validators.required]],
       alarmChecklist: [false],
       p0P4Tab: [false],
       swoAutoCreated: [false],
-      taskReference: [null, [Validators.required]],
-      woDate: [null, [Validators.required]],
-      state: ["Open", [Validators.required]],
+      taskReference: [null, []],
+      woDate: [null, []],
+      state: ["OPEN", [Validators.required]],
       assignmentGroup: [null, [Validators.required]],
       assignedTo: [null, [Validators.required]],
-      gpsLocation: [null, [Validators.required]],
-      shortDescription: [null, [Validators.required]],
-      partShortDescription: [null, [Validators.required]],
-      description: [null, [Validators.required]],
-      workNote: [null, [Validators.required]]
+      gpsLocation: [null, []],
+      shortDescription: [null, []],
+      partShortDescription: [null, []],
+      description: [null, []],
+      workNote: [null, []]
     });
+
+
 
     this.searchControl.valueChanges.subscribe(value => {
       this.filteredSites = this.filterOptions(value!);
     });
 
-    console.log(this.ticket)
+
+
   }
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-    const id = params.get('id');
-    console.log(id)
-    this.ticketService.fetchTicketById(id!)
-    .subscribe(
-     response => {this.ticket = response,console.log(response)},
-     error => console.log(error)
-     
-    )
-
-    })
-    
-    if(this.ticket !== undefined){
-      console.log(this.ticket);
-      this.siteService.fetchTicketById(this.ticket[0]?.siteId).subscribe(
-        response => console.log(response),
-        error => console.log(error)
-        
-      )
-    } else{
-    this.fetchNumber();
-
-    }
     this.fetchSites();
-    this.alarmForm!.get('site')?.valueChanges.subscribe(value => {
-    const site = this.filteredSites.filter(v => v.siteId === value)[0];
 
-    this.filteredAssignmentGroups = site.userGroups;
-      if(this.filteredAssignmentGroups !== undefined && this.filteredAssignmentGroups.length === 1){
-        this.alarmForm!.get('assignmentGroup')?.setValue(this.filteredAssignmentGroups[0].type)
-      }
-
-      this.filteredAssignedTo = site.users;
-
-      const fUsers = this.filteredAssignedTo.filter(v => v.role === this.alarmForm!.get('assignmentGroup')?.value );
-
-      if(fUsers !== undefined && fUsers.length > 0){
-        this.alarmForm!.get('assignedTo')?.setValue(fUsers[0].firstName + " " + fUsers[0].lastName )
-
-      }
-    });
   }
 
-  initForm(): void {
-    
+  onSiteInput(site: any): void {
+    this.alarmForm!.get('site')?.setValue(site);
+    console.log(site)
+    this.filteredAssignmentGroups = site?.userGroups;
+    this.filteredAssignedTo = site?.users;
   }
+
+  onAssignmentGroupInput(assignmentGroup: any): void {
+    this.alarmForm!.get('assignmentGroup')?.setValue(assignmentGroup);
+
+  }
+
+  onAssignedToInput(assignedTo: any) {
+    this.alarmForm!.get('assignedTo')?.setValue(assignedTo);
+
+  }
+
+
   fetchSites(): void {
     this.http.get<any>('http://62.171.177.19:3001/api/sites')
       .subscribe(
         (response: any) => {
           this.filteredSites = response.data;
-          console.log(response.data)
-          },
+
+          this.route.queryParamMap.subscribe(params => {
+            const id = params.get('id');
+            
+            if (id !== undefined && id !== null) {
+
+              this.ticketService.fetchTicketById(id!)
+                .subscribe(
+                  response => {
+                    this.ticket = response;
+                    console.log(this.ticket)
+                    if (this.ticket !== undefined && this.ticket !== '' && this.ticket !== null) {
+                      const priority = this.priorities.find(v => v.value === this.ticket.priority);
+
+                      this.alarmForm?.get('number')?.setValue(this.ticket.reference);
+                      this.alarmForm?.get('priority')?.setValue(priority);
+                      this.alarmForm?.get('state')?.setValue(this.ticket.status);
+                      this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+                      this.alarmForm?.get('site')!.setValue(this.ticket?.site);
+                      this.alarmForm?.get('assignedTo')!.setValue(this.ticket?.user);
+                      this.alarmForm?.get('assignmentGroup')!.setValue(this.ticket?.userGroup);
+                      this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+                      this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+                      this.alarmForm?.get('gpsLocation')?.setValue(this.ticket?.site?.address?.lat + ' , ' + this.ticket?.site?.address?.lng);
+                      this.fetchRefNumber();
+                      this.displaySubmit = false;
+
+                      this.alarmForm!.get('number')?.disable();
+                      this.alarmForm!.get('priority')?.disable();
+                      this.alarmForm!.get('state')?.disable();
+                      this.displayForm = true;
+
+
+                    } else{
+                      this.displayForm = true;
+                    }
+
+
+                  },
+                  error => console.log(error)
+
+                )
+
+            } else {
+              this.displayForm = true;
+              this.fetchNumber();
+              // this.initForm();
+
+
+            }
+
+
+          })
+
+
+        },
         error => console.error('There was an error fetching the site options!', error)
       );
   }
 
-  fetchNumber(): void{
+  fetchNumber(): void {
     console.log('fetch')
-    this.http.get<any>('http://62.171.177.19:3001/api/tickets/generate/reference?type=SWO_TASK', {responseType: "json"})
+    this.http.get<any>('http://62.171.177.19:3001/api/tickets/generate/reference?type=SWO_TASK', { responseType: "json" })
       .subscribe(
-        data => {console.log(data)},
+        data => { console.log(data) },
         error => this.alarmForm!.get('number')?.setValue(error.error.text)
       );
   }
 
-  onSiteChange(site: any): void {
-    console.log(site)
+  fetchRefNumber(): void {
+    console.log('fetch')
+    this.http.get<any>('http://62.171.177.19:3001/api/tickets/generate/site-access-request', { responseType: "json" })
+      .subscribe(
+        data => { console.log(data) },
+        error => this.alarmForm!.get('siteAccessRequest')?.setValue(error.error.text)
+      );
   }
 
   filterOptions(value: string): string[] {
@@ -138,8 +201,6 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   }
 
   submitForm(): void {
-    console.log(this.alarmForm!.value);
-
     const data = {
       priority: this.alarmForm!.get('priority')?.value,
       cause: "test",
@@ -167,36 +228,60 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       popFourTab: false,
       siteId: this.alarmForm!.get('site')?.value
     };
-    
-    console.log(data);
 
-  const data1 =  {
-      priority: this.alarmForm!.get('priority')?.value,
+    console.log(this.alarmForm!.value)
+
+    const data1 = {
+      priority: this.alarmForm!.get('priority')?.value?.name,
       type: "SWO_TASK",
       reference: this.alarmForm!.get('number')?.value,
       alarmCheckList: false,
       popFourTab: false,
-      siteId: "823b9d6b-91e5-4ca2-a6f1-16f19e28d721",
+      siteId: this.alarmForm!.get('site')?.value?.id,
       shortDescription: this.alarmForm!.get('shortDescription')?.value,
+      user: this.alarmForm!.get('assignedTo')?.value?.id,
+      userGroup: this.alarmForm!.get('assignmentGroup')?.value?.id,
 
     }
-     
-    this.http.post(`${environment.BaseUrl}/tickets`, data1)
-    .subscribe(response => {
-      this.createMessage('success', "Ticket créé avec succès");
 
-    },
-     error => {
-      this.createMessage('error', "Une erreur viens de se produire. Ressayez plus tard");
-    }
-     
-    )
+    if (this.ticket) {
+      const data = {
+        ticketId: this.ticket.id,
+        user: this.alarmForm!.get('assignedTo')?.value?.id,
+        userGroup: this.alarmForm!.get('assignmentGroup')?.value?.id,
+        siteAccessRequest: this.alarmForm!.get('siteAccessRequest')?.value?.id
+      }
+      this.ticketService.acceptAssign(data).subscribe(
+        response => {
+          console.log(response);
+          this.createMessage('success', "Ticket accepté avec succès");
 
-    if (this.alarmForm!.valid) {
-      console.log('Form Value:', this.alarmForm!.value);
+        },
+        error => {
+          console.log(error);
+          this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
+
+        }
+      )
     } else {
-      console.error('Form Invalid');
+
+      console.log(data1);
+
+      this.http.post(`${environment.BaseUrl}/tickets`, data1)
+        .subscribe(response => {
+          this.createMessage('success', "Ticket créé avec succès");
+          this.router.navigate(['admin/alarms/tickets'], { queryParams: { state: 'pm' } });
+
+        },
+          error => {
+            this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
+            console.log(error);
+
+          }
+
+        )
     }
+
   }
 
 

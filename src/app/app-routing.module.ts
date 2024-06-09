@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './component/login/login.component';
-import { DasbordComponent } from './component/dasbord/dasbord.component';
 import { AlarmesComponent } from './component/alarmes/alarmes.component';
 import { MenuComponent } from './component/menu/menu.component';
 import { DonnesluesComponent } from './component/donneslues/donneslues.component';
@@ -10,6 +9,7 @@ import { MapComponent } from './component/map/map.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { ChartjsComponent } from './component/chartjs/chartjs.component';
 import { AlarmTicketManagementComponent } from './pages/alarm-ticket-management/alarm-ticket-management.component';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo:"login", pathMatch:"full" },
@@ -22,7 +22,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent},
   { path: 'map', component: MapComponent},
   { path: 'chart', component: ChartjsComponent},
-  { path: 'alarms/tickets', component: AlarmTicketManagementComponent}
+  { path: 'alarms/tickets', component: AlarmTicketManagementComponent},
+  { path: 'users', component: UserManagementComponent}
   ]},
  
 ];

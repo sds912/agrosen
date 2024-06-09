@@ -1,38 +1,49 @@
 <nz-card style="width: 100%;" nzTitle="Tickets" [nzExtra]="extraTemplate">
-    <nz-card-tab>
-      <nz-tabset nzSize="large" [(nzSelectedIndex)]="index1">
-        <nz-tab nzTitle="SAR Task"></nz-tab>
-        <nz-tab nzTitle="Planned Downtowns"></nz-tab>
-      </nz-tabset>
-    </nz-card-tab>
-    <div>
-        <nz-table *ngIf="tickets.length > 0" #basicTable [nzData]="tickets">
-            <thead>
-              <tr>
-                <th>Number</th>
-                <th>Priority</th>
-                <th>State</th>
-                <th>Assigned to</th>
-                <th>Short description</th>
-                <th>Task type</th>
-                <th>Aditionnal site visite required ?</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let a of basicTable.data">
-                <td> <a href="{{'admin/alarms/tickets?id='+ a.id}}" >{{ a.numero??"Numero" }}</a> </td>
-                <td>{{ a.priority}}</td>
-                <td>{{ ""}}</td>
-                <td>{{ a!.noc!.firstName + ' ' + a!.noc!.lastName }}</td>
-                <td>{{ a.shortDescription }}</td>
-                <td>{{ "" }}</td>
-                <td>{{ "" }}</td>
-              </tr>
-            </tbody>
-          </nz-table>
-    </div>
-  </nz-card>
-  <ng-template #extraTemplate>
-    <button nz-button nzType="primary" (click)="navigateToNewTicket()">New</button>
-  </ng-template>
- 
+  <nz-card-tab>
+    <nz-tabset nzSize="large" [(nzSelectedIndex)]="index1">
+      <nz-tab nzTitle="SAR Task"></nz-tab>
+      <nz-tab nzTitle="Planned Downtowns"></nz-tab>
+    </nz-tabset>
+  </nz-card-tab>
+  <div>
+    <nz-table [nzScroll]="{ x: '2000px' }" *ngIf="tickets.length > 0" #basicTable [nzData]="tickets">
+      <thead>
+        <tr>
+          <th nzLeft>Number</th>
+          <th nzLeft>Site</th>
+          <th nzWidth="110px">Priority</th>
+          <th>Created</th>
+          <th nzWidth="100px">State</th>
+          <th>Assigned to</th>
+          <th>Closed</th>
+          <th>Short description</th>
+          <th>Created by</th>
+          <th>Description</th>
+          <th>Part Short description</th>
+          <th nzWidth="80px">Spares</th>
+          <th nzWidth="80px"nzRight>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of basicTable.data">
+          <td nzLeft> <a href="{{'admin/alarms/tickets?id='+ a.id}}">{{ a.reference }}</a> </td>
+          <td nzLeft>{{ a.site?.siteName}}</td>
+          <td >{{ getPriority(a.priority) }}</td>
+          <td >{{ a.createdAt | dateFormat }}</td>
+          <td >{{ a.status }}</td>
+          <td >{{ a.user?.firstName + ' ' + a.user?.lastName}}</td>
+          <td >{{ a.closedAt??'N/A' }}</td>
+          <td>{{ a.shortDescription??'N/A'}}</td>
+          <td>{{ a.noc?.firstName + a.noc?.lastName}}</td>
+          <td>{{ a.description??'N/A' }}</td>
+          <td>{{ a.partDescription??'N/A' }}</td>
+          <td>{{ 'N/A' }}</td>
+          <td nzRight>{{ a.type??'N/A' }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</nz-card>
+<ng-template #extraTemplate>
+  <button nz-button nzType="primary" (click)="navigateToNewTicket()">New</button>
+</ng-template>

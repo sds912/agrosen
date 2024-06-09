@@ -13,7 +13,6 @@ export class AlarmTicketManagementComponent implements OnInit {
   state:any;
   displayMode: string  = 'list';
   ticket: any;
-
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
 
@@ -25,7 +24,6 @@ export class AlarmTicketManagementComponent implements OnInit {
       const id = params.get('id');
       if(id !== undefined && id !== null && id !== ''){
        this.displayMode = 'form';
-       
       } else{
          this.displayMode = 'list';
       }

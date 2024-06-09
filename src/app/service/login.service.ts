@@ -21,7 +21,9 @@ export class LoginService {
   const accessToken = localStorage.getItem('access_token')??"";
   const refreshToken = localStorage.getItem('refesh_token')??"";
   this.setTokens(accessToken, refreshToken);
-  this.loardProfile(this.getAccessToken())
+  if(this.getAccessToken() !== ""){
+    this.loardProfile(this.getAccessToken())
+  }
  }
 
  public login(username : String , password : String){

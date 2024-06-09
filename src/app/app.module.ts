@@ -28,14 +28,12 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { DATE_HELPER_SERVICE_FACTORY, NZ_DATE_CONFIG, fr_FR } from 'ng-zorro-antd/i18n';
-import { DatePipe } from '@angular/common';
-import { NZ_I18N, zh_CN} from 'ng-zorro-antd/i18n';
+import { DATE_HELPER_SERVICE_FACTORY, NZ_DATE_CONFIG } from 'ng-zorro-antd/i18n';
+import { CommonModule, DatePipe } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import fr from '@angular/common/locales/fr';
-import { LoginService } from './service/login.service';
-import { NzLayoutComponent, NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzMenuItemComponent, NzMenuModule } from 'ng-zorro-antd/menu';
+import {  NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzTableModule } from 'ng-zorro-antd/table';
@@ -49,6 +47,9 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { AlarmTicketListComponent } from './component/alarm-ticket-list/alarm-ticket-list.component';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
+import { SiteManagementComponent } from './pages/site-management/site-management.component';
 
 
 registerLocaleData(fr);
@@ -74,10 +75,13 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     AlarmTicketOpenFormComponent,
     TicketManagementSteperComponent,
     DateFormatPipe,
-    AlarmTicketListComponent
+    AlarmTicketListComponent,
+    UserManagementComponent,
+    SiteManagementComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
@@ -102,7 +106,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzAvatarModule,
     NzMessageModule,
     NzCardModule,
-    NzTabsModule
+    NzTabsModule,
+    NzModalModule
+    
     
   ],
   providers: [

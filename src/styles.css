@@ -40,12 +40,16 @@ html, body{
 .ant-layout-content{
     min-height: calc(100vh - 64px);
     background-color: #F7F9FA;
-    padding: 30px;
+    padding: 10px 30px;
 }
 
 .ant-input{
     font-weight: 500;
 }
 
+
+.ant-btn-primary{
+    background-color: #0766BE !important;
+}
 
 

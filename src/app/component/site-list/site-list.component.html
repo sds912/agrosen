@@ -1,0 +1,39 @@
+
+
+
+  <nz-card style="width:100%;" [nzBodyStyle]="{padding: '0'}" nzTitle="Sites" [nzExtra]="extraTemplate">
+    <nz-table #basicTable [nzData]="sites" [nzBordered]="true">
+        <thead>
+          <tr>
+            <th>KiSite</th>
+            <th>Cluster</th>
+            <th>Site Name</th>
+            <th>Site Type</th>
+            <th>GE</th>
+            <th>FS</th>
+            <th>FE</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let site of basicTable.data">
+            <td>{{ site.KiSite }}</td>
+            <td>{{ site.Cluster }}</td>
+            <td>{{ site.SiteName }}</td>
+            <td>{{ site.SiteType }}</td>
+            <td>{{ site.GE.join(', ') }}</td>
+            <td>{{ site.FS.join(', ') }}</td>
+            <td>{{ site.FE.join(', ') }}</td>
+            <td>
+              <button nz-button nzType="link" (click)="editSite(site.KiSite)">Edit</button>
+              <button nz-button nzType="link" nzDanger (click)="deleteSite(site.KiSite)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+  </nz-card>
+  <ng-template #extraTemplate>
+    <button nz-button nzType="primary" [routerLink]="['/admin/sites']" [queryParams]="{ type: 'form' }">Add Site</button>
+  </ng-template>
+  
+  

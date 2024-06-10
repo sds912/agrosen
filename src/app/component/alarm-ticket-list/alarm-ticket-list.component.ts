@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { TicketService } from '../../service/ticket.service';
 
 @Component({
   selector: 'app-alarm-ticket-list',
@@ -10,6 +12,11 @@ import { Router } from '@angular/router';
 export class AlarmTicketListComponent implements OnInit {
   index1 = 0;
   index2 = 0;
+  loading: boolean = true;
+  total: number = 0;
+  pageSize = 10;
+  pageIndex = 1;
+  
 
   priorities: any[] = [{
     key: '1',
@@ -31,7 +38,7 @@ export class AlarmTicketListComponent implements OnInit {
 
   tickets: any[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private ticketService: TicketService) {
 
   }
 
@@ -44,14 +51,19 @@ export class AlarmTicketListComponent implements OnInit {
     return this.priorities.find(v => v.key === value).label;
   }
 
-  fetchTicket(): void {
-    this.http.get<any>('http://62.171.177.19:3001/api/tickets/current-user')
+  fetchTicket(page: number=1, limit:number=10): void {
+    this.loading = true;
+    this.ticketService.fetchTickets(page,limit)
       .subscribe(
         (response: any) => {
           this.tickets = response.data;
-          console.log(response.data)
+          this.total = response.count;
+          this.loading = false;
         },
-        error => console.error('There was an error fetching the site options!', error)
+        error =>{ 
+          console.error('There was an error fetching the site options!', error);
+          this.loading = false;
+        }
       );
   }
 
@@ -61,6 +73,16 @@ export class AlarmTicketListComponent implements OnInit {
 
   navigateToTicketDetails(id: string) {
     this.router.navigate(['admin/alarms/tickets'], { queryParams: { id: 'id' } });
+  }
+
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    console.log(params);
+    const { pageSize, pageIndex, sort, filter } = params;
+    const currentSort = sort.find(item => item.value !== null);
+    const sortField = (currentSort && currentSort.key) || null;
+    const sortOrder = (currentSort && currentSort.value) || null;
+    this.fetchTicket(pageIndex,pageSize);
+   // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
   }
 
 

@@ -6,13 +6,17 @@
     </nz-tabset>
   </nz-card-tab>
   <div>
-    <nz-table [nzScroll]="{ x: '2000px' }" *ngIf="tickets.length > 0" #basicTable [nzData]="tickets">
+    <nz-table nzShowSizeChanger [nzScroll]="{ x: '2000px' }" *ngIf="tickets.length > 0"
+      (nzQueryParams)="onQueryParamsChange($event)" 
+      [nzLoading]="loading" [nzTotal]="total" [nzPageSize]="pageSize"
+      
+      [nzPageIndex]="pageIndex" #basicTable [nzData]="tickets">
       <thead>
         <tr>
           <th nzLeft>Number</th>
           <th nzLeft>Site</th>
           <th nzWidth="110px">Priority</th>
-          <th>Created</th>
+          <th [nzSortFn]="true">Created</th>
           <th nzWidth="100px">State</th>
           <th>Assigned to</th>
           <th>Closed</th>
@@ -21,18 +25,18 @@
           <th>Description</th>
           <th>Part Short description</th>
           <th nzWidth="80px">Spares</th>
-          <th nzWidth="80px"nzRight>Type</th>
+          <th nzWidth="80px" nzRight>Type</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let a of basicTable.data">
           <td nzLeft> <a href="{{'admin/alarms/tickets?id='+ a.id}}">{{ a.reference }}</a> </td>
           <td nzLeft>{{ a.site?.siteName}}</td>
-          <td >{{ getPriority(a.priority) }}</td>
-          <td >{{ a.createdAt | dateFormat }}</td>
-          <td >{{ a.status }}</td>
-          <td >{{ a.user?.firstName + ' ' + a.user?.lastName}}</td>
-          <td >{{ a.closedAt??'N/A' }}</td>
+          <td>{{ getPriority(a.priority) }}</td>
+          <td>{{ a.createdAt | dateFormat }}</td>
+          <td>{{ a.status }}</td>
+          <td>{{ a.user?.firstName + ' ' + a.user?.lastName}}</td>
+          <td>{{ a.closedAt??'N/A' }}</td>
           <td>{{ a.shortDescription??'N/A'}}</td>
           <td>{{ a.noc?.firstName + a.noc?.lastName}}</td>
           <td>{{ a.description??'N/A' }}</td>

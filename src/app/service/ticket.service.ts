@@ -22,4 +22,9 @@ export class TicketService {
   acceptAssign(data: any): Observable<any>{
     return this.http.post(`${baseAPI}/tickets/assigned`, data);
   }
+
+  fetchTickets(page: number, limit: number): Observable<any>{
+    return this.http.get(`${baseAPI}/tickets/current-user?page=${page}&limit=${limit}`);
+  }
+
 }

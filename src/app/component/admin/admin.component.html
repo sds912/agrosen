@@ -34,7 +34,7 @@
          <span nz-icon nzType="product"></span>
          <span>Equipements</span>
        </li>
-       <li nz-menu-item routerLink="/admin/sites">
+       <li nz-menu-item [routerLink]="['/admin/sites']" [queryParams]="{type: 'list'}">
          <span nz-icon nzType="home"></span>
          <span>Sites en service</span>
        </li>

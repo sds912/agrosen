@@ -1,1 +1,4 @@
-<p>site-management works!</p>
+<div class="container">
+  <app-site-list *ngIf="display === 'list'"></app-site-list>
+  <app-site-form *ngIf="display === 'form'"></app-site-form>
+</div>

@@ -18,9 +18,9 @@
        </li>
        <li nz-submenu nzTitle="Tickets" nzIcon="alert">
         <ul>
-          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'swo' }">SWO</li>
-          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'pm' }">PM</li>
-          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'corrective' }">Corrective</li>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ type: ticketType.SWO}">SWO</li>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ type: ticketType.PM }">PM</li>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ type: 'corrective' }">Corrective</li>
         </ul>
       </li>
        <li nz-menu-item routerLink="/admin/lue">

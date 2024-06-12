@@ -19,12 +19,26 @@ export class TicketService {
     return this.http.get(`${baseAPI}/tickets/${id}`);
   }
 
-  acceptAssign(data: any): Observable<any>{
+  create(data: any): Observable<any>{
+    return this.http.post(`${baseAPI}/tickets`, data);
+  }
+
+  assign(data: any): Observable<any>{
     return this.http.post(`${baseAPI}/tickets/assigned`, data);
   }
 
-  fetchTickets(page: number, limit: number): Observable<any>{
-    return this.http.get(`${baseAPI}/tickets/current-user?page=${page}&limit=${limit}`);
+  acceptAssign( data: any): Observable<any>{
+    return this.http.put(`${baseAPI}/tickets/accepted/${data.id}`, null);
+  }
+
+  fetchTickets(page: number, limit: number, type: string): Observable<any>{
+    return this.http.get(`${baseAPI}/tickets/current-user?page=${page}&limit=${limit}&type=${type}`);
+  }
+
+  fetchRefNumber(): Observable<any> {
+
+   return this.http.get<any>(`${baseAPI}/tickets/generate/site-access-request`, { responseType: "json" });
+    
   }
 
 }

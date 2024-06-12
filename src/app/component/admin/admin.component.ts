@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../service/login.service';
+import { TICKET_TYPE } from '../../shared/app-constants';
 
 @Component({
   selector: 'app-admin',
@@ -10,6 +11,8 @@ export class AdminComponent implements OnInit{
 
   isCollapsed = false;
   currentUser: any = null;
+  
+  ticketType = TICKET_TYPE;
 
   constructor(private loginService: LoginService){
 

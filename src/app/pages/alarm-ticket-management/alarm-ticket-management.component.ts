@@ -13,10 +13,12 @@ export class AlarmTicketManagementComponent implements OnInit {
   state:any;
   displayMode: string  = 'list';
   ticket: any;
+  type!: string;
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
 
      this.state = params.get('state');
+     this.type = params.get('type')!;
 
      if(this.state === 'open'){
         this.displayMode = 'form';

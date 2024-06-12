@@ -1,7 +1,7 @@
 <div class="container p-3 pt-0" style="width: 100%;" *ngIf="displayForm">
     <form style="width: 100%;" nz-form [formGroup]="alarmForm!" (ngSubmit)="submitForm()">
         <div class="text-end mb-2" style="margin-right: 60px;">
-            <button *ngIf="!displaySubmit" nz-button nzType="primary"
+            <button *ngIf="!displaySubmit && ticket?.status === 'ASSIGNED'" nz-button nzType="primary"
                 class="login-form-button login-form-margin">Accept</button>
             <button *ngIf="displaySubmit" nz-button nzType="primary"
                 class="login-form-button login-form-margin">Submit</button>

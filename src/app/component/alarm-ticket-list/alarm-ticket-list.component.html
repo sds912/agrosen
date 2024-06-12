@@ -11,7 +11,7 @@
           <th nzLeft>Site</th>
           <th nzWidth="110px">Priority</th>
           <th [nzSortFn]="true">Created</th>
-          <th nzWidth="100px">State</th>
+          <th nzWidth="165px">State</th>
           <th>Assigned to</th>
           <th>Closed</th>
           <th>Short description</th>
@@ -24,7 +24,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let a of basicTable.data">
-          <td nzLeft> <a href="{{'admin/alarms/tickets?id='+ a.id}}">{{ a.reference }}</a> </td>
+          <td nzLeft> <a href="{{'admin/alarms/tickets?id='+ a.id+'&type='+type}}">{{ a.reference }}</a> </td>
           <td nzLeft>{{ a.site?.siteName}}</td>
           <td>{{ getPriority(a.priority) }}</td>
           <td>{{ a.createdAt | dateFormat }}</td>

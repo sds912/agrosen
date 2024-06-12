@@ -6,6 +6,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SiteService } from '../../service/site.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TicketService } from '../../service/ticket.service';
+import { LoginService } from '../../service/login.service';
 
 
 
@@ -47,6 +48,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   ticket: any;
   displaySubmit: boolean = true;
   displayForm: boolean = false;
+  type!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -55,6 +57,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     private router: Router,
     private message: NzMessageService,
     private ticketService: TicketService,
+    private loginService: LoginService,
     private siteService: SiteService) {
 
     this.alarmForm = this.fb.group({
@@ -118,7 +121,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
           this.route.queryParamMap.subscribe(params => {
             const id = params.get('id');
-            
+            this.type = params.get('type')!;
+
             if (id !== undefined && id !== null) {
 
               this.ticketService.fetchTicketById(id!)
@@ -139,16 +143,16 @@ export class AlarmTicketOpenFormComponent implements OnInit {
                       this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
                       this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
                       this.alarmForm?.get('gpsLocation')?.setValue(this.ticket?.site?.address?.lat + ' , ' + this.ticket?.site?.address?.lng);
-                      this.fetchRefNumber();
+                      this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.alarmForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest): null;
+                    
                       this.displaySubmit = false;
-
+                      this.alarmForm?.get('siteAccessRequest')?.disable();
                       this.alarmForm!.get('number')?.disable();
-                      this.alarmForm!.get('priority')?.disable();
                       this.alarmForm!.get('state')?.disable();
                       this.displayForm = true;
 
 
-                    } else{
+                    } else {
                       this.displayForm = true;
                     }
 
@@ -159,9 +163,14 @@ export class AlarmTicketOpenFormComponent implements OnInit {
                 )
 
             } else {
-              this.displayForm = true;
-              this.fetchNumber();
-              // this.initForm();
+
+              if (this.type !== undefined && this.type !== null) {
+                this.displayForm = true;
+                this.fetchNumber(this.type);
+                // this.initForm();
+
+              }
+
 
 
             }
@@ -175,23 +184,16 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       );
   }
 
-  fetchNumber(): void {
+  fetchNumber(type: string): void {
     console.log('fetch')
-    this.http.get<any>('http://62.171.177.19:3001/api/tickets/generate/reference?type=SWO_TASK', { responseType: "json" })
+    this.http.get<any>(`http://62.171.177.19:3001/api/tickets/generate/reference?type=${type}`, { responseType: "json" })
       .subscribe(
         data => { console.log(data) },
         error => this.alarmForm!.get('number')?.setValue(error.error.text)
       );
   }
 
-  fetchRefNumber(): void {
-    console.log('fetch')
-    this.http.get<any>('http://62.171.177.19:3001/api/tickets/generate/site-access-request', { responseType: "json" })
-      .subscribe(
-        data => { console.log(data) },
-        error => this.alarmForm!.get('siteAccessRequest')?.setValue(error.error.text)
-      );
-  }
+ 
 
   filterOptions(value: string): string[] {
     const filterValue = value.toLowerCase();
@@ -233,7 +235,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
     const data1 = {
       priority: this.alarmForm!.get('priority')?.value?.name,
-      type: "SWO_TASK",
+      type: this.type,
       reference: this.alarmForm!.get('number')?.value,
       alarmCheckList: false,
       popFourTab: false,
@@ -245,16 +247,11 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     }
 
     if (this.ticket) {
-      const data = {
-        ticketId: this.ticket.id,
-        user: this.alarmForm!.get('assignedTo')?.value?.id,
-        userGroup: this.alarmForm!.get('assignmentGroup')?.value?.id,
-        siteAccessRequest: this.alarmForm!.get('siteAccessRequest')?.value?.id
-      }
+     const data = this.ticket;
       this.ticketService.acceptAssign(data).subscribe(
         response => {
-          console.log(response);
           this.createMessage('success', "Ticket accepté avec succès");
+          window.location.reload()
 
         },
         error => {
@@ -267,11 +264,32 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
       console.log(data1);
 
-      this.http.post(`${environment.BaseUrl}/tickets`, data1)
-        .subscribe(response => {
-          this.createMessage('success', "Ticket créé avec succès");
-          this.router.navigate(['admin/alarms/tickets'], { queryParams: { state: 'pm' } });
+       this.ticketService.create(data1)
+        .subscribe(ticket => {
+          console.log(ticket)
+          this.ticketService.fetchRefNumber()
+          .subscribe(
+            data => { console.log(data) },
+            error => {
 
+              const data = {
+                ticketId: ticket.id,
+                user: ticket?.user?.id,
+                userGroup: ticket?.userGroup?.id,
+                siteAccessRequest: error.error.text
+              }
+              console.log()
+              this.ticketService.assign(data).subscribe((response: any) =>{
+              console.log(response)
+              this.createMessage('success', "Ticket créé avec succès");
+             this.router.navigate(['admin/alarms/tickets'], { queryParams: { type: this.type } });
+              },
+            error => this.createMessage('error', error?.error?.messages[0]??'Unknown Error'))
+
+            }
+          );
+         
+        
         },
           error => {
             this.createMessage('error', error?.error?.message ?? "Erreur inconnue");

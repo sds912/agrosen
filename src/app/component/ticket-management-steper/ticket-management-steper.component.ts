@@ -20,7 +20,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TicketManagementSteperComponent implements OnInit {
 
-  @Input() status: any = 'ASSIGNED';
+  @Input() status: string = 'OPEN';
 
   ngOnInit(): void {
     console.log(this.status)

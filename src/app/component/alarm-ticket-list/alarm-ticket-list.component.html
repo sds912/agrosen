@@ -1,15 +1,9 @@
-<nz-card style="width: 100%;" nzTitle="Tickets" [nzExtra]="extraTemplate">
-  <nz-card-tab>
-    <nz-tabset nzSize="large" [(nzSelectedIndex)]="index1">
-      <nz-tab nzTitle="SAR Task"></nz-tab>
-      <nz-tab nzTitle="Planned Downtowns"></nz-tab>
-    </nz-tabset>
-  </nz-card-tab>
+<nz-card style="width: 100%;" nzTitle="Tickets" [nzBodyStyle]="{padding: '0'}" [nzExtra]="extraTemplate">
+  
   <div>
     <nz-table nzShowSizeChanger [nzScroll]="{ x: '2000px' }" *ngIf="tickets.length > 0"
       (nzQueryParams)="onQueryParamsChange($event)" 
       [nzLoading]="loading" [nzTotal]="total" [nzPageSize]="pageSize"
-      
       [nzPageIndex]="pageIndex" #basicTable [nzData]="tickets">
       <thead>
         <tr>

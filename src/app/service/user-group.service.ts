@@ -1,12 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SiteService {
+export class UserGroupService {
 
   private apiUrl = environment.BaseUrl; // Your backend API URL
 
@@ -14,14 +14,8 @@ export class SiteService {
   constructor(private http: HttpClient) { }
 
 
-  fetchTicketById(id: string): Observable<any>{
-    return this.http.get(`${environment.BaseUrl}/sites/${id}`);
-  }
-
-
-
-  getSites(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/sites`);
+  getUserGroups(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user-groups`);
   }
 
   getSiteById(id: string): Observable<any> {
@@ -29,7 +23,7 @@ export class SiteService {
   }
 
   createSite(site: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/sites`, site);
+    return this.http.post<any>(this.apiUrl, site);
   }
 
   updateSite(id: string, site: any): Observable<any> {
@@ -39,7 +33,5 @@ export class SiteService {
   deleteSite(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-
-  
 
 }

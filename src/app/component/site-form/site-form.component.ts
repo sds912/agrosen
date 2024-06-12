@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SiteService } from '../../service/site.service';
+import { ClusterService } from '../../service/cluster.service';
+import { UserGroupService } from '../../service/user-group.service';
+import { UserService } from '../../service/user.service';
 
 @Component({
   selector: 'app-site-form',
@@ -14,30 +17,62 @@ export class SiteFormComponent implements OnInit {
   siteForm: FormGroup;
   isEditing = false;
   siteId!: string;
-
-  clusters = ['Cluster1', 'Cluster2', 'Cluster3']; // Replace with actual cluster data
-  siteTypes = ['Type1', 'Type2', 'Type3']; // Replace with actual site type data
-  options = ['Option1', 'Option2', 'Option3']; // Replace with actual GE/FS/FE options
+  clusters: any[] = [];
+  fss: any[] = [];
+  fes: any[] = [];
+  ges: string[] = ["Generator Logic", "SDMO", "TECNOGEN", "UNATRAC", "ELCOS", "PRAMAC", "Caterpillar"];
+  classes: string[] = ["Gold", "Platinum", "Silver"];
+  siteTypes: any[] = [
+    {
+      key: "1",
+      name: "TOP"
+    },
+    {
+      key: "2",
+      name: "BOTTOM"
+    }
+  ]
+  batteries: string[] = ['ALESIS', 'NUX', 'EFNOTE'];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private siteService: SiteService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private clusterService: ClusterService,
+    private userGroupService: UserGroupService,
+    private userService: UserService
   ) {
     this.siteForm = this.fb.group({
-      KiSite: ['', Validators.required],
-      Cluster: ['', Validators.required],
-      SiteName: ['', Validators.required],
-      SiteType: ['', Validators.required],
-      GE: [[], Validators.required],
-      FS: [[], Validators.required],
-      FE: [[], Validators.required]
+      siteName: ['', Validators.required],
+      siteClass: ['', Validators.required],
+      siteType: ['', Validators.required],
+      siteId: ['', Validators.required],
+      genset: [0],
+      ge: [''],
+      customerId: '',
+      address: this.fb.group({
+        city: [''],
+        region: [''],
+        country: [''],
+        street: [''],
+        lat: [0, ],
+        lng: [0, ]
+      }),
+      clusterNumber: ['', Validators.required],
+      fe: [[], Validators.required],
+      fs: [[], Validators.required],
+     // userGroup: ['']
+      battery: ['']
     });
+    
   }
 
   ngOnInit(): void {
+    this.loadClusters();
+    this.loadFE();
+    this.loadFS();
     this.siteId = this.route.snapshot.paramMap.get('id')!;
     if (this.siteId) {
       this.isEditing = true;
@@ -56,32 +91,59 @@ export class SiteFormComponent implements OnInit {
     );
   }
 
+  loadClusters(): void {
+    this.clusterService.getClusters().subscribe(
+      (response: any) => {
+        this.clusters = response?.data;
+        console.log(response.data)
+      },
+      error => {
+        this.message.error('Failed to load site.');
+      }
+    );
+  }
+
+  loadFE(): void {
+    this.userService.getUsersByRole('FE').subscribe(
+      (response: any) => {
+        console.log(response)
+        this.fes = response?.data;
+      },
+      error => {
+        this.message.error('Failed to load site.');
+      }
+    );
+  }
+
+  loadFS(): void {
+    this.userService.getUsersByRole('FS').subscribe(
+      (response: any) => {
+        console.log(response)
+        this.fss = response?.data;
+      },
+      error => {
+        this.message.error('Failed to load site.');
+      }
+    );
+  }
+
+
   saveSite(): void {
-    if (this.siteForm.valid) {
-      const site: any = this.siteForm.value;
-      if (this.isEditing) {
-        this.siteService.updateSite(this.siteId, site).subscribe(
-          () => {
-            this.message.success('Site updated successfully.');
-            this.router.navigate(['/sites']);
-          },
-          error => {
-            this.message.error('Failed to update site.');
-          }
-        );
-      } else {
+    const site: any = this.siteForm.value;
+
+    console.log(site)
+
+   
         this.siteService.createSite(site).subscribe(
           () => {
             this.message.success('Site created successfully.');
-            this.router.navigate(['/sites']);
+            this.router.navigate(['admin/sites'] ,{queryParams:{type:'list'}});
           },
           error => {
-            this.message.error('Failed to create site.');
+            this.message.error(error.error!.message[0]??'Unknown error');
+            console.log(error)
           }
         );
       }
-    } else {
-      this.message.error('Please fill out the form correctly.');
-    }
-  }
+    
 }

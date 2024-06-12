@@ -16,8 +16,9 @@
            <li nz-menu-item routerLink="/admin/alarmes?state=closed">Alarmes fermées</li>
          </ul>
        </li>
-       <li nz-submenu nzTitle="SWO" nzIcon="alert">
+       <li nz-submenu nzTitle="Tickets" nzIcon="alert">
         <ul>
+          <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'swo' }">SWO</li>
           <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'pm' }">PM</li>
           <li nz-menu-item [routerLink]="['/admin/alarms/tickets']" [queryParams]="{ state: 'corrective' }">Corrective</li>
         </ul>
@@ -78,7 +79,7 @@
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu nzSelectable>
               <li nz-menu-item>Mon compte</li>
-              <li nz-menu-item nzDanger>Déconnexion</li>
+              <li nz-menu-item nzDanger (click)="logout()" >Déconnexion</li>
             </ul>
           </nz-dropdown-menu>
         </div>

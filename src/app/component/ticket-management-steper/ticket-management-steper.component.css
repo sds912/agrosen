@@ -1,84 +1,102 @@
-.alarm-stepper{
+.alarm-stepper {
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
-	
-}
-.open-step{
-	 flex: 1;
-	height: 40px;
-	background-color: #0766BE;
-	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
-	color: #FFFFFF;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding-right: 50px;
-	z-index: 2;
-
-}
-.assigned-step{
-	 flex: 1;
-	height: 40px;
-	background-color: #DEDEDE;
-	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
-	color: #0766BE;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding-right: 60px;
-    margin-left: -70px;
-	z-index: 2;
-
-
-
-}
-.progress-step{
+  }
+  
+  .open-step,
+  .assigned-step,
+  .progress-step,
+  .waiting-closure-step,
+  .closed-step {
 	flex: 1;
 	height: 40px;
-	background-color: #C4C4C4;
-	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
-	color: #0766BE;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding-right: 15px;
-    margin-left: -70px;
 	z-index: 2;
-
-}
-.waiting-closure-step{
-	 flex: 1;
-	height: 40px;
-	background-color: #DEDEDE;
 	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
-	color: #0766BE;
+  }
+
+  .open-step-active,
+  .assigned-step-active,
+  .progress-step-active,
+  .waiting-closure-step-active,
+  .closed-step-active {
+	flex: 1;
+	height: 40px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding-right: 15px;
-    margin-left: -70px;
 	z-index: 2;
-
-
-
-}
-
-.closed-step{
-	 flex: 1;
-	height: 40px;
-	background-color: #FFC107;
 	clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 13% 51%, 0% 0%);
-	color: #0766BE;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  }
+  
+  
+  .open-step {
+	background-color: #c4c4c4;
+	color: #0766be;
 	padding-right: 50px;
-    margin-left: -65px;
-	z-index: 2;
+  }
 
-}
+  .open-step-active {
+	background-color: #0766be;
+	color: #ffffff;
+	padding-right: 50px;
+  }
+  
+  
+  .assigned-step {
+	background-color: #dedede;
+	color: #0766be;
+	padding-right: 60px;
+	margin-left: -70px;
+  }
 
-.actve-step{
-	border: 2px solid !important;
-}
+  .assigned-step-active{
+	background-color: #0766be;
+	color: #ffffff;
+	padding-right: 60px;
+	margin-left: -70px;
+  }
+  
+  .progress-step {
+	background-color: #c4c4c4;
+	color: #0766be;
+	padding-right: 15px;
+	margin-left: -70px;
+  }
+
+  .progress-step-active{
+	background-color: #0766be;
+	color: #ffffff;
+	padding-right: 15px;
+	margin-left: -70px;
+  }
+  
+  .waiting-closure-step {
+	background-color: #dedede;
+	color: #0766be;
+	padding-right: 15px;
+	margin-left: -70px;
+  }
+
+  .waiting-closure-step-active {
+	background-color: #0766be;
+	color: #ffffff;
+	padding-right: 15px;
+	margin-left: -70px;
+  }
+  
+  .closed-step {
+	background-color: #ffc107;
+	color: #0766be;
+	padding-right: 50px;
+	margin-left: -65px;
+  }
+  
+  .active-step {
+	background-color: #0766be !important;
+	color: red !important;
+  }
+  

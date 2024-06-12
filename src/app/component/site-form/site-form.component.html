@@ -1,98 +1,185 @@
-
 <form nz-form [formGroup]="siteForm" (ngSubmit)="saveSite()">
-<nz-card style="width:100%;" [nzBodyStyle]="{padding: '0'}" nzTitle="Add Site" [nzExtra]="extraTemplate">
-        <div class="row mt-4">
-            <div class="col-6">
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="6" nzRequired>KiSite</nz-form-label>
-                    <nz-form-control [nzSpan]="14" nzErrorTip="Please input KiSite">
-                        <input nz-input formControlName="KiSite" placeholder="KiSite" />
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div class="col-6">
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="6" nzRequired>Cluster</nz-form-label>
-                    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
-                        <nz-input-group nzPrefixIcon="search">
-                            <input type="text" nz-input [nzAutocomplete]="cluster" placeholder="Search...">
-                        </nz-input-group>
-                        <nz-autocomplete #cluster>
-                            <nz-auto-option *ngFor="let option of clusters" [nzValue]="option"
-                                [nzLabel]="option">{{option}}</nz-auto-option>
-                        </nz-autocomplete>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-    
-        <div class="row">
-            <div class="col-6">
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="6" nzRequired>Site Name</nz-form-label>
-                    <nz-form-control [nzSpan]="14" nzErrorTip="Please input Site Name">
-                        <input nz-input formControlName="SiteName" placeholder="Site Name" />
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div class="col-6">
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="6" nzRequired>Site Type</nz-form-label>
-                    <nz-form-control [nzSpan]="14" nzErrorTip="Please select Site Type">
-                        <nz-select formControlName="SiteType" placeholder="Site Type">
-                            <nz-option *ngFor="let type of siteTypes" [nzValue]="type" [nzLabel]="type"></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-    
-        <div class="row">
-            <div class="col-6">
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="6" nzRequired>GE</nz-form-label>
-                    <nz-form-control [nzSpan]="14" nzErrorTip="Please select GE">
-                        <nz-select formControlName="GE" nzMode="multiple" nzPlaceHolder="Select GE">
-                            <nz-option *ngFor="let option of options" [nzValue]="option" [nzLabel]="option"></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-            <div class="col-6">
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="6" nzRequired>FS</nz-form-label>
-                    <nz-form-control [nzSpan]="14" nzErrorTip="Please select FS">
-                        <nz-select formControlName="FS" nzMode="multiple" nzPlaceHolder="Select FS">
-                            <nz-option *ngFor="let option of options" [nzValue]="option" [nzLabel]="option"></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="6" nzRequired>FE</nz-form-label>
-                    <nz-form-control [nzSpan]="14" nzErrorTip="Please select FE">
-                        <nz-select formControlName="FE" nzMode="multiple" nzPlaceHolder="Select FE">
-                            <nz-option *ngFor="let option of options" [nzValue]="option" [nzLabel]="option"></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                </nz-form-item>
-            </div>
-        </div>
-    
-        
-</nz-card> 
-<ng-template #extraTemplate>
-    <div class="d-flex justify-content-between align-items-center">
-        <nz-form-item style="padding-top: 0px !important; margin-bottom: 0px !important;">
-            <nz-form-control>
-                <button nz-button nzType="primary" type="submit" [disabled]="!siteForm.valid">Save</button>
+    <nz-card style="width:100%;" [nzBodyStyle]="{padding: '0'}" nzTitle="Add Site" [nzExtra]="extraTemplate">
+      <div class="row mt-4">
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>SiteId</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input SiteId">
+              <input nz-input formControlName="siteId" placeholder="SiteId" />
             </nz-form-control>
-        </nz-form-item>
-        <button nz-button nzType="default"  class="ms-2" >Cancel</button>
-    </div>
-</ng-template>
-</form>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>HTS Site ID</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input HTS Site ID">
+              <input nz-input formControlName="customerId" placeholder="HTS Site ID" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      
+      </div>
+  
+      <div class="row">
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Site Name</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input Site Name">
+              <input nz-input formControlName="siteName" placeholder="Site Name" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Site Class</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please select Site Class">
+              <nz-select formControlName="siteClass" placeholder="Site Class" nzPlaceHolder="Class">
+                <nz-option *ngFor="let classe of classes" [nzValue]="classe" [nzLabel]="classe"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Site Type</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please select Site Class">
+              <nz-select formControlName="siteType" placeholder="Site Type" nzPlaceHolder="Class Type">
+                <nz-option *ngFor="let type of siteTypes" [nzValue]="type.key" [nzLabel]="type.name"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Cluster</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+              <nz-input-group nzPrefixIcon="search">
+                <input type="text" nz-input formControlName="clusterNumber" [nzAutocomplete]="cluster" placeholder="Search..." />
+              </nz-input-group>
+              <nz-autocomplete #cluster>
+                <nz-auto-option *ngFor="let option of clusters" [nzValue]="option.clusterNumber"
+                  [nzLabel]="option.clusterNumber">{{option.clusterNumber}}</nz-auto-option>
+              </nz-autocomplete>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Battery</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please select Battery">
+              <nz-select formControlName="battery" placeholder="Battery" nzPlaceHolder="Battery">
+                <nz-option *ngFor="let b of batteries" [nzValue]="b" [nzLabel]="b"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+       
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>GE</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please select GE">
+              <nz-select formControlName="ge" placeholder="Site Class" nzPlaceHolder="GE">
+                <nz-option *ngFor="let ge of ges" [nzValue]="ge" [nzLabel]="ge"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>FS</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please select FS">
+              <nz-select formControlName="fs" nzMode="multiple" nzPlaceHolder="Select FS">
+                <nz-option *ngFor="let fs of fss" [nzValue]="fs.id" [nzLabel]="fs.firstName + ' ' + fs.lastName"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
 
+        <div class="col-6">
+          <nz-form-item >
+            <nz-form-label [nzSpan]="6" nzRequired>FE</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please select FE">
+              <nz-select formControlName="fe" nzMode="multiple" nzPlaceHolder="Select FE">
+                <nz-option *ngFor="let fe of fes" [nzValue]="fe.id" [nzLabel]="fe.firstName + ' ' + fe.lastName"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+       
+      </div>
+      <fieldset style="margin: 4px 20px;">
+        <legend>Address</legend>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item formGroupName="address">
+              <nz-form-label [nzSpan]="6" >Country</nz-form-label>
+              <nz-form-control [nzSpan]="14" nzErrorTip="Please input Country">
+                <input nz-input id="autocomplete" formControlName="country" placeholder="Enter your address" type="text" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item formGroupName="address">
+              <nz-form-label [nzSpan]="6" >Region</nz-form-label>
+              <nz-form-control [nzSpan]="14" nzErrorTip="Please input Region">
+                <input nz-input formControlName="region" placeholder="Region" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item formGroupName="address">
+              <nz-form-label [nzSpan]="6" >City</nz-form-label>
+              <nz-form-control [nzSpan]="14" nzErrorTip="Please input city">
+                <input nz-input formControlName="city" placeholder="City" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item formGroupName="address">
+              <nz-form-label [nzSpan]="6" >Street</nz-form-label>
+              <nz-form-control [nzSpan]="14" nzErrorTip="Please input street">
+                <input nz-input formControlName="street" placeholder="Street" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item formGroupName="address">
+              <nz-form-label [nzSpan]="6" >Latitude</nz-form-label>
+              <nz-form-control [nzSpan]="14" nzErrorTip="Please input Latitude">
+                <input type="number" nz-input formControlName="lat" placeholder="Latitude" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item formGroupName="address">
+              <nz-form-label [nzSpan]="6" >Longitude</nz-form-label>
+              <nz-form-control [nzSpan]="14" nzErrorTip="Please input Longitude">
+                <input type="number" nz-input formControlName="lng" placeholder="Longitude" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </fieldset>
+      <div class="p-4 text-end">
+        <button nz-button nzType="primary" type="submit" >Save</button>
+      </div>
+    </nz-card>
+    <ng-template #extraTemplate>
+      <div class="d-flex justify-content-between align-items-center">
+        <nz-form-item style="padding-top: 0px !important; margin-bottom: 0px !important;">
+          <nz-form-control>
+            <button nz-button nzType="primary" type="submit" >Save</button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </ng-template>
+    
+  </form>
+  

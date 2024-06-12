@@ -1,7 +1,7 @@
-// src/app/site-list/site-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SiteService } from '../../service/site.service';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 @Component({
   selector: 'app-site-list',
@@ -10,6 +10,11 @@ import { SiteService } from '../../service/site.service';
 })
 export class SiteListComponent implements OnInit {
   sites: any[] = [];
+  siteTypes: string[] = ['TOP','BOTTOM'];
+  loading: boolean = true;
+  total: number = 0;
+  pageSize = 10;
+  pageIndex = 1;
 
   constructor(private siteService: SiteService, private message: NzMessageService) {}
 
@@ -18,24 +23,32 @@ export class SiteListComponent implements OnInit {
   }
 
   loadSites(): void {
+    this.loading = true;
     this.siteService.getSites().subscribe(
       (response: any) => {
         this.sites = response?.data?.map((site: any) => ({
-          KiSite: site.siteId,
-          Cluster: site.siteClass,
-          SiteName: site.siteName,
-          SiteType: site.siteType,
-          GE: site.users.filter((user: any) => user.role === 'GE').map((user: any) => user.firstName + ' ' + user.lastName),
+          siteId: site.siteId ?? 'N/A',
+          cluster: site.clusterNumber ?? 'N/A',
+          siteName: site.siteName ?? 'N/A',
+          siteType: site.siteType ? this.siteTypes[site.siteType] ?? 'N/A' : 'N/A',
+          customerId: site.customerId ?? 'N/A',
+          genset: site.genset ?? 'N/A',
+          battery: site.battery ?? 'N/A',
+          location: {
+            city: site.address.city ?? 'N/A',
+            country: site.address.country ?? 'N/A',
+            region: site.address.region ?? 'N/A'
+          },
+          GE: site.ge ?? 'N/A',
           FS: site.users.filter((user: any) => user.role === 'FS').map((user: any) => user.firstName + ' ' + user.lastName),
           FE: site.users.filter((user: any) => user.role === 'FE').map((user: any) => user.firstName + ' ' + user.lastName)
         }));
-        console.log(this.sites);
-        
+        this.loading = false;
       },
       error => {
         this.message.error('Failed to load sites.');
         console.log(error);
-        
+        this.loading = false;
       }
     );
   }
@@ -51,6 +64,7 @@ export class SiteListComponent implements OnInit {
       }
     );
   }
+
   editSite(id: string): void {
     this.siteService.deleteSite(id).subscribe(
       () => {
@@ -61,5 +75,15 @@ export class SiteListComponent implements OnInit {
         this.message.error('Failed to delete site.');
       }
     );
+  }
+
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    console.log(params);
+    const { pageSize, pageIndex, sort, filter } = params;
+    const currentSort = sort.find(item => item.value !== null);
+    const sortField = (currentSort && currentSort.key) || null;
+    const sortOrder = (currentSort && currentSort.value) || null;
+    this.loadSites()
+   // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
   }
 }

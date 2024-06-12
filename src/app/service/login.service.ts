@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environments/environment.development';
 import { Observable, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 const apiBaseUrl = environment.BaseUrl;
 
@@ -17,7 +18,7 @@ export class LoginService {
   accessToken!:any
   refreshToken!: any;
   currentUser: any;
- constructor(private http:HttpClient) { 
+ constructor(private http:HttpClient, private router: Router) { 
   const accessToken = localStorage.getItem('access_token')??"";
   const refreshToken = localStorage.getItem('refesh_token')??"";
   this.setTokens(accessToken, refreshToken);
@@ -63,6 +64,7 @@ export class LoginService {
   this.username=undefined;
   this.roles=undefined;
   localStorage.clear();
+  this.router.navigate(['/login'])
   
  }
 

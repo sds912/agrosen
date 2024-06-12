@@ -21,5 +21,9 @@ export class AdminComponent implements OnInit{
     console.log(this.currentUser)
   }
 
+  logout(): void {
+    this.loginService.logout();
+  }
+
 
 }

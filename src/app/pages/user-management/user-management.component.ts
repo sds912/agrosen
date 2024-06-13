@@ -1,98 +1,145 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../../service/user.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
+
+interface User {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string | null;
+  isDeleted: boolean;
+  phoneNumber: string;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  lastLogin: string;
+  isVerified: boolean;
+  isBlocked: boolean;
+  isLocked: boolean;
+  dateOfBirth: string | null;
+  placeOfBirth: string | null;
+  role: string;
+  enabled: boolean;
+}
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
-  styleUrl: './user-management.component.css'
+  styleUrls: ['./user-management.component.css']
 })
-export class UserManagementComponent {
-  
-  users: any[] = [];
+export class UserManagementComponent implements OnInit {
+
+  loading: boolean = true;
+  total: number = 0;
+  pageSize = 10;
+  pageIndex = 1;
+  users: User[] = [];
+  roles = ['FE', 'FS', 'NOC', 'ZM', 'ADMIN'];
   isVisible = false;
-  isOkLoading = false;
-  currentUser: any = null;
-  userForm!: FormGroup;
-  roles: string[] = ['FE', 'FS'];
+  isEditing = false;
+  selectedUser: User | null = null;
+  userForm: FormGroup;
+  date = null;
 
 
-  constructor(private userService: UserService, private modal: NzModalService, private fb: FormBuilder, private message: NzMessageService) { 
-
-    
+  onChange(result: Date): void {
+    console.log('onChange: ', result);
   }
-
-  ngOnInit(): void {
-    this.loadUsers();
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.userForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required]],
-      role: ['', [Validators.required]],
-      username: ['', [Validators.required]]
+      firstName: [''],
+      lastName: [''],
+      email: [''],
+      phoneNumber: [''],
+      role: [''],
+      username: [''],
+      lastLogin: [''],
+      createdAt: [''],
+      updatedAt: [''],
+      createdBy: [''],
+      isDeleted: [''],
+      isVerified: [''],
+      isBlocked: [''],
+      isLocked: [''],
+      dateOfBirth: [''],
+      placeOfBirth: [''],
+      enabled: ['']
     });
   }
 
-  loadUsers(): void {
-    this.userService.getUsers().subscribe((data: any) => {
-      this.users = data;
-    });
-  }
-
-  showModal(user?: any): void {
+  showModal(user?: User): void {
+    this.isEditing = !!user;
+    this.selectedUser = user || null;
     if (user) {
-      this.currentUser = { ...user };
+      this.userForm.patchValue(user);
     } else {
-      this.currentUser = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        role: '',
-        username: ''
-      };
+      this.userForm.reset();
     }
     this.isVisible = true;
-  }
-
-  handleOk(): void {
-    this.isOkLoading = true;
-    if (this.currentUser.id) {
-      this.userService.updateUser(this.currentUser.id, this.currentUser).subscribe(() => {
-        this.loadUsers();
-        this.message.success('User updated successfully');
-        this.isVisible = false;
-        this.isOkLoading = false;
-      });
-    } else {
-      this.userService.createUser(this.userForm.value).subscribe(() => {
-        this.loadUsers();
-        this.message.success('User created successfully');
-        this.isVisible = false;
-        this.isOkLoading = false;
-      },
-    error => console.log(error));
-    }
   }
 
   handleCancel(): void {
     this.isVisible = false;
   }
 
-  deleteUser(id: string): void {
-    this.modal.confirm({
-      nzTitle: 'Are you sure delete this user?',
-      nzOnOk: () => {
-        this.userService.deleteUser(id).subscribe(() => {
-          this.loadUsers();
-          this.message.success('User deleted successfully');
-        });
-      }
-    });
+  handleOk(): void {
+    if (this.isEditing && this.selectedUser) {
+      // Update user
+      const index = this.users.findIndex(u => u.id === this.selectedUser!.id);
+      this.users[index] = { ...this.selectedUser, ...this.userForm.value, updatedAt: new Date().toISOString() };
+    } else {
+      // Add new user
+      const newUser: User = {
+        ...this.userForm.value,
+        id: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        createdBy: null,
+        isDeleted: false,
+        lastLogin: '',
+        isVerified: false,
+        isBlocked: false,
+        isLocked: false,
+        dateOfBirth: null,
+        placeOfBirth: null,
+        enabled: true
+      };
+      this.users.push(newUser);
+    }
+    this.isVisible = false;
   }
+
+  loadUsers(): void {
+    this.loading = true;
+    this.userService.getUsers()
+    .subscribe(
+      response => {
+      this.users = response.data;
+    this.loading = false;
+
+    },
+      error => {
+        this.loading = false;
+
+      })
+  }
+
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    console.log(params);
+    const { pageSize, pageIndex, sort, filter } = params;
+    const currentSort = sort.find(item => item.value !== null);
+    const sortField = (currentSort && currentSort.key) || null;
+    const sortOrder = (currentSort && currentSort.value) || null;
+    this.loadUsers()
+   // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
+  }
+
 
 
 }

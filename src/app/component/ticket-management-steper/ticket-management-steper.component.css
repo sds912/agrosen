@@ -50,52 +50,52 @@
 	background-color: #dedede;
 	color: #0766be;
 	padding-right: 60px;
-	margin-left: -70px;
+	margin-left: -80px;
   }
 
   .assigned-step-active{
 	background-color: #0766be;
 	color: #ffffff;
 	padding-right: 60px;
-	margin-left: -70px;
+	margin-left: -80px;
   }
   
   .progress-step {
 	background-color: #c4c4c4;
 	color: #0766be;
 	padding-right: 15px;
-	margin-left: -70px;
+	margin-left: -80px;
   }
 
   .progress-step-active{
 	background-color: #0766be;
 	color: #ffffff;
 	padding-right: 15px;
-	margin-left: -70px;
+	margin-left: -80px;
   }
   
   .waiting-closure-step {
 	background-color: #dedede;
 	color: #0766be;
 	padding-right: 15px;
-	margin-left: -70px;
+	margin-left: -80px;
   }
 
   .waiting-closure-step-active {
 	background-color: #0766be;
 	color: #ffffff;
 	padding-right: 15px;
-	margin-left: -70px;
+	margin-left: -80px;
   }
   
   .closed-step {
 	background-color: #ffc107;
 	color: #0766be;
 	padding-right: 50px;
-	margin-left: -65px;
+	margin-left: -80px;
   }
   
-  .active-step {
+  .closed-step-active {
 	background-color: #0766be !important;
 	color: white;
   }

@@ -1,13 +1,10 @@
-<div class="container p-3 pt-0 px-5" style="width: 100%;" *ngIf="displayForm">
-    <div *ngIf="ticket?.status === TICKETSTATE.WORKINPROGRESS" class="d-flex justify-content-end align-items-center ">
-        <button nz-button nzType="primary" (click)="saveStatus(TICKETSTATE.CLOSED)" >Close SWO Complete</button>
-        <button class="mx-2 btn-outline-warning"  nz-button nzType="primary" (click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)" >Close SWO Incomplete</button>
-        <button [disabled]="ticket.status === TICKETSTATE.CANCEL || ticket.status === TICKETSTATE.CLOSED" nz-button nzType="default" nzDanger (click)="saveStatus(TICKETSTATE.CANCEL)" >Cancel SWO</button>
-    </div>  
+<div class="container p-3 pt-0" style="width: 100%;" *ngIf="displayForm">
     <form style="width: 100%;" nz-form [formGroup]="alarmForm!" (ngSubmit)="submitForm()">
         <div class="text-end mb-2" style="margin-right: 60px;">
-            <button *ngIf="!displaySubmit && ticket?.status === TICKETSTATE.ASSIGNED && this.currentUser && this.currentUser?.role !== ROLE.NOC" nz-button nzType="primary">Accept</button>
-            <button *ngIf="displaySubmit" nz-button nzType="primary">Submit</button>  
+            <button *ngIf="!displaySubmit && ticket?.status === TICKETSTATE.ASSIGNED && this.currentUser && this.currentUser?.role !== ROLE.NOC" nz-button nzType="primary"
+                class="login-form-button login-form-margin">Accept</button>
+            <button *ngIf="displaySubmit" nz-button nzType="primary"
+                class="login-form-button login-form-margin">Submit</button>
         </div>
         <app-ticket-management-steper [status]="this.ticket?.status"></app-ticket-management-steper>
         <div class="d-flex justify-content-between mt-3">
@@ -53,7 +50,7 @@
                 <nz-form-item>
                     <nz-form-label nzRequired [nzSpan]="10">Priority</nz-form-label>
                     <nz-form-control  [nzXs]="14" nzErrorTip="The input is not valid">
-                        <nz-select name="select-validate" nzPlaceHolder="Priority" formControlName="priority">
+                        <nz-select name="select-validate" formControlName="priority">
                             <nz-option *ngFor="let p of priorities" [nzValue]="p" [nzLabel]="p.name">{{p.name}}</nz-option>
                         </nz-select>
                     </nz-form-control>
@@ -117,14 +114,14 @@
                         <nz-input-group nzPrefixIcon="search">
                             <input type="text" nz-input [nzAutocomplete]="assignmentGroup"
                             [disabled]="this.ticket !== undefined"
-                            [ngModel]="alarmForm!.get('assignmentGroup')?.value?.name??''"
+                            [ngModel]="alarmForm!.get('assignmentGroup')?.value?.type"
                             [ngModelOptions]="{standalone: true}"
                             (ngModelChange)="onAssignmentGroupInput($event)" 
-                            [value]="alarmForm!.get('assignmentGroup')?.value?.name??''" placeholder="Search...">
+                            [value]="alarmForm!.get('assignmentGroup')?.value?.siteId" placeholder="Search...">
                         </nz-input-group>
                         <nz-autocomplete #assignmentGroup>
                             <nz-auto-option *ngFor="let option of filteredAssignmentGroups" [nzValue]="option"
-                                [nzLabel]="option.name">{{ option.name }}</nz-auto-option>
+                                [nzLabel]="option.type">{{ option.type }}</nz-auto-option>
                         </nz-autocomplete>
                     </nz-form-control>
                 </nz-form-item>
@@ -135,14 +132,14 @@
                         <nz-input-group nzPrefixIcon="search">
                             <input type="text" nz-input [nzAutocomplete]="assignedTo"
                             [disabled]="this.ticket !== undefined"
-                            [ngModel]="alarmForm!.get('assignedTo')?.value?.firstName !== undefined ? alarmForm!.get('assignedTo')?.value?.firstName??'' +' '+ alarmForm?.get('assignedTo')?.value?.lastName??'':''"
+                            [ngModel]="alarmForm!.get('assignedTo')?.value?.role"
                             [ngModelOptions]="{standalone: true}"
                             (ngModelChange)="onAssignedToInput($event)" 
-                            [value]=" alarmForm!.get('assignedTo')?.value?.firstName !== undefined ? alarmForm!.get('assignedTo')?.value?.firstName??'' +' '+ alarmForm?.get('assignedTo')?.value?.lastName??'': ''" placeholder="Search...">
+                            [value]="alarmForm!.get('assignedTo')?.value?.role" placeholder="Search...">
                         </nz-input-group>
                         <nz-autocomplete #assignedTo>
                             <nz-auto-option *ngFor="let option of filteredAssignedTo" [nzValue]="option"
-                                [nzLabel]="option.firstName??'' +' '+ option.lastName??''">{{ option.firstName??'' +' '+ option.lastName??'' }}</nz-auto-option>
+                                [nzLabel]="option.role">{{ option.role }}</nz-auto-option>
                         </nz-autocomplete>
                     </nz-form-control>
                 </nz-form-item>

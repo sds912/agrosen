@@ -28,10 +28,11 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { DATE_HELPER_SERVICE_FACTORY, NZ_DATE_CONFIG, NZ_I18N } from 'ng-zorro-antd/i18n';
+import { DATE_HELPER_SERVICE_FACTORY, NZ_DATE_CONFIG, NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { CommonModule, DatePipe } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
+import fr from '@angular/common/locales/fr';
 import {  NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
@@ -46,15 +47,18 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { AlarmTicketListComponent } from './component/alarm-ticket-list/alarm-ticket-list.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { SiteManagementComponent } from './pages/site-management/site-management.component';
 import { SiteListComponent } from './component/site-list/site-list.component';
 import { SiteFormComponent } from './component/site-form/site-form.component';
+import { AlarmTicketPMOpenFormComponent } from './component/alarm-ticket-pm-open-form/alarm-ticket-pm-open-form.component';
 
 
 registerLocaleData(en);
+registerLocaleData(fr);
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -81,7 +85,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     UserManagementComponent,
     SiteManagementComponent,
     SiteListComponent,
-    SiteFormComponent
+    SiteFormComponent,
+    AlarmTicketPMOpenFormComponent
   ],
   imports: [
     BrowserModule,
@@ -111,7 +116,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzMessageModule,
     NzCardModule,
     NzTabsModule,
-    NzModalModule
+    NzModalModule,
+    NzSwitchModule
     
     
   ],
@@ -122,7 +128,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       multi: true
     },
     { provide: NZ_ICONS, useValue: icons },
-    { provide: NZ_I18N, useValue: en }
+    { provide: NZ_I18N, useValue: en },
+    { provide: NZ_I18N, useValue: en_US }
      
   ],
   bootstrap: [AppComponent]

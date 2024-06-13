@@ -20,8 +20,12 @@ export class AdminComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.currentUser = this.loginService.currentUser;
-    console.log(this.currentUser)
+    if(localStorage.getItem('access_token') !== '' && localStorage.getItem('access_token') !== null ){
+      this.loginService.loardProfile(localStorage.getItem('access_token'))
+      this.currentUser = this.loginService.currentUser;
+    }
+    
+    
   }
 
   logout(): void {

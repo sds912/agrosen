@@ -13,11 +13,11 @@ import { ROLE, TiCKET_STATE } from '../../shared/app-constants';
 
 
 @Component({
-  selector: 'app-alarm-ticket-open-form',
-  templateUrl: './alarm-ticket-open-form.component.html',
-  styleUrls: ['./alarm-ticket-open-form.component.css']
+  selector: 'app-alarm-ticket-pm-open-form',
+  templateUrl: './alarm-ticket-pm-open-form.component.html',
+  styleUrls: ['./alarm-ticket-pm-open-form.component.css']
 })
-export class AlarmTicketOpenFormComponent implements OnInit {
+export class AlarmTicketPMOpenFormComponent implements OnInit {
 
   priorities: any[] = [
     {
@@ -52,8 +52,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   displayForm: boolean = false;
   type!: string;
   currentUser: any;
-  TICKETSTATE = TiCKET_STATE;
-  ROLE = ROLE;
+ TICKETSTATE = TiCKET_STATE;
+ ROLE = ROLE;
 
   constructor(
     private fb: FormBuilder,
@@ -76,8 +76,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       taskReference: [null, []],
       woDate: [null, []],
       state: ["OPEN", [Validators.required]],
-      assignmentGroup: ['', [Validators.required]],
-      assignedTo: ['', [Validators.required]],
+      assignmentGroup: [null, [Validators.required]],
+      assignedTo: [null, [Validators.required]],
       gpsLocation: [null, []],
       shortDescription: [null, []],
       partShortDescription: [null, []],
@@ -149,8 +149,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
                       this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
                       this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
                       this.alarmForm?.get('gpsLocation')?.setValue(this.ticket?.site?.address?.lat + ' , ' + this.ticket?.site?.address?.lng);
-                      this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.alarmForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest) : null;
-
+                      this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.alarmForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest): null;
+                    
                       this.displaySubmit = false;
                       this.alarmForm?.get('siteAccessRequest')?.disable();
                       this.alarmForm!.get('number')?.disable();
@@ -199,7 +199,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       );
   }
 
-
+ 
 
   filterOptions(value: string): string[] {
     const filterValue = value.toLowerCase();
@@ -253,10 +253,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     }
 
     if (this.ticket) {
-
-      const data: any = this.ticket;
-      data.type = this.type;
-      console.log(data)
+     const data = this.ticket;
       this.ticketService.acceptAssign(data).subscribe(
         response => {
           this.createMessage('success', "Ticket accepté avec succès");
@@ -273,32 +270,32 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
       console.log(data1);
 
-      this.ticketService.create(data1)
+       this.ticketService.create(data1)
         .subscribe(ticket => {
           console.log(ticket)
           this.ticketService.fetchRefNumber()
-            .subscribe(
-              data => { console.log(data) },
-              error => {
+          .subscribe(
+            data => { console.log(data) },
+            error => {
 
-                const data = {
-                  ticketId: ticket.id,
-                  user: ticket?.user?.id,
-                  userGroup: ticket?.userGroup?.id,
-                  siteAccessRequest: error.error.text
-                }
-                console.log()
-                this.ticketService.assign(data).subscribe((response: any) => {
-                  console.log(response)
-                  this.createMessage('success', "Ticket créé avec succès");
-                  this.router.navigate(['admin/alarms/tickets'], { queryParams: { type: this.type } });
-                },
-                  error => this.createMessage('error', error?.error?.messages[0] ?? 'Unknown Error'))
-
+              const data = {
+                ticketId: ticket.id,
+                user: ticket?.user?.id,
+                userGroup: ticket?.userGroup?.id,
+                siteAccessRequest: error.error.text
               }
-            );
+              console.log()
+              this.ticketService.assign(data).subscribe((response: any) =>{
+              console.log(response)
+              this.createMessage('success', "Ticket créé avec succès");
+             this.router.navigate(['admin/alarms/tickets'], { queryParams: { type: this.type } });
+              },
+            error => this.createMessage('error', error?.error?.messages[0]??'Unknown Error'))
 
-
+            }
+          );
+         
+        
         },
           error => {
             this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
@@ -314,28 +311,5 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
   createMessage(type: string, message: string): void {
     this.message.create(type, message);
-  }
-
-  saveStatus(status: string) {
-    const data = {
-      status: status,
-      cause: this.alarmForm?.get('shortDescription')?.value,
-      resolutionComment: this.alarmForm?.get('description')?.value,
-      workNotes: this.alarmForm?.get('workNote')?.value
-    }
-    
-    this.ticketService.updateStatus(this.ticket.id, data)
-      .subscribe(response => {
-        this.message.success(status !== this.TICKETSTATE.CANCEL ? 'Closed Successfully' : 'Canceled');
-        this.ticketService.fetchTicketById(this.ticket?.id)
-        .subscribe(
-          response => {
-            this.ticket = response;
-          });
-        
-      },
-        error => {
-          this.message.error(error.error?.messages[0]??'Unknown Error')
-        })
   }
 }

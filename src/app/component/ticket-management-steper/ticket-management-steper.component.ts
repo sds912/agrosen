@@ -1,5 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import { TiCKET_STATE } from '../../shared/app-constants';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-management-steper',
@@ -20,10 +22,16 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TicketManagementSteperComponent implements OnInit {
 
+  constructor(private route: ActivatedRoute){
+
+  }
+
   @Input() status: string = 'OPEN';
 
+  TICKETSTATUS = TiCKET_STATE;
+
   ngOnInit(): void {
-    console.log(this.status)
+    
   }
 
   

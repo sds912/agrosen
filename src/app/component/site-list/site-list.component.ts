@@ -26,9 +26,11 @@ export class SiteListComponent implements OnInit {
     this.loading = true;
     this.siteService.getSites().subscribe(
       (response: any) => {
+        console.log(response);
+        
         this.sites = response?.data?.map((site: any) => ({
           siteId: site.siteId ?? 'N/A',
-          cluster: site.clusterNumber ?? 'N/A',
+          cluster: site.cluster?.clusterNumber ?? 'N/A',
           siteName: site.siteName ?? 'N/A',
           siteType: site.siteType ? this.siteTypes[site.siteType] ?? 'N/A' : 'N/A',
           customerId: site.customerId ?? 'N/A',

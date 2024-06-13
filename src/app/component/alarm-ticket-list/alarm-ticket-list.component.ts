@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { TicketService } from '../../service/ticket.service';
-import { TICKET_TYPE } from '../../shared/app-constants';
+import { TICKET_TYPE, TiCKET_STATE } from '../../shared/app-constants';
 
 @Component({
   selector: 'app-alarm-ticket-list',
@@ -75,7 +75,7 @@ export class AlarmTicketListComponent implements OnInit {
   }
 
   navigateToNewTicket() {
-    this.router.navigate(['admin/alarms/tickets'], { queryParams: { state: 'open', type: this.type } });
+    this.router.navigate(['admin/alarms/tickets'], { queryParams: { status: TiCKET_STATE.OPEN, type: this.type } });
   }
 
   navigateToTicketDetails(id: string) {

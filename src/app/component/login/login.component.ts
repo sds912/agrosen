@@ -32,7 +32,8 @@ export class LoginComponent implements OnInit{
       localStorage.setItem('access_token', data['access_token']);
       localStorage.setItem('refresh_token', data['access_token']);
        this.authservice.loardProfile(data['access_token'])
-       this.router.navigateByUrl("/admin")
+       this.router.navigateByUrl("/admin");
+      // window.location.reload()
      },
      error:err=>{
        console.log(err)

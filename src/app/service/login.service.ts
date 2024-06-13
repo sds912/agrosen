@@ -64,7 +64,7 @@ export class LoginService {
   this.username=undefined;
   this.roles=undefined;
   localStorage.clear();
-  this.router.navigate(['/login'])
+  this.router.navigate(['/login']);
   
  }
 

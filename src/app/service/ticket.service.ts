@@ -41,4 +41,8 @@ export class TicketService {
     
   }
 
+  updateStatus(id: string, data: any): Observable<any>{
+    return this.http.put(`${baseAPI}/tickets/update-status/${id}`, data);
+  }
+
 }

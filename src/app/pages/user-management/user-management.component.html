@@ -1,90 +1,136 @@
-<div class="mb-2 text-end">
-    <button nz-button nzType="primary" (click)="showModal()">Ajouter un utilisateur</button>
-</div>
 
-<nz-table #basicTable [nzData]="users" [nzBordered]="true">
-    <thead>
-      <tr>
-        <th nzWidth="25%">First Name</th>
-        <th nzWidth="25%">Last Name</th>
-        <th nzWidth="20%">Email</th>
-        <th nzWidth="10%">Role</th>
-        <th nzWidth="20%">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of basicTable.data">
-        <td>{{ user?.firstName }}</td>
-        <td>{{ user?.lastName }}</td>
-        <td>{{ user?.email }}</td>
-        <td>{{ user?.role }}</td>
-        <td>
-          <button nz-button nzType="link" (click)="showModal(user)">Edit</button>
-          <button nz-button nzType="link" nzDanger (click)="deleteUser(user.id)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
+
+
+
+<nz-card style="width:100%;" [nzBodyStyle]="{padding: '0'}" nzTitle="Users" [nzExtra]="extraTemplate">
+  <nz-table #basicTable [nzData]="users" [nzBordered]="true"
+nzShowSizeChanger [nzScroll]="{ x: '2000px' }"
+(nzQueryParams)="onQueryParamsChange($event)" 
+[nzLoading]="loading" [nzTotal]="total" [nzPageSize]="pageSize"
+[nzPageIndex]="pageIndex"
+>
+  <thead>
+    <tr>
+      <th nzLeft>First Name</th>
+      <th nzLeft>Last Name</th>
+      <th >Email</th>
+      <th >Phone Number</th>
+      <th >Role</th>
+      <th >Username</th>
+      <th >Last Login</th>
+      <th >Created At</th>
+      <th >Updated At</th>
+      <th >Is Verified</th>
+      <th nzRight nzWidth="110px">Is Blocked</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of basicTable.data">
+      <td nzLeft>{{ user?.firstName }}</td>
+      <td nzLeft>{{ user?.lastName }}</td>
+      <td>{{ user?.email }}</td>
+      <td>{{ user?.phoneNumber }}</td>
+      <td>{{ user?.role }}</td>
+      <td>{{ user?.username }}</td>
+      <td>{{ user?.lastLogin! | dateFormat }}</td>
+      <td>{{ user?.createdAt! | dateFormat }}</td>
+      <td>{{ user?.updatedAt! | dateFormat }}</td>
+      <td>{{ user?.isVerified }}</td>
+      <td nzRight class="text-end" >
+        <nz-switch
+      [ngModel]="user?.isBlocked"
+      [nzCheckedChildren]="checkedTemplate"
+      [nzUnCheckedChildren]="unCheckedTemplate"
+      
+    ></nz-switch>
+    <ng-template #checkedTemplate><span nz-icon nzType="check"></span></ng-template>
+    <ng-template #unCheckedTemplate><span nz-icon nzType="close"></span></ng-template>
+      </td>
+      
+    </tr>
+  </tbody>
 </nz-table>
-  
-  
+</nz-card>
+<ng-template #extraTemplate>
+  <button nz-button nzType="primary" (click)="showModal()">New</button>
+</ng-template>
 
+<nz-modal [(nzVisible)]="isVisible" nzWidth="640px" [nzMaskClosable]="false" [nzStyle]="{ top: '20px' }" nzCancelText="Cancel" nzOkText="Save" nzTitle="Create New User" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent >
+    <form nz-form [formGroup]="userForm" style="width: 100%;">
+      <div class="row">
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzRequired>First Name</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input First Name">
+              <input nz-input formControlName="firstName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzRequired>Last Name</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input Last Name">
+              <input nz-input formControlName="lastName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzRequired>Email</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input Email">
+              <input nz-input formControlName="email" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzRequired>Phone Number</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input Phone Number">
+              <input nz-input formControlName="phoneNumber"  />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzRequired>Role</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please select Role">
+              <nz-select formControlName="role" nzPlaceHolder="Role" >
+                <nz-option *ngFor="let role of roles" [nzValue]="role" [nzLabel]="role"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10" nzRequired>Username</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input Username">
+              <input nz-input formControlName="username"  />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        
+      
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10">Date of Birth</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <nz-date-picker style="width: 100%;" formControlName="dateOfBirth" nzFormat="yyyy-MM-dd" [nzPlaceHolder]="'Date of birth'"  ></nz-date-picker> 
 
-  <nz-modal [(nzVisible)]="isVisible" [nzStyle]="{ top: '20px' }" nzCancelText="Annuller" nzOkText="Enregistrer" nzTitle="Créer un utilisateur" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
-      <ng-container *nzModalContent>
-        <form nz-form [formGroup]="userForm" style="width: 100%; height: 300px;">
-            <div nz-form-item nz-row>
-              <div nz-form-label nz-col [nzSpan]="6">
-                <label for="firstName">Prénom</label>
-              </div>
-              <div nz-form-control nz-col [nzSpan]="14">
-                <input nz-input id="firstName" formControlName="firstName" />
-              </div>
-            </div>
-            <div nz-form-item nz-row class="my-3">
-              <div nz-form-label nz-col [nzSpan]="6">
-                <label for="lastName">Nom</label>
-              </div>
-              <div nz-form-control nz-col [nzSpan]="14">
-                <input nz-input id="lastName" formControlName="lastName" />
-              </div>
-            </div>
-            <div nz-form-item nz-row>
-              <div nz-form-label nz-col [nzSpan]="6">
-                <label for="email">Email</label>
-              </div>
-              <div nz-form-control nz-col [nzSpan]="14">
-                <input nz-input id="email" formControlName="email" />
-              </div>
-            </div>
-            <div nz-form-item nz-row class="my-3">
-              <div nz-form-label nz-col [nzSpan]="6">
-                <label for="phoneNumber">Numéro</label>
-              </div>
-              <div nz-form-control nz-col [nzSpan]="14">
-                <input nz-input id="phoneNumber" formControlName="phoneNumber" />
-              </div>
-            </div>
-            <div nz-form-item nz-row>
-              <div nz-form-label nz-col [nzSpan]="6">
-                <label for="role">Role</label>
-              </div>
-              <div nz-form-control nz-col [nzSpan]="14">
-                <nz-select class="w-100" formControlName="role" nzPlaceHolder="Select a role">
-                  <nz-option *ngFor="let role of roles" [nzValue]="role" [nzLabel]="role"></nz-option>
-                </nz-select>
-              </div>
-            </div>
-            <div nz-form-item nz-row class="my-3">
-              <div nz-form-label nz-col [nzSpan]="6">
-                <label for="username">Nom d'utilisateur</label>
-              </div>
-              <div nz-form-control nz-col [nzSpan]="14">
-                <input nz-input id="username" formControlName="username" />
-              </div>
-            </div>
-          </form>
-      </ng-container>
-    </nz-modal>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="10">Place of Birth</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <input nz-input formControlName="placeOfBirth"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
 
-
-  

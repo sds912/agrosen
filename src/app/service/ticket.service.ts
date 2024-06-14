@@ -45,4 +45,18 @@ export class TicketService {
     return this.http.put(`${baseAPI}/tickets/update-status/${id}`, data);
   }
 
+  getTicketTasks(id:string): Observable<any>{
+    return this.http.get(`${baseAPI}/site-access-request-task/${id}`);
+  }
+
+  uploadImage(image: any, id: string){
+    return this.http.post(`${baseAPI}/files/upload/${id}`, image);
+
+  }
+
+  loadImage(fileName: string): Observable<ArrayBuffer>{
+    return this.http.get(`${baseAPI}/files/${fileName}`, { responseType: 'arraybuffer' });
+  }
+
+
 }

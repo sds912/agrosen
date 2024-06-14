@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TicketService } from '../../service/ticket.service';
 import { LoginService } from '../../service/login.service';
 import { ROLE, TiCKET_STATE } from '../../shared/app-constants';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
@@ -54,6 +55,10 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   currentUser: any;
   TICKETSTATE = TiCKET_STATE;
   ROLE = ROLE;
+  selectedFile: any | null = null;
+  imgURL: any;
+  tasks: any [] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -63,7 +68,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     private message: NzMessageService,
     private ticketService: TicketService,
     private loginService: LoginService,
-    private siteService: SiteService) {
+    private siteService: SiteService,
+    private sanitizer: DomSanitizer) {
 
     this.alarmForm = this.fb.group({
       number: [null, [Validators.required]],
@@ -99,6 +105,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     this.currentUser = this.loginService.currentUser;
     this.fetchSites();
 
+
   }
 
   onSiteInput(site: any): void {
@@ -129,44 +136,10 @@ export class AlarmTicketOpenFormComponent implements OnInit {
             const id = params.get('id');
             this.type = params.get('type')!;
 
+
             if (id !== undefined && id !== null) {
 
-              this.ticketService.fetchTicketById(id!)
-                .subscribe(
-                  response => {
-                    this.ticket = response;
-                    console.log(this.ticket)
-                    if (this.ticket !== undefined && this.ticket !== '' && this.ticket !== null) {
-                      const priority = this.priorities.find(v => v.value === this.ticket.priority);
-
-                      this.alarmForm?.get('number')?.setValue(this.ticket.reference);
-                      this.alarmForm?.get('priority')?.setValue(priority);
-                      this.alarmForm?.get('state')?.setValue(this.ticket.status);
-                      this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
-                      this.alarmForm?.get('site')!.setValue(this.ticket?.site);
-                      this.alarmForm?.get('assignedTo')!.setValue(this.ticket?.user);
-                      this.alarmForm?.get('assignmentGroup')!.setValue(this.ticket?.userGroup);
-                      this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
-                      this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
-                      this.alarmForm?.get('gpsLocation')?.setValue(this.ticket?.site?.address?.lat + ' , ' + this.ticket?.site?.address?.lng);
-                      this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.alarmForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest) : null;
-
-                      this.displaySubmit = false;
-                      this.alarmForm?.get('siteAccessRequest')?.disable();
-                      this.alarmForm!.get('number')?.disable();
-                      this.alarmForm!.get('state')?.disable();
-                      this.displayForm = true;
-
-
-                    } else {
-                      this.displayForm = true;
-                    }
-
-
-                  },
-                  error => console.log(error)
-
-                )
+             this.loadTicketById(id);
 
             } else {
 
@@ -188,6 +161,52 @@ export class AlarmTicketOpenFormComponent implements OnInit {
         },
         error => console.error('There was an error fetching the site options!', error)
       );
+  }
+
+  loadTicketById(id: string ){
+    this.ticketService.fetchTicketById(id!)
+    .subscribe(
+      response => {
+        this.ticket = response;
+        console.log(this.ticket)
+        this.fetchTicketTasks(this.ticket.id);
+        this.getFullImageURL();
+
+        if (this.ticket !== undefined && this.ticket !== '' && this.ticket !== null) {
+          const priority = this.priorities.find(v => v.value === this.ticket.priority);
+
+          this.alarmForm?.get('number')?.setValue(this.ticket.reference);
+          this.alarmForm?.get('priority')?.setValue(priority);
+          this.alarmForm?.get('state')?.setValue(this.ticket.status);
+          this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+          this.alarmForm?.get('site')!.setValue(this.ticket?.site);
+          this.alarmForm?.get('assignedTo')!.setValue(this.ticket?.user);
+          this.alarmForm?.get('assignmentGroup')!.setValue(this.ticket?.userGroup);
+          this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+          this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+          this.alarmForm?.get('gpsLocation')?.setValue(this.ticket?.site?.address?.lat + ' , ' + this.ticket?.site?.address?.lng);
+          this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.alarmForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest) : null;
+
+          this.displaySubmit = false;
+          this.alarmForm?.get('siteAccessRequest')?.disable();
+          this.alarmForm!.get('number')?.disable();
+          this.alarmForm!.get('state')?.disable();
+          this.displayForm = true;
+
+          if(this.ticket.status === this.TICKETSTATE.CLOSED || this.ticket.status === this.TICKETSTATE.WAITFORCLOSURE ){
+            this.alarmForm!.disable()
+          }
+
+
+        } else {
+          this.displayForm = true;
+        }
+
+
+      },
+      error => console.log(error)
+
+    )
   }
 
   fetchNumber(type: string): void {
@@ -323,19 +342,85 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       resolutionComment: this.alarmForm?.get('description')?.value,
       workNotes: this.alarmForm?.get('workNote')?.value
     }
-    
+
     this.ticketService.updateStatus(this.ticket.id, data)
       .subscribe(response => {
         this.message.success(status !== this.TICKETSTATE.CANCEL ? 'Closed Successfully' : 'Canceled');
-        this.ticketService.fetchTicketById(this.ticket?.id)
-        .subscribe(
-          response => {
-            this.ticket = response;
-          });
-        
+        this.loadTicketById(this.ticket.id);
+
       },
         error => {
-          this.message.error(error.error?.messages[0]??'Unknown Error')
+          this.message.error(error.error?.messages[0] ?? 'Unknown Error')
         })
   }
+
+  fetchTicketTasks(id: string) {
+    this.ticketService.getTicketTasks(id)
+      .subscribe(
+        response => {
+         this.tasks = response.data;
+         console.log(this.tasks);
+         
+        },
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+
+    this.onUpload(this.ticket?.id);
+
+  }
+
+  onUpload(id: string) {
+    if (!this.selectedFile) {
+      alert('Please select a file first');
+      return;
+    }
+
+    const uploadData = new FormData();
+    uploadData.append('file', this.selectedFile, this.selectedFile.name);
+
+    this.ticketService.uploadImage(uploadData, id)
+      .subscribe(
+        response => {
+          console.log(response);
+          this.message.success('Uploaded Successfully !');
+          this.loadTicketById(this.ticket.id)
+        },
+        error => {
+          console.error(error);
+          this.message.error(error?.error?.messages[0] ?? 'Upload Failed')
+        }
+      );
+  }
+
+  getFullImageURL() {
+    this.ticket.documents.map((data: any) => {
+      this.ticketService.loadImage(data.fileName)
+        .subscribe(image => {
+          data.imageData = this.convertToBase64(image);
+        },
+          error => {
+           
+          this.message.error('Flail to load images');
+
+          })
+    })
+
+  }
+
+  convertToBase64(buffer: ArrayBuffer): any {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return 'data:image/png;base64,' + btoa(binary);
+  }
+
 }

@@ -1,0 +1,31 @@
+<nz-card style="width: 100%;" [nzTitle]="'Source task = ' + ticket.reference " [nzBodyStyle]="{padding: '0'}" [nzExtra]="extraTemplate">
+  
+<nz-table #table [nzData]="listOfTicketTasks">
+    <thead>
+      <tr>
+        <th>Number</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Assigned to</th>
+        <th>Short description</th>
+        <th>Task type</th>
+        <th>Additional site visite required ?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of listOfTicketTasks">
+        <td>{{ task.number }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ 'N/A'}}</td>
+        <td>{{ task.shortDescription }}</td>
+        <td>{{task.type}}</td>
+        <td>{{task.additionalSiteVisiteRequired}}</td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+  <ng-template #extraTemplate>
+    <button nz-button nzType="primary" >New</button>
+  </ng-template>
+  

@@ -66,6 +66,20 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>User Group</nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
+              <nz-input-group nzPrefixIcon="search">
+                <input type="text" nz-input formControlName="userGroup" [nzAutocomplete]="userGroup" placeholder="Search..." />
+              </nz-input-group>
+              <nz-autocomplete #userGroup>
+                <nz-auto-option *ngFor="let option of userGroups" [nzValue]="option.id"
+                  [nzLabel]="option.name">{{option.name}}</nz-auto-option>
+              </nz-autocomplete>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
       <div class="row">
         <div class="col-6">

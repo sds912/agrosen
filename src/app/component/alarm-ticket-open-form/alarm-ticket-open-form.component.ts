@@ -40,7 +40,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
   ]
 
-  alarmForm?: FormGroup;
+  ticketForm?: FormGroup;
   searchControl = this.fb.control('');
   filteredSites: any[] = [];
   filteredSiteAccessRequests: any[] = [];
@@ -57,7 +57,19 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   ROLE = ROLE;
   selectedFile: any | null = null;
   imgURL: any;
-  tasks: any [] = [];
+  tasks: any[] = [];
+
+  faultCodePrefixes: string[] = ['--None--', 'Standard Fault (F-)', 'Customer Issue Fault (C-)', 'PM Fault (P-)', 'SHEQ (S-)'];
+  faultCategories: string[] = ['--None--', 'Batteries', 'Alarms', 'Cables', 'AC Aircon', 'Controller', 'RMS'];
+  faultGroups: string[] = ['--None--', 'Fault AC Aircon', 'Fault AC Aircon', 'Fault AC Aircon', 'Fault Cables', 'Fault RMS'];
+  faults: string[] = ['--None--', 'Others RMS', 'Low cooling', 'AVS', 'Compressor 24000BTU'];
+  faultCodes: string[] = ['--None--', 'AN-01', 'AN-02', 'AN-03', 'AN-04'];
+  types: string[] = ['--None--', 'Service',];
+  spheres: string[] = ['--None--', 'PM'];
+  partCategories: string[] = ['--None--'];
+  partGroups: string[] = ['--None--'];
+  parts: string[] = ['--None--'];
+  partCodes: string[] = ['--None--'];
 
 
   constructor(
@@ -71,7 +83,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     private siteService: SiteService,
     private sanitizer: DomSanitizer) {
 
-    this.alarmForm = this.fb.group({
+    this.ticketForm = this.fb.group({
       number: [null, [Validators.required]],
       site: [null, [Validators.required]],
       siteAccessRequest: [null, []],
@@ -88,7 +100,19 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       shortDescription: [null, []],
       partShortDescription: [null, []],
       description: [null, []],
-      workNote: [null, []]
+      workNote: [null, []],
+      faultCodePrefix: [''],
+      faultCategory: [''],
+      faultGroup: [''],
+      fault: [''],
+      faultCode: [''],
+      partType: [''],
+      spheres: [''],
+      partCategory: [''],
+      partGroup: [''],
+      part: [''],
+      partCode: [''],
+      quantity: ['']
     });
 
 
@@ -109,25 +133,36 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   }
 
   onSiteInput(site: any): void {
-    this.alarmForm!.get('site')?.setValue(site);
-    console.log(site)
+    this.ticketForm?.get('assignmentGroup')?.reset();
+    this.ticketForm?.get('assignedTo')?.reset();
+    this.ticketForm!.get('site')?.setValue(site);
     this.filteredAssignmentGroups = site?.userGroups;
     this.filteredAssignedTo = site?.users;
+
+    if(this.filteredAssignmentGroups !== null && this.filteredAssignmentGroups !== undefined && this.filteredAssignmentGroups.length > 0){
+      this.ticketForm?.get('assignmentGroup')?.setValue(this.filteredAssignmentGroups[0]);
+    }
+
+    if(this.filteredAssignedTo !== null && this.filteredAssignedTo !== undefined && this.filteredAssignedTo.length > 0){
+      this.ticketForm?.get('assignedTo')?.setValue(this.filteredAssignedTo[0]);
+
+    }
+
   }
 
   onAssignmentGroupInput(assignmentGroup: any): void {
-    this.alarmForm!.get('assignmentGroup')?.setValue(assignmentGroup);
+    this.ticketForm!.get('assignmentGroup')?.setValue(assignmentGroup);
 
   }
 
   onAssignedToInput(assignedTo: any) {
-    this.alarmForm!.get('assignedTo')?.setValue(assignedTo);
+    this.ticketForm!.get('assignedTo')?.setValue(assignedTo);
 
   }
 
 
   fetchSites(): void {
-    this.http.get<any>('http://62.171.177.19:3001/api/sites')
+     this.siteService.getSites()
       .subscribe(
         (response: any) => {
           this.filteredSites = response.data;
@@ -139,7 +174,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
             if (id !== undefined && id !== null) {
 
-             this.loadTicketById(id);
+              this.loadTicketById(id);
 
             } else {
 
@@ -163,58 +198,69 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       );
   }
 
-  loadTicketById(id: string ){
+  loadTicketById(id: string) {
     this.ticketService.fetchTicketById(id!)
-    .subscribe(
-      response => {
-        this.ticket = response;
-        console.log(this.ticket)
-        this.fetchTicketTasks(this.ticket.id);
-        this.getFullImageURL();
+      .subscribe(
+        response => {
+          this.ticket = response;
+          console.log(this.ticket)
+          this.fetchTicketTasks(this.ticket.id);
+          this.getFullImageURL();
 
-        if (this.ticket !== undefined && this.ticket !== '' && this.ticket !== null) {
-          const priority = this.priorities.find(v => v.value === this.ticket.priority);
+          if (this.ticket !== undefined && this.ticket !== '' && this.ticket !== null) {
+            const priority = this.priorities.find(v => v.value === this.ticket.priority);
 
-          this.alarmForm?.get('number')?.setValue(this.ticket.reference);
-          this.alarmForm?.get('priority')?.setValue(priority);
-          this.alarmForm?.get('state')?.setValue(this.ticket.status);
-          this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
-          this.alarmForm?.get('site')!.setValue(this.ticket?.site);
-          this.alarmForm?.get('assignedTo')!.setValue(this.ticket?.user);
-          this.alarmForm?.get('assignmentGroup')!.setValue(this.ticket?.userGroup);
-          this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
-          this.alarmForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
-          this.alarmForm?.get('gpsLocation')?.setValue(this.ticket?.site?.address?.lat + ' , ' + this.ticket?.site?.address?.lng);
-          this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.alarmForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest) : null;
+            this.ticketForm?.get('number')?.setValue(this.ticket.reference);
+            this.ticketForm?.get('priority')?.setValue(priority);
+            this.ticketForm?.get('state')?.setValue(this.ticket.status);
+            this.ticketForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+            this.ticketForm?.get('site')!.setValue(this.ticket?.site);
+            this.ticketForm?.get('assignedTo')!.setValue(this.ticket?.user);
+            this.ticketForm?.get('assignmentGroup')!.setValue(this.ticket?.userGroup);
+            this.ticketForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+            this.ticketForm?.get('shortDescription')?.setValue(this.ticket.shortDescription);
+            this.ticketForm?.get('faultCodePrefix')?.setValue(this.ticket.faultCodePrefix);
+            this.ticketForm?.get('faultCategory')?.setValue(this.ticket.faultCategory);
+            this.ticketForm?.get('faultGroup')?.setValue(this.ticket.faultGroup);
+            this.ticketForm?.get('fault')?.setValue(this.ticket.fault);
+            this.ticketForm?.get('faultCode')?.setValue(this.ticket.faultCode);
+            this.ticketForm?.get('partType')?.setValue(this.ticket.partType);
+            this.ticketForm?.get('spheres')?.setValue(this.ticket.separes);
+            this.ticketForm?.get('partCategory')?.setValue(this.ticket.partCategory);
+            this.ticketForm?.get('partGroup')?.setValue(this.ticket.partGroup);
+            this.ticketForm?.get('part')?.setValue(this.ticket.part);
+            this.ticketForm?.get('partCode')?.setValue(this.ticket.partCode);
+            this.ticketForm?.get('quantity')?.setValue(this.ticket.quantity);
+            this.ticketForm?.get('gpsLocation')?.setValue(this.ticket?.site?.address?.lat + ' , ' + this.ticket?.site?.address?.lng);
+            this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.ticketForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest) : null;
 
-          this.displaySubmit = false;
-          this.alarmForm?.get('siteAccessRequest')?.disable();
-          this.alarmForm!.get('number')?.disable();
-          this.alarmForm!.get('state')?.disable();
-          this.displayForm = true;
+            this.displaySubmit = false;
+            this.ticketForm?.get('siteAccessRequest')?.disable();
+            this.ticketForm!.get('number')?.disable();
+            this.ticketForm!.get('state')?.disable();
+            this.displayForm = true;
 
-          if(this.ticket.status === this.TICKETSTATE.CLOSED || this.ticket.status === this.TICKETSTATE.WAITFORCLOSURE ){
-            this.alarmForm!.disable()
+            if (this.ticket.status === this.TICKETSTATE.CLOSED || this.ticket.status === this.TICKETSTATE.WAITFORCLOSURE) {
+              this.ticketForm!.disable()
+            }
+
+
+          } else {
+            this.displayForm = true;
           }
 
 
-        } else {
-          this.displayForm = true;
-        }
+        },
+        error => console.log(error)
 
-
-      },
-      error => console.log(error)
-
-    )
+      )
   }
 
   fetchNumber(type: string): void {
-    console.log('fetch')
-    this.http.get<any>(`http://62.171.177.19:3001/api/tickets/generate/reference?type=${type}`, { responseType: "json" })
+    this.ticketService.getNumber(type)
       .subscribe(
-        data => { console.log(data) },
-        error => this.alarmForm!.get('number')?.setValue(error.error.text)
+        data => { },
+        error => this.ticketForm!.get('number')?.setValue(error.error.text)
       );
   }
 
@@ -228,48 +274,30 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   }
 
   submitForm(): void {
-    const data = {
-      priority: this.alarmForm!.get('priority')?.value,
-      cause: "test",
-      description: this.alarmForm!.get('description')?.value,
-      shortDescription: this.alarmForm!.get('shortDescription')?.value,
-      outage: true,
-      outageDateStart: "2024-06-04T23:23:35.370Z",
-      outageDateEnd: "2024-06-04T23:23:35.370Z",
-      outageDuration: "string",
-      resolutionComment: "string",
-      counterIndex: "string",
-      code: "string",
-      dcVoltage: 0,
-      fluentDC: 0,
-      alarmId: "",
-      user: this.alarmForm!.get('assignedTo')?.value,
-      userGroup: this.alarmForm!.get('assignmentGroup')?.value,
-      type: "test",
-      reference: this.alarmForm!.get('partShortDescription')?.value,
-      siteAccessRequest: "test",
-      partDescription: this.alarmForm!.get('partShortDescription')?.value,
-      taskReference: this.alarmForm!.get('taskReference')?.value,
-      workNotes: this.alarmForm!.get('workNote')?.value,
-      alarmCheckList: this.alarmForm!.get('alarmCheckList')?.value,
-      popFourTab: false,
-      siteId: this.alarmForm!.get('site')?.value
-    };
-
-    console.log(this.alarmForm!.value)
-
     const data1 = {
-      priority: this.alarmForm!.get('priority')?.value?.name,
+      priority: this.ticketForm!.get('priority')?.value?.name,
       type: this.type,
-      reference: this.alarmForm!.get('number')?.value,
+      reference: this.ticketForm!.get('number')?.value,
       alarmCheckList: false,
       popFourTab: false,
-      siteId: this.alarmForm!.get('site')?.value?.id,
-      shortDescription: this.alarmForm!.get('shortDescription')?.value,
-      user: this.alarmForm!.get('assignedTo')?.value?.id,
-      userGroup: this.alarmForm!.get('assignmentGroup')?.value?.id,
-
+      siteId: this.ticketForm!.get('site')?.value?.id,
+      shortDescription: this.ticketForm!.get('shortDescription')?.value,
+      user: this.ticketForm!.get('assignedTo')?.value?.id,
+      userGroup: this.ticketForm!.get('assignmentGroup')?.value?.id,
+      faultCodePrefix: this.ticketForm!.get('faultCodePrefix')?.value,
+      faultCategory: this.ticketForm!.get('faultCategory')?.value,
+      faultGroup: this.ticketForm!.get('faultGroup')?.value,
+      fault: this.ticketForm!.get('fault')?.value,
+      faultCode: this.ticketForm!.get('faultCode')?.value,
+      partType: this.ticketForm!.get('partType')?.value,
+      separes: this.ticketForm!.get('spheres')?.value,
+      partCategory: this.ticketForm!.get('partCategory')?.value,
+      partGroup: this.ticketForm!.get('partGroup')?.value,
+      part: this.ticketForm!.get('part')?.value,
+      partCode: this.ticketForm!.get('partCode')?.value,
+      quantity: this.ticketForm!.get('quantity')?.value
     }
+
 
     if (this.ticket) {
 
@@ -283,21 +311,18 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
         },
         error => {
-          console.log(error);
           this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
 
         }
       )
     } else {
 
-      console.log(data1);
-
       this.ticketService.create(data1)
         .subscribe(ticket => {
           console.log(ticket)
           this.ticketService.fetchRefNumber()
             .subscribe(
-              data => { console.log(data) },
+              data => {  },
               error => {
 
                 const data = {
@@ -306,7 +331,6 @@ export class AlarmTicketOpenFormComponent implements OnInit {
                   userGroup: ticket?.userGroup?.id,
                   siteAccessRequest: error.error.text
                 }
-                console.log()
                 this.ticketService.assign(data).subscribe((response: any) => {
                   console.log(response)
                   this.createMessage('success', "Ticket créé avec succès");
@@ -338,9 +362,9 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   saveStatus(status: string) {
     const data = {
       status: status,
-      cause: this.alarmForm?.get('shortDescription')?.value,
-      resolutionComment: this.alarmForm?.get('description')?.value,
-      workNotes: this.alarmForm?.get('workNote')?.value
+      cause: this.ticketForm?.get('shortDescription')?.value,
+      resolutionComment: this.ticketForm?.get('description')?.value,
+      workNotes: this.ticketForm?.get('workNote')?.value
     }
 
     this.ticketService.updateStatus(this.ticket.id, data)
@@ -358,12 +382,10 @@ export class AlarmTicketOpenFormComponent implements OnInit {
     this.ticketService.getTicketTasks(id)
       .subscribe(
         response => {
-         this.tasks = response.data;
-         console.log(this.tasks);
-         
+          this.tasks = response.data;
         },
         error => {
-          console.log(error);
+          this.message.error(error?.error?.messages[0]??'Unknown Error')
         }
       )
   }
@@ -405,8 +427,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
           data.imageData = this.convertToBase64(image);
         },
           error => {
-           
-          this.message.error('Flail to load images');
+
+            this.message.error('Flail to load images');
 
           })
     })
@@ -421,6 +443,11 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       binary += String.fromCharCode(bytes[i]);
     }
     return 'data:image/png;base64,' + btoa(binary);
+  }
+
+
+  openTask(): void {
+
   }
 
 }

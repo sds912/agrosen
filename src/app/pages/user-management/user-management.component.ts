@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../../service/user.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 interface User {
   id: string;
@@ -47,7 +48,7 @@ export class UserManagementComponent implements OnInit {
   onChange(result: Date): void {
     console.log('onChange: ', result);
   }
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder, private userService: UserService, private message: NzMessageService) {
     this.userForm = this.fb.group({
       firstName: [''],
       lastName: [''],
@@ -89,11 +90,24 @@ export class UserManagementComponent implements OnInit {
       // Update user
       const index = this.users.findIndex(u => u.id === this.selectedUser!.id);
       this.users[index] = { ...this.selectedUser, ...this.userForm.value, updatedAt: new Date().toISOString() };
+      console.log(this.selectedUser);
+      
+      this.userService.updateUser(this.selectedUser.id, this.selectedUser)
+      .subscribe(
+        response => {
+          this.message.success('Updated Successfully !');
+          this.loadUsers();
+        },
+        error => {
+           this.message.error(error?.error?.messages??[0]??'Unknown Error !')
+           
+        }
+      )
     } else {
       // Add new user
       const newUser: User = {
         ...this.userForm.value,
-        id: new Date().toISOString(),
+        id: '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         createdBy: null,
@@ -106,7 +120,17 @@ export class UserManagementComponent implements OnInit {
         placeOfBirth: null,
         enabled: true
       };
-      this.users.push(newUser);
+      this.userService.createUser(newUser)
+      .subscribe(
+        response => {
+          this.message.success('Created Successfully !');
+          this.loadUsers();
+        },
+        error => {
+           this.message.error(error.error?.messages[0]??'Unknown Error !')
+           
+        }
+      )
     }
     this.isVisible = false;
   }

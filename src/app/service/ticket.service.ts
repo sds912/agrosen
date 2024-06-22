@@ -58,5 +58,9 @@ export class TicketService {
     return this.http.get(`${baseAPI}/files/${fileName}`, { responseType: 'arraybuffer' });
   }
 
+  getNumber(type: string): Observable<any> {
+    return this.http.get<any>(`${baseAPI}/tickets/generate/reference?type=${type}`, { responseType: "json" })
+  }
+
 
 }

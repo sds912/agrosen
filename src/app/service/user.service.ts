@@ -36,4 +36,8 @@ export class UserService {
   deleteUser(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/users/${id}`);
   }
+
+  getUserGroups(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user-groups`);
+  }
 }

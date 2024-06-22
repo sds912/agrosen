@@ -33,6 +33,7 @@ export class SiteFormComponent implements OnInit {
     }
   ]
   batteries: string[] = ['ALESIS', 'NUX', 'EFNOTE'];
+  userGroups: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -63,7 +64,7 @@ export class SiteFormComponent implements OnInit {
       clusterNumber: ['', Validators.required],
       fe: [[], Validators.required],
       fs: [[], Validators.required],
-     // userGroup: ['']
+      userGroup: [''],
       battery: ['']
     });
     
@@ -73,6 +74,7 @@ export class SiteFormComponent implements OnInit {
     this.loadClusters();
     this.loadFE();
     this.loadFS();
+    this.loadUserGroup();
     this.siteId = this.route.snapshot.paramMap.get('id')!;
     if (this.siteId) {
       this.isEditing = true;
@@ -114,6 +116,19 @@ export class SiteFormComponent implements OnInit {
       }
     );
   }
+
+  loadUserGroup(): void {
+    this.userService.getUserGroups().subscribe(
+      (response: any) => {
+        console.log(response)
+        this.userGroups = response?.data;
+      },
+      error => {
+        this.message.error('Failed to load site.');
+      }
+    );
+  }
+
 
   loadFS(): void {
     this.userService.getUsersByRole('FS').subscribe(

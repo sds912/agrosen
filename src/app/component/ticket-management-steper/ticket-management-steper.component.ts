@@ -22,11 +22,13 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TicketManagementSteperComponent implements OnInit {
 
+
   constructor(private route: ActivatedRoute){
 
   }
 
   @Input() status: string = 'OPEN';
+  @Input() type: string = 'ticket';
 
   TICKETSTATUS = TiCKET_STATE;
 

@@ -1,6 +1,6 @@
 <div class="d-flex alarm-stepper">
 	<div class="open-step" [class.open-step-active]="status === null">Open</div>
-	<div class="assigned-step" [class.assigned-step-active]="status === 'ASSIGNED'">Assigned</div>
+	<div *ngIf="type !== 'task'" class="assigned-step" [class.assigned-step-active]="status === 'ASSIGNED'">Assigned</div>
 	<div class="progress-step" [class.progress-step-active]="status === 'WORK_IN_PROGRESS'">Work in progress</div>
      <!--	<div class="waiting-closure-step" [class.active-step]="status === 'WAITING_CLOSURE'">Waiting closure</div> -->
 	<div class="closed-step" [class.closed-step-active]="status === 'CLOSED' || status === TICKETSTATUS.WAITFORCLOSURE">Closed</div>

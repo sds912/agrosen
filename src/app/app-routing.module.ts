@@ -12,12 +12,14 @@ import { AlarmTicketManagementComponent } from './pages/alarm-ticket-management/
 import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { SiteManagementComponent } from './pages/site-management/site-management.component';
 import { TicketTaskManagementComponent } from './pages/ticket-task-management/ticket-task-management.component';
+import { AuthGuard } from './shared/auth.guard';
+import { SiteDetailsComponent } from './component/site-details/site-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo:"login", pathMatch:"full" },
-  { path: 'alarmes', component: AlarmesComponent},
   { path: 'login', component: LoginComponent},
-  { path: 'admin', component:AdminComponent,children:[
+  { path: 'admin', component:AdminComponent,
+    children:[
   { path: 'alarmes', component: AlarmesComponent},
   { path: 'menu', component:MenuComponent},
   { path: 'lue', component:DonnesluesComponent},
@@ -27,8 +29,9 @@ const routes: Routes = [
   { path: 'alarms/tickets', component: AlarmTicketManagementComponent},
   { path: 'users', component: UserManagementComponent},
   { path: 'sites', component: SiteManagementComponent},
+  { path: 'sites/:id', component: SiteDetailsComponent},
   { path: 'ticket/task', component: TicketTaskManagementComponent},
-  ]},
+  ], canActivate:[ AuthGuard]},
  
 ];
 

@@ -20,6 +20,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AlarmTicketOpenFormComponent implements OnInit {
 
+loading: boolean = false;
   priorities: any[] = [
     {
       name: 'CRITICAL',
@@ -128,8 +129,10 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.loginService.currentUser;
     this.fetchSites();
-
-
+    this.ticketForm?.get('number')?.disable();
+    this.ticketForm?.get('shortDescription')?.disable();
+    this.ticketForm?.get('siteAccessRequest')?.disable();
+    this.ticketForm!.get('state')?.disable();
   }
 
   onSiteInput(site: any): void {
@@ -162,6 +165,7 @@ export class AlarmTicketOpenFormComponent implements OnInit {
 
 
   fetchSites(): void {
+    this.loading = true;
      this.siteService.getSites()
       .subscribe(
         (response: any) => {
@@ -175,9 +179,11 @@ export class AlarmTicketOpenFormComponent implements OnInit {
             if (id !== undefined && id !== null) {
 
               this.loadTicketById(id);
+              
+
 
             } else {
-
+              this.loading = false;
               if (this.type !== undefined && this.type !== null) {
                 this.displayForm = true;
                 this.fetchNumber(this.type);
@@ -235,9 +241,6 @@ export class AlarmTicketOpenFormComponent implements OnInit {
             this.ticket!.status !== 'ASSIGNED' && this.ticket!.status !== 'OPEN' ? this.ticketForm?.get('siteAccessRequest')?.setValue(this.ticket?.siteAccessRequest) : null;
 
             this.displaySubmit = false;
-            this.ticketForm?.get('siteAccessRequest')?.disable();
-            this.ticketForm!.get('number')?.disable();
-            this.ticketForm!.get('state')?.disable();
             this.displayForm = true;
 
             if (this.ticket.status === this.TICKETSTATE.CLOSED || this.ticket.status === this.TICKETSTATE.WAITFORCLOSURE) {
@@ -249,9 +252,12 @@ export class AlarmTicketOpenFormComponent implements OnInit {
             this.displayForm = true;
           }
 
-
+          this.loading = false;
         },
-        error => console.log(error)
+        error => {
+          console.log(error);
+          this.loading = false;
+        }
 
       )
   }
@@ -259,8 +265,14 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   fetchNumber(type: string): void {
     this.ticketService.getNumber(type)
       .subscribe(
-        data => { },
-        error => this.ticketForm!.get('number')?.setValue(error.error.text)
+        data => { 
+          this.loading = false;
+        },
+        error => {
+          this.ticketForm!.get('number')?.setValue(error.error.text);
+          this.loading = false;
+
+        }
       );
   }
 
@@ -274,6 +286,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
   }
 
   submitForm(): void {
+    this.loading = true;
+
     const data1 = {
       priority: this.ticketForm!.get('priority')?.value?.name,
       type: this.type,
@@ -307,11 +321,15 @@ export class AlarmTicketOpenFormComponent implements OnInit {
       this.ticketService.acceptAssign(data).subscribe(
         response => {
           this.createMessage('success', "Ticket accepté avec succès");
-          window.location.reload()
+          window.location.reload();
+          this.loading = false;
+
 
         },
         error => {
           this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
+          this.loading = false;
+
 
         }
       )
@@ -335,8 +353,14 @@ export class AlarmTicketOpenFormComponent implements OnInit {
                   console.log(response)
                   this.createMessage('success', "Ticket créé avec succès");
                   this.router.navigate(['admin/alarms/tickets'], { queryParams: { type: this.type } });
+                   this.loading = false;
+
                 },
-                  error => this.createMessage('error', error?.error?.messages[0] ?? 'Unknown Error'))
+                  error => {
+                    this.createMessage('error', error?.error?.messages[0] ?? 'Unknown Error');
+          this.loading = false;
+
+                  })
 
               }
             );
@@ -346,6 +370,8 @@ export class AlarmTicketOpenFormComponent implements OnInit {
           error => {
             this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
             console.log(error);
+          this.loading = false;
+
 
           }
 

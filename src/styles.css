@@ -58,3 +58,8 @@ html, body{
     color: #ffc107 !important;
 }
 
+.ant-form-item{
+    margin-bottom: 3px !important;
+  }
+  
+

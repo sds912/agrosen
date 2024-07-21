@@ -13,7 +13,7 @@ import { DonnesluesComponent } from './component/donneslues/donneslues.component
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FilterpipePipe } from './filterpipe.pipe';
 import { AdminComponent } from './component/admin/admin.component';
-import { AppHttpInterceptor } from './interceptors/app-http.interceptor';
+import {  AuthInterceptor } from './interceptors/app-http.interceptor';
 import { MapComponent } from './component/map/map.component';
 import { GoogleMapsModule } from '@angular/google-maps'
 import { DashboardComponent } from './component/dashboard/dashboard.component';
@@ -58,6 +58,9 @@ import { AlarmTicketPMOpenFormComponent } from './component/alarm-ticket-pm-open
 import { TicketTaskListComponent } from './component/ticket-task-list/ticket-task-list.component';
 import { TicketTaskFormComponent } from './component/ticket-task-form/ticket-task-form.component';
 import { TicketTaskManagementComponent } from './pages/ticket-task-management/ticket-task-management.component';
+import { NgxLoadingModule } from 'ngx-loading';
+import { SiteDetailsComponent } from './component/site-details/site-details.component';
+import { AlarmTicketPmFormComponent } from './component/alarm-ticket-pm-form/alarm-ticket-pm-form.component';
 
 
 registerLocaleData(en);
@@ -92,7 +95,9 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     AlarmTicketPMOpenFormComponent,
     TicketTaskListComponent,
     TicketTaskFormComponent,
-    TicketTaskManagementComponent
+    TicketTaskManagementComponent,
+    SiteDetailsComponent,
+    AlarmTicketPmFormComponent
   ],
   imports: [
     BrowserModule,
@@ -123,16 +128,14 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzCardModule,
     NzTabsModule,
     NzModalModule,
-    NzSwitchModule
+    NzSwitchModule,
+    NgxLoadingModule.forRoot({}),
+
     
     
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS ,
-      useClass: AppHttpInterceptor, 
-      multi: true
-    },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: NZ_ICONS, useValue: icons },
     { provide: NZ_I18N, useValue: en },
     { provide: NZ_I18N, useValue: en_US }

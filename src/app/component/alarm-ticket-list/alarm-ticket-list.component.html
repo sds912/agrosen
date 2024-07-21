@@ -1,7 +1,7 @@
 <nz-card style="width: 100%;" nzTitle="Tickets" [nzBodyStyle]="{padding: '0'}" [nzExtra]="extraTemplate">
   
   <div>
-    <nz-table nzShowSizeChanger [nzScroll]="{ x: '2000px' }" *ngIf="tickets.length > 0"
+    <nz-table nzShowSizeChanger [nzScroll]="{ x: '2000px' }" 
       (nzQueryParams)="onQueryParamsChange($event)" 
       [nzLoading]="loading" [nzTotal]="total" [nzPageSize]="pageSize"
       [nzPageIndex]="pageIndex" #basicTable [nzData]="tickets">

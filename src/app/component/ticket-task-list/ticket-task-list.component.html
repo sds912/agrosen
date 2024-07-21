@@ -14,8 +14,18 @@
     <tbody>
       <tr *ngFor="let task of listOfTicketTasks">
         <td><a [href]="'/admin/ticket/task?id='+task?.id">{{ task.number }}</a></td>
-        <td>{{ task.priority }}</td>
-        <td>{{ task.status }}</td>
+        <td>
+          {{ task.priority }}
+        </td>
+        <td>
+          <nz-form-item style="width: 110px;">
+            <nz-form-control>
+              <nz-select [(ngModel)]="task.status" (ngModelChange)="onStatusChange(task)">
+                <nz-option *ngFor="let status of statusOptions" [nzDisabled]="task.status === status" [nzValue]="status" [nzLabel]="status"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </td>
         <td>{{ 'N/A' }}</td>
         <td>{{ task.shortDescription }}</td>
         <td>{{ task.type }}</td>
@@ -28,3 +38,5 @@
 <ng-template #extraTemplate>
   <button nz-button nzType="primary" (click)="router.navigate(['/admin/ticket/task'])">New</button>
 </ng-template>
+<ngx-loading [show]="loading"></ngx-loading>
+

@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule } from
 import { Router,RouterOutlet } from '@angular/router';
 import { LoginService } from '../../service/login.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../service/auth.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 
 @Component({
@@ -15,8 +17,8 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent implements OnInit{
 
      formLogin!:FormGroup
-  constructor(private fb:FormBuilder,private authservice:LoginService,
-    private router:Router){}
+  constructor(private fb:FormBuilder,private authservice: AuthService,
+    private router:Router, private message: NzMessageService){}
 
   ngOnInit(): void {
     this.formLogin=this.fb.group({
@@ -27,19 +29,14 @@ export class LoginComponent implements OnInit{
   handleLogin(){
    let username=this.formLogin.value.username;
    let password= this.formLogin.value.password;
-   this.authservice.login(username,password).subscribe({
-     next:(data: any)=>{
-      localStorage.setItem('access_token', data['access_token']);
-      localStorage.setItem('refresh_token', data['access_token']);
-       this.authservice.loardProfile(data['access_token'])
-       this.router.navigateByUrl("/admin");
-      // window.location.reload()
-     },
-     error:err=>{
-       console.log(err)
-     }
+   
+   this.authservice.login({username,password}).subscribe(() => {
+   this.message.success('Authentification réussie !');
+   }, 
+  error => {
+    this.message.error("Erreur d'authentification !");
 
-   })
+  })
   }
  
 

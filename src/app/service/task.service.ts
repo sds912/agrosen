@@ -17,4 +17,12 @@ export class TaskService {
   getTaskById(id: string ): Observable<any>{
     return this.http.get(`${this.baseAPI}/site-access-request-task/findbyid/${id}`);
   }
+
+  upateTaskByStatus(id: string , status: string): Observable<any>{
+    return this.http.put(`${this.baseAPI}/site-access-request-task/update-status/${id}`, {'status': status});
+  }
+
+  getTasks(id: string ): Observable<any>{
+    return this.http.get(`${this.baseAPI}/site-access-request-task/${id}`);
+  }
 }

@@ -25,7 +25,7 @@ export class SiteService {
   }
 
   getSiteById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/sites/${id}`);
   }
 
   createSite(site: any): Observable<any> {

@@ -16,7 +16,8 @@
         <th>Location</th>
         <th>GE</th>
         <th>FS</th>
-        <th nzRight>FE</th>
+        <th>FE</th>
+        <th nzWidth="80px" nzRight class="text-end">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -31,7 +32,10 @@
         <td>{{ site.location.city }}, {{ site.location.country }}, {{ site.location.region }}</td>
         <td>{{ site.GE}}</td>
         <td>{{ site.FS.join(', ') }}</td>
-        <td nzRight>{{ site.FE.join(', ') }}</td>
+        <td>{{ site.FE.join(', ') }}</td>
+        <td nzRight class="text-end">
+          <button (click)="viewSiteDetails(site?.id)" nz-button nzType="primary"><span class="fa fa-eye"></span></button>
+        </td>
       </tr>
     </tbody>
   </nz-table>
@@ -39,3 +43,5 @@
 <ng-template #extraTemplate>
   <button nz-button nzType="primary" [routerLink]="['/admin/sites']" [queryParams]="{ type: 'form' }">Add Site</button>
 </ng-template>
+
+

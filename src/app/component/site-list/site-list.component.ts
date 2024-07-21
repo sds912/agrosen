@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SiteService } from '../../service/site.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-site-list',
@@ -16,7 +17,7 @@ export class SiteListComponent implements OnInit {
   pageSize = 10;
   pageIndex = 1;
 
-  constructor(private siteService: SiteService, private message: NzMessageService) {}
+  constructor(private siteService: SiteService, private message: NzMessageService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadSites();
@@ -30,6 +31,7 @@ export class SiteListComponent implements OnInit {
         
         this.sites = response?.data?.map((site: any) => ({
           siteId: site.siteId ?? 'N/A',
+          id: site.id,
           cluster: site.cluster?.clusterNumber ?? 'N/A',
           siteName: site.siteName ?? 'N/A',
           siteType: site.siteType ? this.siteTypes[site.siteType] ?? 'N/A' : 'N/A',
@@ -87,5 +89,9 @@ export class SiteListComponent implements OnInit {
     const sortOrder = (currentSort && currentSort.value) || null;
     this.loadSites()
    // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
+  }
+
+  viewSiteDetails(siteId: string): void {
+    this.router.navigate(['/admin/sites', siteId]);
   }
 }

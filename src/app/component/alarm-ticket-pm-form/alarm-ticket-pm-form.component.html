@@ -1,0 +1,436 @@
+<div class="container p-3 pt-0 px-5" style="width: 100%;" *ngIf="displayForm">
+	<div class="d-flex justify-content-between align-items-center ">
+		<div *ngIf="ticket && ticket.status !== TICKETSTATE.ASSIGNED">{{!ticket ? 'NEW TICKET': 'TICKET : '+
+            ticket.reference}}</div>
+		<div *ngIf="ticket?.status === TICKETSTATE.WORKINPROGRESS" class="d-flex justify-content-end align-items-center " style="margin-bottom: 10px;">
+			<button nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.CLOSED)">Close PM Complete</button>
+			<button class="mx-2 btn-outline-warning" nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)">Close PM Incomplete</button>
+			<button [disabled]="ticket.status === TICKETSTATE.CANCEL || ticket.status === TICKETSTATE.CLOSED" nz-button nztype="default" nzdanger (click)="saveStatus(TICKETSTATE.CANCEL)">Cancel PM</button>
+			<button nz-button nztype="primary" class="ms-2">
+				<label for="ticket-image" style="display: block; width: 100%; height: 100%; cursor: pointer;">
+					Upload
+					<input id="ticket-image" type="file" style="visibility: hidden; width: 0; height: 0;" (change)="onFileSelected($event)" accept="image/*">
+				</label>
+			</button>
+
+		</div>
+	</div>
+
+	<form style="width: 100%;" nz-form [formGroup]="ticketForm!" (ngSubmit)="submitForm()">
+		<div class="d-flex justify-content-between align-items-center">
+			<div *ngIf="!ticket || ticket.status === TICKETSTATE.ASSIGNED">{{!ticket ? 'NEW TICKET': 'TICKET : '+
+                ticket.reference}}</div>
+			<div class="text-end mb-2" style="margin-right: 60px;">
+				<button *ngIf="!displaySubmit && ticket?.status === TICKETSTATE.ASSIGNED && this.currentUser && this.currentUser?.role !== ROLE.NOC" nz-button nztype="primary">Accept</button>
+				<button *ngIf="displaySubmit" nz-button nztype="primary">Submit</button>
+			</div>
+
+		</div>
+
+		<app-ticket-management-steper [status]="this.ticket?.status"></app-ticket-management-steper>
+		<div class="d-flex justify-content-between mt-3">
+			<div class="alarm-tiket-form-left w-50">
+				<nz-form-item>
+					<nz-form-label [nzSm]="10" [nzXs]="24" nzfor="number">Number</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The number is not valid">
+						<input nz-input id="number" formControlName="number"/>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item>
+					<nz-form-label [nzSpan]="10" nzrequired>Site</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
+						<nz-input-group nzprefixicon="search">
+							<input type="text" nz-input [nzAutocomplete]="sites" [ngModel]="ticketForm!.get('site')?.value?.siteId" [disabled]="this.ticket !== undefined" [ngModelOptions]="{standalone: true}" (ngModelChange)="onSiteInput($event)" [value]="ticketForm!.get('site')?.value?.siteId" placeholder="Search...">
+						</nz-input-group>
+						<nz-autocomplete #sites>
+							<nz-auto-option *ngFor="let option of filteredSites" [nzValue]="option" [nzLabel]="option.siteId">{{option.siteId}}</nz-auto-option>
+						</nz-autocomplete>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item>
+					<nz-form-label [nzSpan]="10">Site Access Request</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
+						<nz-input-group nzprefixicon="search">
+							<input type="text" nz-input [nzAutocomplete]="siteAccessRequest" formControlName="siteAccessRequest" placeholder="Search...">
+						</nz-input-group>
+						<nz-autocomplete #siteAccessRequest>
+							<nz-auto-option *ngFor="let option of filteredSiteAccessRequests" [nzValue]="option">{{
+                                option }}</nz-auto-option>
+						</nz-autocomplete>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item>
+					<nz-form-label [nzSm]="10" [nzXs]="24" nzfor="gpsLocation">GPS location</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
+						<input nz-input id="gpsLocation" formControlName="gpsLocation"/>
+					</nz-form-control>
+				</nz-form-item>
+			</div>
+
+			<div class="alarm-tiket-form-right w-50">
+				<nz-form-item>
+					<nz-form-label [nzSm]="10" [nzXs]="24" nzfor="state">State</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
+						<input nz-input id="state" formControlName="state"/>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item>
+					<nz-form-label [nzSpan]="10">Assignment group</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
+						<nz-input-group nzprefixicon="search">
+							<input type="text" nz-input [nzAutocomplete]="assignmentGroup" [disabled]="this.ticket !== undefined" [ngModel]="ticketForm!.get('assignmentGroup')?.value?.name??''" [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignmentGroupInput($event)" [value]="ticketForm!.get('assignmentGroup')?.value?.name??''" placeholder="Search...">
+						</nz-input-group>
+						<nz-autocomplete #assignmentGroup>
+							<nz-auto-option *ngFor="let option of filteredAssignmentGroups" [nzValue]="option" [nzLabel]="option.name">{{ option.name }}</nz-auto-option>
+						</nz-autocomplete>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item>
+					<nz-form-label [nzSpan]="10" nzrequired>Assigned to</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
+						<nz-input-group nzprefixicon="search">
+							<input type="text" nz-input [nzAutocomplete]="assignedTo" [disabled]="this.ticket !== undefined" [ngModel]="ticketForm!.get('assignedTo')?.value?.firstName !== undefined ? ticketForm!.get('assignedTo')?.value?.firstName??'' +' '+ ticketForm?.get('assignedTo')?.value?.lastName??'':''" [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignedToInput($event)" [value]=" ticketForm!.get('assignedTo')?.value?.firstName !== undefined ? ticketForm!.get('assignedTo')?.value?.firstName??'' +' '+ ticketForm?.get('assignedTo')?.value?.lastName??'': ''" placeholder="Search...">
+						</nz-input-group>
+						<nz-autocomplete #assignedTo>
+							<nz-auto-option *ngFor="let option of filteredAssignedTo" [nzValue]="option" [nzLabel]="option.firstName??'' +' '+ option.lastName??''">{{ option.firstName??'' +' '+
+                                option.lastName??'' }}</nz-auto-option>
+						</nz-autocomplete>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item>
+					<nz-form-label [nzSpan]="10" nzfor="datePicker">Scheduled WO Date</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24">
+						<nz-date-picker style="width: 100%;" formControlName="sheduleDate" nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item>
+					<nz-form-label [nzSpan]="10" nzfor="datePicker">Re-Scheduled WO Date</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24">
+						<nz-date-picker style="width: 100%;" formControlName="reSheduleDate" nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item>
+					<nz-form-label [nzSpan]="10" nzfor="datePicker">Actual WO Date</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24">
+						<nz-date-picker style="width: 100%;" formControlName="actualDate" nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item>
+					<nz-form-label [nzSm]="10" [nzXs]="24" nzfor="state">Re-Scheduled By</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
+						<input nz-input id="state" formControlName="reSheduleBy"/>
+					</nz-form-control>
+				</nz-form-item>
+			</div>
+		</div>
+		<div class="d-flex justify-content-between mt-3">
+			<div class="alarm-tiket-form-left w-50">
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">AC Power & Generator</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="acPowerAndGenerator"></label>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">Alarm Checklist</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="alarmCheckList"></label>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">Recorded Metrics, Readings & Remarks</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="recordedMetricsReadingAndRemarks"></label>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">Tower</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="tower"></label>
+					</nz-form-control>
+				</nz-form-item>
+			</div>
+			<div class="alarm-tiket-form-right w-50">
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">Air Conditioning</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="airConditioning"></label>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">Janitorial</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="janitorial"></label>
+					</nz-form-control>
+				</nz-form-item>
+
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">Rectifier</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="rectifier"></label>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">Solar</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="solar"></label>
+					</nz-form-control>
+				</nz-form-item>
+				<nz-form-item formGroupName="additionalInfo">
+					<nz-form-label [nzSpan]="10">RMS</nz-form-label>
+					<nz-form-control [nzXs]="14" nzerrortip="The input is not valid">
+						<label nz-checkbox formControlName="rms"></label>
+					</nz-form-control>
+				</nz-form-item>
+
+			</div>
+		</div>
+
+
+		<div class="mt-5">
+			<nz-form-item style="width: 100%;">
+				<nz-form-label [nzSm]="4" nzfor="shortDescription">Short description</nz-form-label>
+				<nz-form-control [nzSm]="24" [nzXs]="24" nzerrortip="The input is not valid">
+					<input nz-input id="shortDescription" formControlName="shortDescription"/>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item style="width: 100%;">
+				<nz-form-label [nzSm]="4" nzfor="partShortDescription">Part Short description</nz-form-label>
+				<nz-form-control [nzSm]="24" [nzXs]="24" nzerrortip="The input is not valid">
+					<input nz-input id="partShortDescription" formControlName="partShortDescription"/>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item style="width: 100%;">
+				<nz-form-label [nzSm]="4" nzfor="description">Description</nz-form-label>
+				<nz-form-control [nzSm]="24" [nzXs]="24" nzerrortip="The input is not valid">
+					<textarea nz-input formControlName="description" placeholder="Autosize height with minimum and maximum number of lines" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item style="width: 100%;">
+				<nz-form-label [nzSm]="4" nzfor="workNote">Work Note</nz-form-label>
+				<nz-form-control [nzSm]="24" [nzXs]="24" nzerrortip="The input is not valid">
+					<textarea nz-input formControlName="workNote" placeholder="Autosize height with minimum and maximum number of lines" [nzAutosize]="{ minRows: 2, maxRows: 6 }"></textarea>
+				</nz-form-control>
+			</nz-form-item>
+		</div>
+
+		<div class="mt-5">
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">janTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="janTab"></label>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">acpgTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="acpgTab"></label>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">rectifierTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="rectifierTab"></label>
+				</nz-form-control>
+
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">acTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="acTab"></label>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">towerTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="towerTab"></label>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">metricsTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="metricsTab"></label>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">solarTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="solarTab"></label>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label [nzSpan]="4">alarmTab</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<label nz-checkbox formControlName="alarmTab"></label>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzSpan]="4" nzfor="fault-category">AC Service</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="fault-category" nzplaceholder="Fault Category" formControlName="acService">
+						<nz-option *ngFor="let fc of faultCategories" [nzValue]="fc" [nzLabel]="fc">{{fc}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item  formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzSpan]="4" nzfor="fault-category">DG Service</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="fault-category" nzplaceholder="Fault Category" formControlName="dgService">
+						<nz-option *ngFor="let fc of faultCategories" [nzValue]="fc" [nzLabel]="fc">{{fc}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+
+		</div>
+
+
+		<nz-card class="w-100 p-0 mt-4">
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzSpan]="6" nzfor="fault-code-prefix">Are you in site when taking <br/> these readings ?
+				</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="fault-code-prefix" nzplaceholder="Fault Code Prefix" formControlName="whenTakingTheseReading">
+						<nz-option *ngFor="let fcp of faultCodePrefixes" [nzValue]="fcp" [nzLabel]="fcp">{{fcp}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzSpan]="6" nzfor="fault-category">Fuel Probe Type</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="fault-category" nzplaceholder="Fault Category" formControlName="fuelProbType">
+						<nz-option *ngFor="let fc of faultCategories" [nzValue]="fc" [nzLabel]="fc">{{fc}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzSpan]="6" nzfor="fault-group">Fuel Probe Manufacturer</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="fault-group" nzplaceholder="Fault Group" formControlName="fuelProbManufacturer">
+						<nz-option *ngFor="let fg of faultGroups" [nzValue]="fg" [nzLabel]="fg">{{fg}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzSpan]="6" nzfor="fault">Fuel Probe Model Number</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="fault" nzplaceholder="Fault" formControlName="fuelProbModelNumber">
+						<nz-option *ngFor="let f of faults" [nzValue]="f" [nzLabel]="f">{{f}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label  [nzXs]="6" nzfor="number">Fuel level (DG Controller) Litres</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The number is not valid">
+					<input nz-input id="number" formControlName="fuelLevelDgController"/>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label  [nzXs]="6" nzfor="number">Fuel level (RMS) Litres</nz-form-label>
+				<nz-form-control  [nzXs]="24" nzerrortip="The number is not valid">
+					<input nz-input id="number" formControlName="fuelLevelRms"/>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label [nzXs]="6" nzfor="number">Generator Run Hours</nz-form-label>
+				<nz-form-control  [nzXs]="24" nzerrortip="The number is not valid">
+					<input nz-input id="number" formControlName="generatorRunHours"/>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label  [nzXs]="6" nzfor="number">DG Output</nz-form-label>
+				<nz-form-control  [nzXs]="24" nzerrortip="The number is not valid">
+					<input nz-input id="number" formControlName="dgOutput"/>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label  [nzXs]="6" nzfor="number">Grid Meter Units</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The number is not valid">
+					<input nz-input id="number" formControlName="gridMeterUnit"/>
+				</nz-form-control>
+			</nz-form-item>
+
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzXs]="6" nzfor="fault-code">Is Grid Meter Configured ?</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="fault-code" nzplaceholder="Fault Code" formControlName="gridMeterConfigured">
+						<nz-option *ngFor="let code of faultCodes" [nzValue]="code" [nzLabel]="code">{{code}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzXs]="6" nzfor="type">Grid Meter Type</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="type" nzplaceholder="Type" formControlName="gridMeterType">
+						<nz-option *ngFor="let type of types" [nzValue]="type" [nzLabel]="type">{{type}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzXs]="6" nzfor="spheres">Grid Meter Manufacturer</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="spheres" nzplaceholder="Spheres" formControlName="gridMeterManufacturer">
+						<nz-option *ngFor="let sphere of spheres" [nzValue]="sphere" [nzLabel]="sphere">{{sphere}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+			<nz-form-item formGroupName="additionalInfo">
+				<nz-form-label nzrequired [nzXs]="6" nzfor="part-category">Grid Meter Model Number</nz-form-label>
+				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
+					<nz-select name="part-category" nzplaceholder="Part Category" formControlName="gridMeterModelNumber">
+						<nz-option *ngFor="let pc of partCategories" [nzValue]="pc" [nzLabel]="pc">{{pc}}</nz-option>
+					</nz-select>
+				</nz-form-control>
+			</nz-form-item>
+
+		</nz-card>
+		<button class="mt-3" *ngIf="displaySubmit" nz-button nztype="primary">Submit</button>
+
+	</form>
+
+	<div *ngIf="ticket">
+		<div class="row">
+			<div *ngFor="let doc of ticket.documents" class="col-12 mt-3">
+				<div class="card">
+					<div class="card-header">
+						<div class="d-flex justify-content-between align-items-center">
+							<span>Uploaded by:
+								{{doc.createdBy}}</span>
+							<span>Image uploaded:
+								{{doc.createdAt | dateFormat}}</span>
+						</div>
+					</div>
+					<div class="card-body">
+						<img [src]="doc.imageData" class="img-fluid" style="height: 220px;"/>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<app-ticket-task-list *ngIf="tasks.length > 0" [listOfTicketTasks]="tasks" [ticket]="ticket"></app-ticket-task-list>
+
+<ngx-loading [show]="loading"></ngx-loading>

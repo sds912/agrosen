@@ -15,6 +15,7 @@ export class AlarmTicketManagementComponent implements OnInit {
   displayMode: string = 'list';
   ticket: any;
   type!: string;
+  TICCKETTYPE = TICKET_TYPE;
   
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {

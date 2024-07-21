@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AlarmOpenFormComponent } from './alarm-ticket-open-form.component';
+import { AlarmTicketOpenFormComponent } from './alarm-ticket-open-form.component';
 
-describe('AlarmOpenFormComponent', () => {
-  let component: AlarmOpenFormComponent;
-  let fixture: ComponentFixture<AlarmOpenFormComponent>;
+describe('AlarmTicketOpenFormComponent', () => {
+  let component: AlarmTicketOpenFormComponent;
+  let fixture: ComponentFixture<AlarmTicketOpenFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AlarmOpenFormComponent]
+      declarations: [AlarmTicketOpenFormComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(AlarmOpenFormComponent);
+    fixture = TestBed.createComponent(AlarmTicketOpenFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

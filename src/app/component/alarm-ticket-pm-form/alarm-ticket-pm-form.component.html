@@ -278,7 +278,7 @@
 				<nz-form-label nzrequired [nzSpan]="4" nzfor="fault-category">AC Service</nz-form-label>
 				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
 					<nz-select name="fault-category" nzplaceholder="Fault Category" formControlName="acService">
-						<nz-option *ngFor="let fc of faultCategories" [nzValue]="fc" [nzLabel]="fc">{{fc}}</nz-option>
+						<nz-option *ngFor="let fc of acServices" [nzValue]="fc" [nzLabel]="fc">{{fc}}</nz-option>
 					</nz-select>
 				</nz-form-control>
 			</nz-form-item>
@@ -286,7 +286,7 @@
 				<nz-form-label nzrequired [nzSpan]="4" nzfor="fault-category">DG Service</nz-form-label>
 				<nz-form-control [nzXs]="24" nzerrortip="The input is not valid">
 					<nz-select name="fault-category" nzplaceholder="Fault Category" formControlName="dgService">
-						<nz-option *ngFor="let fc of faultCategories" [nzValue]="fc" [nzLabel]="fc">{{fc}}</nz-option>
+						<nz-option *ngFor="let fc of dgServices" [nzValue]="fc" [nzLabel]="fc">{{fc}}</nz-option>
 					</nz-select>
 				</nz-form-control>
 			</nz-form-item>

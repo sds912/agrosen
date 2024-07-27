@@ -10,13 +10,13 @@
     </div>
     <div style="align-self: stretch; justify-content: space-between; align-items: flex-end; display: inline-flex">
         <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{active}}</div>
+            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{alarmWorking}}</div>
             <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
                 <div style="justify-content: flex-start; align-items: center; display: flex">
                     <div style="width: 24px; height: 24px; padding-top: 8px; padding-bottom: 8px; padding-left: 4.41px; padding-right: 5px; transform: rotate(90deg); transform-origin: 0 0; justify-content: center; align-items: center; display: flex">
                         <div style="width: 8px; height: 14.59px; transform: rotate(-90deg); transform-origin: 0 0; background: #727272; border: 1.50px #727272 solid"></div>
                     </div>
-                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">92.4% </div>
+                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{ alarmTotal > 0 ?((alarmWorking/alarmTotal)*100 | round): 0}}% </div>
                 </div>
             </div>
         </div>
@@ -42,13 +42,13 @@
     </div>
     <div style="align-self: stretch; justify-content: space-between; align-items: flex-end; display: inline-flex">
         <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">12</div>
+            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{ticketWorking}}</div>
             <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
                 <div style="justify-content: flex-start; align-items: center; display: flex">
                     <div style="width: 24px; height: 24px; padding-top: 8px; padding-bottom: 8px; padding-left: 4.41px; padding-right: 5px; transform: rotate(90deg); transform-origin: 0 0; justify-content: center; align-items: center; display: flex">
                         <div style="width: 8px; height: 14.59px; transform: rotate(-90deg); transform-origin: 0 0; background: #727272; border: 1.50px #727272 solid"></div>
                     </div>
-                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">92.4% </div>
+                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{ ticketTotal > 0 ?((ticketWorking/ticketTotal)*100 | round): 0}}% </div>
                 </div>
             </div>
         </div>
@@ -74,13 +74,13 @@
     </div>
     <div style="align-self: stretch; justify-content: space-between; align-items: flex-end; display: inline-flex">
         <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{nombreTotalAlarmes}}</div>
+            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{alarmTotal}}</div>
             <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
                 <div style="justify-content: flex-start; align-items: center; display: flex">
                     <div style="width: 24px; height: 24px; padding-top: 8px; padding-bottom: 8px; padding-left: 4.41px; padding-right: 5px; transform: rotate(90deg); transform-origin: 0 0; justify-content: center; align-items: center; display: flex">
                         <div style="width: 8px; height: 14.59px; transform: rotate(-90deg); transform-origin: 0 0; background: #727272; border: 1.50px #727272 solid"></div>
                     </div>
-                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">92.4% </div>
+                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{ alarmTotal > 0 ?((alarmTotal/alarmTotal)*100 | round): 0}}% </div>
                 </div>
             </div>
         </div>
@@ -106,13 +106,13 @@
     </div>
     <div style="align-self: stretch; justify-content: space-between; align-items: flex-end; display: inline-flex">
         <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">48</div>
+            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{ticketTotal}}</div>
             <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
                 <div style="justify-content: flex-start; align-items: center; display: flex">
                     <div style="width: 24px; height: 24px; padding-top: 8px; padding-bottom: 8px; padding-left: 4.41px; padding-right: 5px; transform: rotate(90deg); transform-origin: 0 0; justify-content: center; align-items: center; display: flex">
                         <div style="width: 8px; height: 14.59px; transform: rotate(-90deg); transform-origin: 0 0; background: #727272; border: 1.50px #727272 solid"></div>
                     </div>
-                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">92.4% </div>
+                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{ ticketTotal > 0 ?((ticketTotal/ticketTotal)*100 | round): 0}}% </div>
                 </div>
             </div>
         </div>
@@ -138,13 +138,13 @@
     </div>
     <div style="align-self: stretch; justify-content: space-between; align-items: flex-end; display: inline-flex">
         <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{cleared}}</div>
+            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{alarmClosed}}</div>
             <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
                 <div style="justify-content: flex-start; align-items: center; display: flex">
                     <div style="width: 24px; height: 24px; padding-top: 8px; padding-bottom: 8px; padding-left: 4.41px; padding-right: 5px; transform: rotate(90deg); transform-origin: 0 0; justify-content: center; align-items: center; display: flex">
                         <div style="width: 8px; height: 14.59px; transform: rotate(-90deg); transform-origin: 0 0; background: #727272; border: 1.50px #727272 solid"></div>
                     </div>
-                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">92.4% </div>
+                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{ alarmTotal > 0 ?((alarmClosed/alarmTotal)*100 | round): 0}}% </div>
                 </div>
             </div>
         </div>
@@ -170,13 +170,13 @@
     </div>
     <div style="align-self: stretch; justify-content: space-between; align-items: flex-end; display: inline-flex">
         <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 6px; display: inline-flex">
-            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">36</div>
+            <div style="align-self: stretch; color: #20252A; font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 30px; letter-spacing: 1px; word-wrap: break-word">{{ticketClosed}}</div>
             <div style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 12px; display: inline-flex">
                 <div style="justify-content: flex-start; align-items: center; display: flex">
                     <div style="width: 24px; height: 24px; padding-top: 8px; padding-bottom: 8px; padding-left: 4.41px; padding-right: 5px; transform: rotate(90deg); transform-origin: 0 0; justify-content: center; align-items: center; display: flex">
                         <div style="width: 8px; height: 14.59px; transform: rotate(-90deg); transform-origin: 0 0; background: #727272; border: 1.50px #727272 solid"></div>
                     </div>
-                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">92.4% </div>
+                    <div style="color: #727272; font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">{{ ticketTotal > 0 ?((ticketClosed/ticketTotal)*100 | round) : 0}}% </div>
                 </div>
             </div>
         </div>

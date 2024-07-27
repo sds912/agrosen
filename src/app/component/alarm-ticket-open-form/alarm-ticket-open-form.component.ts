@@ -42,6 +42,7 @@ loading: boolean = false;
   ]
 
   ticketForm?: FormGroup;
+  reference: string = "";
   searchControl = this.fb.control('');
   filteredSites: any[] = [];
   filteredSiteAccessRequests: any[] = [];
@@ -71,6 +72,7 @@ loading: boolean = false;
   partGroups: string[] = ['--None--'];
   parts: string[] = ['--None--'];
   partCodes: string[] = ['--None--'];
+
 
 
   constructor(
@@ -134,6 +136,8 @@ loading: boolean = false;
     this.ticketForm?.get('siteAccessRequest')?.disable();
     this.ticketForm!.get('state')?.disable();
   }
+
+ 
 
   onSiteInput(site: any): void {
     this.ticketForm?.get('assignmentGroup')?.reset();

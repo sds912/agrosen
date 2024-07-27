@@ -14,11 +14,9 @@ export class AlarmesService {
 
   constructor(private http: HttpClient) { }
 
- /*  public getalarmes():Observable<Array<Alarmes >>{
-    return this.http.get<Array<Alarmes>>(this.apiBaseUrl+"/chercherAlarme?mc=A&size=5&page=0")
-    http://localhost:8080/cherchersite?mc=D&size=5&page=0
-  } */
-
+  public getDashboardData(status: string){
+    return this.http.get(this.apiBaseUrl+`/api/tickets/count?status=${status}`)
+   }
   public getData(motCle:String,page:number,size:number){
     return this.http.get(this.apiBaseUrl+"/cherchersite?mc="+motCle+"&size="+size+"&page="+page+"")
   }
@@ -55,4 +53,65 @@ export class AlarmesService {
    getMarkers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiBaseUrl}/listeAlarmes`);
   }
+
+  countAlarmByStatus(status: any = null): Observable<any> {
+   if(status !== null){
+    return this.http.get<{ total: number }>(`${this.apiBaseUrl}/alarms/count?status=${status}`);
+
+   }
+   return this.http.get<{ total: number }>(`${this.apiBaseUrl}/alarms/count`);
+
+  }
+
+  createAlarm(alarm: any): Observable<any> {
+    return this.http.post(`${this.apiBaseUrl}/alarms`, alarm);
+  }
+
+  updateAlarm(id: number, alarm: any): Observable<any> {
+    return this.http.put(`${this.apiBaseUrl}/alarms/${id}`, alarm);
+  }
+
+  deleteAlarm(id: number): Observable<any> {
+    return this.http.delete(`${this.apiBaseUrl}/alarmes/${id}`);
+  }
+
+  filter(filterParams: any = null, page: number = 1, limit: number = 10): Observable<any> {
+    // Initialize the query string
+    let queryParams = '';
+  
+    // Check each parameter and append to the query string if not null
+    if (filterParams) {
+      const params = [];
+      
+      if (filterParams.siteName !== null) {
+        params.push(`name=${filterParams.siteName}`);
+      }
+      if (filterParams.alarmName !== null) {
+        params.push(`alarmName=${filterParams.alarmName}`);
+      }
+      if (filterParams.date !== null) {
+        params.push(`dateStart=${filterParams.date}`);
+      }
+      
+      params.push(`limit=${limit}`);
+      params.push(`page=${page}`);
+
+      
+      // Join all parameters with '&' and prepend with '?'
+
+      if (params.length > 0) {
+        queryParams = '?' + params.join('&');
+      }
+    }
+  
+    // Construct the complete URL
+    const url = `${this.apiBaseUrl}/alarms/${queryParams}`;
+    console.log(url);
+    
+    // Return the HTTP GET request
+    return this.http.get<any>(url);
+  }
+  
+
+  
 }

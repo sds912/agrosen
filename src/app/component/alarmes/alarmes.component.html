@@ -20,68 +20,50 @@
           <th>Nom Alarme</th>
           <th>Début Alarme</th>
           <th>Fin Alarme</th>
-          <th nzWidth="135px">Actions</th> <!-- New column for actions -->
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let a of basicTable.data">
           <td>{{ a.siteId }}</td>
           <td>{{ a.name}}</td>
-          <td>{{ a.ticket.dcVoltage}}</td>
+          <td>{{ a.ticket?.dcVoltage}}</td>
           <td>{{ a.iDcStart }}</td>
           <td>{{ a.uL1Start }}  {{ a.uL2Start }} {{ a.uL3Start }}</td>
           <td>{{ a.name }}</td>
           <td>{{ a.dateEnd | dateFormat }}</td>
           <td>{{ a.dateStart | dateFormat }}</td>
-          <td>
-            <!-- Action buttons -->
-            <button nz-button nzType="default" nzSize="small" class="detail-btn" (click)="viewDetails(a)">
-              <i nz-icon nzType="eye"></i>
-            </button>
-            <button nz-button nzType="default" nzSize="small" class="mx-2 edit-btn" (click)="edit(a)">
-              <i nz-icon nzType="edit"></i>
-            </button>
-            <button nz-button nzType="default" nzSize="small" class="delete-btn" (click)="delete(a)">
-              <i nz-icon nzType="delete" ></i>
-            </button>
-          </td>
         </tr>
       </tbody>
     </nz-table>
   </nz-card>
 </div>
 <ng-template #extraTemplate>
-  <form [formGroup]="formGroup">
+  
   <div class="justify-content-between d-flex align-items-center  ">
     <div class="me-2 fw-bold">Filtre: </div>
     <div>
-      <nz-select name="select-validate" formControlName="siteFilter">
-        <nz-option selected  nzValue="Sites" nzLabel="Sites"></nz-option>
-        <nz-option nzValue="2 Medium" nzLabel="2 Medium"></nz-option>
-        <nz-option nzValue="3 Minor" nzLabel="3 Minor"></nz-option>
-        <nz-option nzValue="4 Low" nzLabel="4 Low"></nz-option>
-      </nz-select>
-    </div>
-
-    <div class="mx-3">
-      <nz-select name="select-validate" formControlName="siteFilter">
-        <nz-option   nzValue="Sites" nzLabel="Sites"></nz-option>
-        <nz-option nzValue="2 Medium" nzLabel="2 Medium"></nz-option>
-        <nz-option nzValue="3 Minor" nzLabel="3 Minor"></nz-option>
-        <nz-option nzValue="4 Low" nzLabel="4 Low"></nz-option>
-      </nz-select>
-    </div>
-
-    <div>
-      <nz-select name="select-validate" formControlName="siteFilter">
-        <nz-option   nzValue="Sites" nzLabel="Sites"></nz-option>
-        <nz-option nzValue="2 Medium" nzLabel="2 Medium"></nz-option>
-        <nz-option nzValue="3 Minor" nzLabel="3 Minor"></nz-option>
-        <nz-option nzValue="4 Low" nzLabel="4 Low"></nz-option>
-      </nz-select>
+      <input nz-input 
+             placeholder="Search by site" 
+             (input)="onSiteSearch($event.target)" 
+             style="min-width: 120px;" />
     </div>
     
+    <div class="mx-3">
+      <input nz-input 
+             placeholder="Search by name" 
+             (input)="onAlarmSearch($event.target)" 
+             style="min-width: 120px;" />
+    </div>
+    
+
+    <div>
+      <nz-form-control  nzerrortip="The input is not valid">
+				<nz-date-picker  [(ngModel)]="date" (ngModelChange)="onDateSearch($event)"   style="width: 100%;"  nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
+      </nz-form-control>
+    </div>
+    <button class="ms-3" (click)="applayFilter()" nz-button nzType="primary"><span class="fa fa-search"></span></button>
+    
   </div>
-  </form>
+
 </ng-template>
 

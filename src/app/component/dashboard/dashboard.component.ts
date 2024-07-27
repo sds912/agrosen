@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlarmesService } from '../../service/alarmes.service';
+import { TicketService } from '../../service/ticket.service';
+import { ALARM_STATE, TiCKET_STATE } from '../../shared/app-constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,17 +13,28 @@ export class DashboardComponent implements OnInit {
   occurenceDTU_NO_Response:any;
   occurenceDC_Low_Voltage1:any;
   occurenceDC_Low_Voltage2:any;
-  nombreTotalAlarmes:any;
+  alarmTotal =  0;
+  alarmWorking = 0
+  alarmClosed = 0;
+  ticketTotal =  0;
+  ticketWorking = 0
+  ticketClosed = 0;
+
   cleared:any;
   active:any;
-  constructor(private alarmeService:AlarmesService){}
+  constructor(private alarmeService:AlarmesService, private ticketService: TicketService){}
 
   ngOnInit(): void {
-    this.getAllAlarmes();
     this.getOccurencDTU_NO_Response();
     this.getOccurenceMain_AC_OUT();
     this.  getAllAlarmesCleared();
     this.getAllAlarmesActive();
+    this.getAlarmTotal();
+    this.getAlarmClosed();
+    this.getAlarmWorking();
+    this.getTicketClosed();
+    this.getTicketWorking();
+    this.getTicketTotal();
   }
   getOccurenceMain_AC_OUT(){
     return this.alarmeService.getOcurrenceMain_AC_OUT().subscribe(
@@ -56,14 +69,7 @@ export class DashboardComponent implements OnInit {
       }
     )
    }
-   getAllAlarmes(){
-    return this.alarmeService.getNombreTotalAlarmes().subscribe(
-      data=>{
-          this.nombreTotalAlarmes=data;  
-         // console.log(this.nombreTotalAlarmes)
-      }
-    )
-   }
+  
    getAllAlarmesCleared(){
     return this.alarmeService.getNombreTotalAlarmesCleared().subscribe(
       data=>{
@@ -80,4 +86,54 @@ export class DashboardComponent implements OnInit {
       }
     )
    }
+
+    // New methods to fetch individual statistics
+  getAlarmTotal() {
+    this.alarmeService.countAlarmByStatus().subscribe(
+      data => {
+        this.alarmTotal = data.count;
+      }
+    );
+  }
+
+  getAlarmWorking() {
+    this.alarmeService.countAlarmByStatus(ALARM_STATE.INPROGRESS).subscribe(
+      data => {
+        this.alarmWorking = data.count;
+      }
+    );
+  }
+
+  getAlarmClosed() {
+    this.alarmeService.countAlarmByStatus(ALARM_STATE.CLOSED).subscribe(
+      data => {
+        this.alarmClosed = data.count;
+      }
+    );
+  }
+
+  getTicketTotal() {
+    this.ticketService.countTickerByStatus().subscribe(
+      data => {
+        this.ticketTotal = data.count;
+      }
+    );
+  }
+
+  getTicketWorking() {
+    this.ticketService.countTickerByStatus(TiCKET_STATE.INPROGRESS).subscribe(
+      data => {
+        console.log(data)
+        this.ticketWorking = data.count;
+      }
+    );
+  }
+
+  getTicketClosed() {
+    this.ticketService.countTickerByStatus(TiCKET_STATE.CLOSED).subscribe(
+      data => {
+        this.ticketClosed = data.count;
+      }
+    );
+  }
 }

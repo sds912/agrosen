@@ -62,5 +62,17 @@ export class TicketService {
     return this.http.get<any>(`${baseAPI}/tickets/generate/reference?type=${type}`, { responseType: "json" })
   }
 
+ 
 
+  countTickerByStatus(status: any = null): Observable<any> {
+    if(status !== null){
+      return this.http.get<{ working: number }>(`${baseAPI}/tickets/count?status=${status}`);
+
+    }
+
+    return this.http.get<{ working: number }>(`${baseAPI}/tickets/count`);
+
+  }
+
+  
 }

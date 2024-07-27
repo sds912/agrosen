@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../service/login.service';
 import { Router } from '@angular/router';
 import { AlarmesService } from '../../service/alarmes.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { SiteService } from '../../service/site.service';
+import { formatDate } from '../../shared/date-formater';
 
 
 
@@ -12,8 +15,11 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
   styleUrl: './alarmes.component.css'
 })
 export class AlarmesComponent implements OnInit {
+
+
   expandIndex: number | null = null; // Expand row index, if needed
   alarmes: any[] = [];
+  sites: any[] = [];
   alarm: any = [];
   formGroup!: FormGroup;
   motCle: String = "";
@@ -21,13 +27,19 @@ export class AlarmesComponent implements OnInit {
   size: number = 10;
   pages: any;
   filterAlarme: String = "";
- occurence:any;
+  occurence:any;
+  date: Date | null = null;
+  filterParams: any = {
+    siteName: null,
+    alarmName: null,
+    date: null
+  };
 
 
   
   constructor(public authservice: LoginService,
     private alarmeService: AlarmesService, private fb: FormBuilder,
-    private router: Router) { 
+    private router: Router, private message: NzMessageService, private siteService: SiteService) { 
       this.formGroup = this.fb.group({
         siteFilter: ['Sites'] // Default selected value
       });
@@ -43,6 +55,7 @@ export class AlarmesComponent implements OnInit {
   ngOnInit(): void {
       //this.getOccurence()
     this.getAlarmes();
+    this.getSitess();
     this.formGroup = this.fb.group({
       keyword: this.fb.control("")
     });
@@ -53,6 +66,18 @@ export class AlarmesComponent implements OnInit {
       (response: any) => {
         console.log(response.data)
         this.alarmes =  response.data;
+      //  this.pages = new Array(this.alarmes.totalPages)
+     //   this.alarm = this.alarmes.data;
+      //  console.log(this.alarm)
+      })
+
+  }
+
+  public getSitess() {
+    this.siteService.getSites().subscribe(
+      (response: any) => {
+        console.log(response.data)
+        this.sites =  response.data;
       //  this.pages = new Array(this.alarmes.totalPages)
      //   this.alarm = this.alarmes.data;
       //  console.log(this.alarm)
@@ -78,40 +103,39 @@ export class AlarmesComponent implements OnInit {
     this.getAlarmes()
   }
 
-  viewDetails(id: any){
-
-  }
-
-  edit(id: any){
-
-  }
-  delete(id: any){
-
-  }
-
  
 
-  listOfData: any[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park'
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park'
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park'
+  onSiteSearch(target: any): void {
+   this.filterParams.siteName = target?.value;
+   // this.filteredSites = this.sites.filter(site => site.name.toLowerCase().includes(value.toLowerCase()));
+  }
+
+  onAlarmSearch(target: any): void {
+    this.filterParams.alarmName = target.value;
+   
+
+   // this.filteredAlarms = this.alarms.filter(alarm => alarm.name.toLowerCase().includes(value.toLowerCase()));
+  }
+ 
+  onDateSearch(date: any) {
+
+    this.filterParams.date =formatDate(date);
+
+    
     }
-  ];
  
-  
+  applayFilter() {
+    console.log(this.filterParams)
+      this.alarmeService.filter(this.filterParams)
+      .subscribe(
+        res => {
+          this.message.success('filtered sucessfuly !');
+          this.alarmes = res.data;
+          
+         },
+        error => this.message.error(error?.error?.message)
+      )
+      
+    }
   
 }

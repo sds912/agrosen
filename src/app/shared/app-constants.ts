@@ -1,6 +1,7 @@
 export const TICKET_TYPE = {
     SWO: 'SWO_TASK',
-    PM: 'PM_TASK'
+    PM: 'PM_TASK',
+    PMA: 'PMA_TASK'
 }
 
 export const TiCKET_STATE = {
@@ -9,7 +10,15 @@ export const TiCKET_STATE = {
     WORKINPROGRESS: 'WORK_IN_PROGRESS',
     WAITFORCLOSURE: 'AWAITING_CLOSURE',
     CLOSED: 'CLOSED',
-    CANCEL: 'CANCEL'
+    CANCEL: 'CANCEL',
+    INPROGRESS: 'IN_PROGRESS'
+}
+
+export const ALARM_STATE = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  CANCEL: 'CANCEL',
+  INPROGRESS: 'IN_PROGRESS'
 }
 
 export const ROLE = {

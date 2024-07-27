@@ -61,6 +61,9 @@ import { TicketTaskManagementComponent } from './pages/ticket-task-management/ti
 import { NgxLoadingModule } from 'ngx-loading';
 import { SiteDetailsComponent } from './component/site-details/site-details.component';
 import { AlarmTicketPmFormComponent } from './component/alarm-ticket-pm-form/alarm-ticket-pm-form.component';
+import { RoundPipe } from './shared/round.pipe';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+
 
 
 registerLocaleData(en);
@@ -73,6 +76,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 
 @NgModule({
   declarations: [
+    RoundPipe,
     AppComponent,
     AlarmesComponent,
     MenuComponent,
@@ -130,6 +134,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     NzModalModule,
     NzSwitchModule,
     NgxLoadingModule.forRoot({}),
+    NzPopconfirmModule
 
     
     

@@ -2,7 +2,7 @@
     <div *ngIf="displayMode === 'form'">
         <app-alarm-ticket-open-form *ngIf="type === TICCKETTYPE.SWO" ></app-alarm-ticket-open-form>
         <app-alarm-ticket-pm-form *ngIf="type === TICCKETTYPE.PM" ></app-alarm-ticket-pm-form>
-        <app-alarm-ticket-open-form *ngIf="type === TICCKETTYPE.PMA" ></app-alarm-ticket-open-form>
+        <app-alarm-ticket-pm-form *ngIf="type === TICCKETTYPE.PMA" ></app-alarm-ticket-pm-form>
     </div>
 
     <div *ngIf="displayMode === 'list'">

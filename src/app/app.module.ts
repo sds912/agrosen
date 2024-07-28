@@ -54,7 +54,6 @@ import { UserManagementComponent } from './pages/user-management/user-management
 import { SiteManagementComponent } from './pages/site-management/site-management.component';
 import { SiteListComponent } from './component/site-list/site-list.component';
 import { SiteFormComponent } from './component/site-form/site-form.component';
-import { AlarmTicketPMOpenFormComponent } from './component/alarm-ticket-pm-open-form/alarm-ticket-pm-open-form.component';
 import { TicketTaskListComponent } from './component/ticket-task-list/ticket-task-list.component';
 import { TicketTaskFormComponent } from './component/ticket-task-form/ticket-task-form.component';
 import { TicketTaskManagementComponent } from './pages/ticket-task-management/ticket-task-management.component';
@@ -96,7 +95,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     SiteManagementComponent,
     SiteListComponent,
     SiteFormComponent,
-    AlarmTicketPMOpenFormComponent,
     TicketTaskListComponent,
     TicketTaskFormComponent,
     TicketTaskManagementComponent,

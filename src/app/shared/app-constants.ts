@@ -1,7 +1,7 @@
 export const TICKET_TYPE = {
     SWO: 'SWO_TASK',
     PM: 'PM_TASK',
-    PMA: 'PMA_TASK'
+    PMA: 'PRA'
 }
 
 export const TiCKET_STATE = {

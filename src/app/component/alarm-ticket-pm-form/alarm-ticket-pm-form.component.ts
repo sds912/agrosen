@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ROLE, TiCKET_STATE} from '../../shared/app-constants';
+import {ROLE, TiCKET_STATE, TICKET_TYPE} from '../../shared/app-constants';
 import {HttpClientXsrfModule} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
@@ -46,6 +46,7 @@ export class AlarmTicketPmFormComponent {
 	type !: string;
 	currentUser : any;
 	TICKETSTATE = TiCKET_STATE;
+	TICKETTYPE = TICKET_TYPE;
 	ROLE = ROLE;
 	selectedFile : any | null = null;
 	imgURL : any;
@@ -218,7 +219,14 @@ export class AlarmTicketPmFormComponent {
 		this.ticketForm ?. get('assignedTo') ?. reset();
 		this.ticketForm !.get('site') ?. setValue(site);
 		this.filteredAssignmentGroups = site ?. userGroups;
-		this.filteredAssignedTo = site ?. users;
+
+		if(this.type === TICKET_TYPE.PMA){
+			this.filteredAssignedTo = site ?. users?.filter((v:any) => v.role === ROLE.FS);
+         
+		}else{
+			this.filteredAssignedTo = site ?. users;
+
+		}
 
 		if (this.filteredAssignmentGroups !== null && this.filteredAssignmentGroups !== undefined && this.filteredAssignmentGroups.length > 0) {
 			this.ticketForm ?. get('assignmentGroup') ?. setValue(this.filteredAssignmentGroups[0]);
@@ -527,6 +535,7 @@ export class AlarmTicketPmFormComponent {
 	}
 
 	onUpload(id : string) {
+		this.loading = true;
 		if (!this.selectedFile) {
 			alert('Please select a file first');
 			return;
@@ -539,9 +548,13 @@ export class AlarmTicketPmFormComponent {
 			console.log(response);
 			this.message.success('Uploaded Successfully !');
 			this.loadTicketById(this.ticket.id)
+		    this.loading = true;
+
 		}, error => {
 			console.error(error);
-			this.message.error(error ?. error ?. messages[0] ?? 'Upload Failed')
+			this.message.error(error ?. error ?. messages[0] ?? 'Upload Failed');
+		this.loading = true;
+
 		});
 	}
 

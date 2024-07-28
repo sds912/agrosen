@@ -3,9 +3,9 @@
 		<div *ngIf="ticket && ticket.status !== TICKETSTATE.ASSIGNED">{{!ticket ? 'NEW TICKET': 'TICKET : '+
             ticket.reference}}</div>
 		<div *ngIf="ticket?.status === TICKETSTATE.WORKINPROGRESS" class="d-flex justify-content-end align-items-center " style="margin-bottom: 10px;">
-			<button nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.CLOSED)">Close PM Complete</button>
-			<button class="mx-2 btn-outline-warning" nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)">Close PM Incomplete</button>
-			<button [disabled]="ticket.status === TICKETSTATE.CANCEL || ticket.status === TICKETSTATE.CLOSED" nz-button nztype="default" nzdanger (click)="saveStatus(TICKETSTATE.CANCEL)">Cancel PM</button>
+			<button nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.CLOSED)">Close {{this.type === TICKETTYPE.PM ? 'PM' : 'PMA'}} Complete</button>
+			<button class="mx-2 btn-outline-warning" nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)">Close {{this.type === TICKETTYPE.PM ? 'PM' : 'PMA'}}  Incomplete</button>
+			<button [disabled]="ticket.status === TICKETSTATE.CANCEL || ticket.status === TICKETSTATE.CLOSED" nz-button nztype="default" nzdanger (click)="saveStatus(TICKETSTATE.CANCEL)">Cancel {{this.type === TICKETTYPE.PM ? 'PM' : 'PMA'}} </button>
 			<button nz-button nztype="primary" class="ms-2">
 				<label for="ticket-image" style="display: block; width: 100%; height: 100%; cursor: pointer;">
 					Upload
@@ -31,14 +31,14 @@
 		<div class="d-flex justify-content-between mt-3">
 			<div class="alarm-tiket-form-left w-50">
 				<nz-form-item>
-					<nz-form-label [nzSm]="10" [nzXs]="24" nzfor="number">Number</nz-form-label>
+					<nz-form-label [nzSm]="10" nzRequired [nzXs]="24" nzfor="number">Number</nz-form-label>
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The number is not valid">
 						<input nz-input id="number" formControlName="number"/>
 					</nz-form-control>
 				</nz-form-item>
 
 				<nz-form-item>
-					<nz-form-label [nzSpan]="10" nzrequired>Site</nz-form-label>
+					<nz-form-label [nzSpan]="10" nzRequired>Site</nz-form-label>
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
 						<nz-input-group nzprefixicon="search">
 							<input type="text" nz-input [nzAutocomplete]="sites" [ngModel]="ticketForm!.get('site')?.value?.siteId" [disabled]="this.ticket !== undefined" [ngModelOptions]="{standalone: true}" (ngModelChange)="onSiteInput($event)" [value]="ticketForm!.get('site')?.value?.siteId" placeholder="Search...">
@@ -50,7 +50,7 @@
 				</nz-form-item>
 
 				<nz-form-item>
-					<nz-form-label [nzSpan]="10">Site Access Request</nz-form-label>
+					<nz-form-label [nzSpan]="10"  >Site Access Request</nz-form-label>
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
 						<nz-input-group nzprefixicon="search">
 							<input type="text" nz-input [nzAutocomplete]="siteAccessRequest" formControlName="siteAccessRequest" placeholder="Search...">
@@ -72,14 +72,14 @@
 
 			<div class="alarm-tiket-form-right w-50">
 				<nz-form-item>
-					<nz-form-label [nzSm]="10" [nzXs]="24" nzfor="state">State</nz-form-label>
+					<nz-form-label [nzSm]="10" [nzXs]="24" nzRequired nzfor="state">State</nz-form-label>
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
 						<input nz-input id="state" formControlName="state"/>
 					</nz-form-control>
 				</nz-form-item>
 
 				<nz-form-item>
-					<nz-form-label [nzSpan]="10">Assignment group</nz-form-label>
+					<nz-form-label [nzSpan]="10" nzRequired>Assignment group</nz-form-label>
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
 						<nz-input-group nzprefixicon="search">
 							<input type="text" nz-input [nzAutocomplete]="assignmentGroup" [disabled]="this.ticket !== undefined" [ngModel]="ticketForm!.get('assignmentGroup')?.value?.name??''" [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignmentGroupInput($event)" [value]="ticketForm!.get('assignmentGroup')?.value?.name??''" placeholder="Search...">
@@ -91,20 +91,20 @@
 				</nz-form-item>
 
 				<nz-form-item>
-					<nz-form-label [nzSpan]="10" nzrequired>Assigned to</nz-form-label>
+					<nz-form-label [nzSpan]="10" nzRequired>Assigned to</nz-form-label>
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
 						<nz-input-group nzprefixicon="search">
-							<input type="text" nz-input [nzAutocomplete]="assignedTo" [disabled]="this.ticket !== undefined" [ngModel]="ticketForm!.get('assignedTo')?.value?.firstName !== undefined ? ticketForm!.get('assignedTo')?.value?.firstName??'' +' '+ ticketForm?.get('assignedTo')?.value?.lastName??'':''" [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignedToInput($event)" [value]=" ticketForm!.get('assignedTo')?.value?.firstName !== undefined ? ticketForm!.get('assignedTo')?.value?.firstName??'' +' '+ ticketForm?.get('assignedTo')?.value?.lastName??'': ''" placeholder="Search...">
+							<input type="text" nz-input [nzAutocomplete]="assignedTo" [disabled]="this.ticket !== undefined"  [ngModel]="(this.ticketForm?.get('assignedTo')?.value?.firstName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.firstName: '')+ ' '+ (this.ticketForm?.get('assignedTo')?.value?.lastName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.lastName: '')" [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignedToInput($event)"
+							 [value]="'ok'" placeholder="Search...">
 						</nz-input-group>
 						<nz-autocomplete #assignedTo>
-							<nz-auto-option *ngFor="let option of filteredAssignedTo" [nzValue]="option" [nzLabel]="option.firstName??'' +' '+ option.lastName??''">{{ option.firstName??'' +' '+
-                                option.lastName??'' }}</nz-auto-option>
+							<nz-auto-option *ngFor="let option of filteredAssignedTo" [nzValue]="option" [nzLabel]="(this.ticketForm?.get('assignedTo')?.value?.firstName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.firstName: '')+ ' '+ (this.ticketForm?.get('assignedTo')?.value?.lastName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.lastName: '')">{{(this.ticketForm?.get('assignedTo')?.value?.firstName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.firstName: '')+ ' '+ (this.ticketForm?.get('assignedTo')?.value?.lastName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.lastName: '')}} ({{option.role}})</nz-auto-option>
 						</nz-autocomplete>
 					</nz-form-control>
 				</nz-form-item>
 
 				<nz-form-item>
-					<nz-form-label [nzSpan]="10" nzfor="datePicker">Scheduled WO Date</nz-form-label>
+					<nz-form-label [nzSpan]="10" nzfor="datePicker" nzRequired>Scheduled WO Date</nz-form-label>
 					<nz-form-control [nzSm]="14" [nzXs]="24">
 						<nz-date-picker style="width: 100%;" formControlName="sheduleDate" nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
 					</nz-form-control>

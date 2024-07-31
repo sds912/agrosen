@@ -83,11 +83,11 @@ export class AlarmesService {
     if (filterParams) {
       const params = [];
       
-      if (filterParams.siteName !== null) {
-        params.push(`name=${filterParams.siteName}`);
+      if (filterParams.siteId !== null) {
+        params.push(`siteId=${filterParams.siteId}`);
       }
       if (filterParams.alarmName !== null) {
-        params.push(`alarmName=${filterParams.alarmName}`);
+        params.push(`name=${filterParams.alarmName}`);
       }
       if (filterParams.date !== null) {
         params.push(`dateStart=${filterParams.date}`);

@@ -29,11 +29,14 @@ export class AlarmesComponent implements OnInit {
   filterAlarme: String = "";
   occurence:any;
   date: Date | null = null;
+  siteId: string | null = null;
+  alarmName: string | null = null;
   filterParams: any = {
-    siteName: null,
+    siteId: null,
     alarmName: null,
     date: null
   };
+  loading: boolean = false;
 
 
   
@@ -55,32 +58,31 @@ export class AlarmesComponent implements OnInit {
   ngOnInit(): void {
       //this.getOccurence()
     this.getAlarmes();
-    this.getSitess();
+    //this.getSitess();
     this.formGroup = this.fb.group({
       keyword: this.fb.control("")
     });
 
   }
   public getAlarmes() {
+    this.loading = true;
     this.alarmeService.getAlarmes(this.Currentpage, this.size).subscribe(
       (response: any) => {
-        console.log(response.data)
         this.alarmes =  response.data;
-      //  this.pages = new Array(this.alarmes.totalPages)
-     //   this.alarm = this.alarmes.data;
-      //  console.log(this.alarm)
-      })
+        this.loading = false;
+        this.message.success('Alarms loaded successfuly !')
+      },
+    error => {
+      this.message.error(error.error.message);
+      this.loading = false;
+    })
 
   }
 
   public getSitess() {
     this.siteService.getSites().subscribe(
       (response: any) => {
-        console.log(response.data)
         this.sites =  response.data;
-      //  this.pages = new Array(this.alarmes.totalPages)
-     //   this.alarm = this.alarmes.data;
-      //  console.log(this.alarm)
       })
 
   }
@@ -106,22 +108,25 @@ export class AlarmesComponent implements OnInit {
  
 
   onSiteSearch(target: any): void {
-   this.filterParams.siteName = target?.value;
-   // this.filteredSites = this.sites.filter(site => site.name.toLowerCase().includes(value.toLowerCase()));
+    if(target?.value !== null && target?.value !== ''){
+      this.filterParams.siteId = target?.value;
+    }
   }
 
   onAlarmSearch(target: any): void {
-    this.filterParams.alarmName = target.value;
+    if(target?.value !== null && target?.value !== ''){
+      this.filterParams.alarmName = target.value;
+
+    }
    
 
    // this.filteredAlarms = this.alarms.filter(alarm => alarm.name.toLowerCase().includes(value.toLowerCase()));
   }
  
   onDateSearch(date: any) {
-
+   if(date !== null){
     this.filterParams.date =formatDate(date);
-
-    
+   }
     }
  
   applayFilter() {
@@ -136,6 +141,16 @@ export class AlarmesComponent implements OnInit {
         error => this.message.error(error?.error?.message)
       )
       
+    }
+
+    reloadData(){
+      this.filterParams.siteId = null;
+      this.filterParams.alarmName = null;
+      this.filterParams.date = null;
+      this.date = null;
+      this.alarmName = null;
+      this.siteId = null;
+      this.getAlarmes();
     }
   
 }

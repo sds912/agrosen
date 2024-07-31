@@ -43,7 +43,8 @@
     <div class="me-2 fw-bold">Filtre: </div>
     <div>
       <input nz-input 
-             placeholder="Search by site name" 
+             placeholder="Search by site Id" 
+             [(ngModel)]="siteId" 
              (input)="onSiteSearch($event.target)" 
              style="min-width: 120px;" />
     </div>
@@ -51,6 +52,7 @@
     <div class="mx-3">
       <input nz-input 
              placeholder="Search by alarm name" 
+             [(ngModel)]="alarmName" 
              (input)="onAlarmSearch($event.target)" 
              style="min-width: 120px;" />
     </div>
@@ -61,6 +63,7 @@
 				<nz-date-picker  [(ngModel)]="date" (ngModelChange)="onDateSearch($event)"   style="width: 100%;"  nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
       </nz-form-control>
     </div>
+    <button class="ms-3" (click)="reloadData()" nz-button class="btn btn-outline-warning ms-5 me-2"><span class="fa fa-refresh"></span></button>
     <button class="ms-3" (click)="applayFilter()" nz-button nzType="primary"><span class="fa fa-search"></span></button>
     
   </div>

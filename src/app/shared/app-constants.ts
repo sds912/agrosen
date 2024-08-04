@@ -28,3 +28,10 @@ export const ROLE = {
   ADMIN: 'ADMIN'
 }
 
+export const PRIORITIES = {
+  CRITICAL: 'CRITICAL',
+  HIGH: 'HIGH',
+  MODERATE: 'MODERATE',
+  LOW: 'LOW'
+}
+

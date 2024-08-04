@@ -57,8 +57,6 @@ loading: boolean = false;
   currentUser: any;
   TICKETSTATE = TiCKET_STATE;
   ROLE = ROLE;
-  selectedFile: any | null = null;
-  imgURL: any;
   tasks: any[] = [];
 
   faultCodePrefixes: string[] = ['--None--', 'Standard Fault (F-)', 'Customer Issue Fault (C-)', 'PM Fault (P-)', 'SHEQ (S-)'];
@@ -420,35 +418,9 @@ loading: boolean = false;
       )
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  
 
-    this.onUpload(this.ticket?.id);
-
-  }
-
-  onUpload(id: string) {
-    if (!this.selectedFile) {
-      alert('Please select a file first');
-      return;
-    }
-
-    const uploadData = new FormData();
-    uploadData.append('file', this.selectedFile, this.selectedFile.name);
-
-    this.ticketService.uploadImage(uploadData, id)
-      .subscribe(
-        response => {
-          console.log(response);
-          this.message.success('Uploaded Successfully !');
-          this.loadTicketById(this.ticket.id)
-        },
-        error => {
-          console.error(error);
-          this.message.error(error?.error?.messages[0] ?? 'Upload Failed')
-        }
-      );
-  }
+ 
 
   getFullImageURL() {
     this.ticket.documents.map((data: any) => {

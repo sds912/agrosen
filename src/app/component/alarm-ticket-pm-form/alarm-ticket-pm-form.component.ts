@@ -258,6 +258,7 @@ export class AlarmTicketPmFormComponent {
 			this.route.queryParamMap.subscribe(params => {
 				const id = params.get('id');
 				this.type = params.get('type')!;
+				this.loading = false;
 
 
 				if (id !== undefined && id !== null) {
@@ -266,7 +267,6 @@ export class AlarmTicketPmFormComponent {
 
 
 				} else {
-					this.loading = false;
 					if (this.type !== undefined && this.type !== null) {
 						this.displayForm = true;
 						this.fetchNumber(this.type);
@@ -281,7 +281,11 @@ export class AlarmTicketPmFormComponent {
 			})
 
 
-		}, error => console.error('There was an error fetching the site options!', error));
+		}, error => {
+			this.loading = false;
+
+			console.error('There was an error fetching the site options!', error)
+		});
 	}
 
 	loadTicketById(id : string) {
@@ -548,12 +552,12 @@ export class AlarmTicketPmFormComponent {
 			console.log(response);
 			this.message.success('Uploaded Successfully !');
 			this.loadTicketById(this.ticket.id)
-		    this.loading = true;
+		    this.loading = false;
 
 		}, error => {
 			console.error(error);
 			this.message.error(error ?. error ?. messages[0] ?? 'Upload Failed');
-		this.loading = true;
+		this.loading = false;
 
 		});
 	}
@@ -583,6 +587,12 @@ export class AlarmTicketPmFormComponent {
 
 
 	openTask(): void {}
+
+
+	taskController(): boolean{
+		var result =  this.tasks.find((t) => t.status === 'OPEN');
+		return !(result === undefined && this.tasks.length == 2);
+	}
 
 
 }

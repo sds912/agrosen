@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { TicketService } from '../../service/ticket.service';
 import { TICKET_TYPE, TiCKET_STATE } from '../../shared/app-constants';
+import { formatDate } from '../../shared/date-formater';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-alarm-ticket-list',
@@ -11,12 +13,26 @@ import { TICKET_TYPE, TiCKET_STATE } from '../../shared/app-constants';
   styleUrl: './alarm-ticket-list.component.css'
 })
 export class AlarmTicketListComponent implements OnInit {
+  selectedStatus: any;
+  date: Date | null = null;
+  ticketStatus: { label: string, value: string }[] = [
+    { label: 'ASSIGNED', value: TiCKET_STATE.ASSIGNED },
+    { label: 'WORK IN PROGRESS', value: TiCKET_STATE.WORKINPROGRESS },
+    { label: 'WAIT FOR CLOSURE', value: TiCKET_STATE.WAITFORCLOSURE },
+    { label: 'CLOSED', value: TiCKET_STATE.CLOSED },
+    { label: 'CANCEL', value: TiCKET_STATE.CANCEL }
+];
   type!: string;
   loading: boolean = true;
   total: number = 0;
   pageSize = 10;
   pageIndex = 1;
-  
+  filterParams: any = {
+    site: null,
+    status: null,
+    date: null
+
+  }
 
   priorities: any[] = [{
     key: '1',
@@ -37,8 +53,14 @@ export class AlarmTicketListComponent implements OnInit {
   ]
 
   tickets: any[] = [];
+alarmName: any;
+siteId: any;
 
-  constructor(private route: ActivatedRoute, private router: Router, private ticketService: TicketService) {
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private ticketService: TicketService,
+   private message: NzMessageService) {
 
   }
 
@@ -83,7 +105,6 @@ export class AlarmTicketListComponent implements OnInit {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
     const { pageSize, pageIndex, sort, filter } = params;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
@@ -92,6 +113,59 @@ export class AlarmTicketListComponent implements OnInit {
    // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
   }
 
+
+  onStatusSearch(value: any) {
+    console.log(value);
+    
+    this.filterParams.status = value;
+
+    this.applayFilter();
+    
+    }
+    applayFilter() {
+     // console.log(this.filterParams);
+      this.loading = true;
+     this.ticketService.filterTickets(this.pageIndex, this.pageSize, this.type,this.filterParams )
+     .subscribe(
+      res => {
+        //console.log(res);
+
+        this.tickets = res?.data;
+        this.loading = false;
+       this.message.success('Data loaded successfuly !');
+        
+      },
+      error => {
+        console.log(error);
+        this.loading = false;
+        this.message.error('Error loading data !');
+
+        
+      }
+     )
+    }
+    reloadData() {
+      this.filterParams.site = null;
+      this.filterParams.date = null;
+      this.filterParams.status = null;
+      this.selectedStatus = null;
+      this.date = null;
+      this.siteId = null;
+    this.fetchTicket(this.pageIndex, this.pageSize, this.type);
+    }
+
+    onSiteSearch(event: any) {
+   // console.log(event?.value);
+    this.filterParams.site = event?.target?.value;
+
+      
+      }
+
+      onDateSearch(date: any) {
+        console.log(date);
+          this.filterParams.date = date !== null ? formatDate(date): null;
+          this.applayFilter();
+          }
 
 
 }

@@ -1,5 +1,5 @@
 <form nz-form [formGroup]="siteForm" *ngIf="!loading">
-    <nz-card style="width:100%;" [nzBodyStyle]="{padding: '0'}" nzTitle="Site Details" [nzExtra]="extraTemplate">
+    <nz-card style="width:100%;" [nzBodyStyle]="{padding: '0'}" >
       <div class="row mt-4">
         <div class="col-6">
           <nz-form-item>
@@ -157,15 +157,7 @@
         </div>
       </fieldset>
     </nz-card>
-    <ng-template #extraTemplate>
-      <div class="d-flex justify-content-between align-items-center">
-        <nz-form-item style="padding-top: 0px !important; margin-bottom: 0px !important;">
-          <nz-form-control>
-            <button nz-button nzType="primary" (click)="goBack()">Back</button>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </ng-template>
+    
   </form>
   
 <ngx-loading [show]="loading"></ngx-loading>

@@ -4,8 +4,8 @@
   </div>
   <form style="margin-left: 5%; margin-right: 5%;" nz-form [formGroup]="taskForm!">
 
-    <div class="d-flex justify-content-between mt-3">
-      <div class="alarm-ticket-form-left">
+    <div class="d-flex justify-content-between mt-3 w-100">
+      <div class="alarm-ticket-form-left w-50">
         <nz-form-item>
           <nz-form-label [nzXs]="10" nzFor="number">Number</nz-form-label>
           <nz-form-control [nzXs]="14" nzErrorTip="The number is not valid">
@@ -45,16 +45,22 @@
             <input nz-input id="source-task" formControlName="sourceTask" />
           </nz-form-control>
         </nz-form-item>
-
+        <nz-form-item>
+					<nz-form-label [nzSpan]="10" nzfor="datePicker" nzRequired>Created At</nz-form-label>
+					<nz-form-control [nzSm]="14" [nzXs]="24">
+						<nz-date-picker style="width: 100%;" formControlName="createdAt" nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
+					</nz-form-control>
+				</nz-form-item>
         <nz-form-item>
           <nz-form-label [nzXs]="20">Additional site visit required?</nz-form-label>
           <nz-form-control [nzXs]="4" nzErrorTip="The input is not valid">
             <label nz-checkbox formControlName="additionalSiteVisiteRequired"></label>
           </nz-form-control>
         </nz-form-item>
+        
       </div>
 
-      <div class="alarm-ticket-form-right">
+      <div class="alarm-ticket-form-right w-50">
         <nz-form-item>
           <nz-form-label [nzXs]="10" nzFor="state">State</nz-form-label>
           <nz-form-control [nzXs]="14" nzErrorTip="The input is not valid">

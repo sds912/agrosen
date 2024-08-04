@@ -1,0 +1,53 @@
+
+<div class="card mt-5">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Images before intervention</h2>
+            <button nz-button nzType="primary" class="ms-2">
+                <label for="ticket-image" style="display: block; width: 100%; height: 100%; cursor: pointer;">
+                    Upload
+                    <input id="ticket-image" type="file" style="visibility: hidden; width: 0; height: 0;"
+                        (change)="onFileSelected($event)" accept="image/*">
+                </label>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+           
+                <div *ngFor="let doc of ticket?.documents" class="col-4">
+                    <div class="card card-body mt-3">
+                        <img [src]="doc.imageData" class="img-fluid" style="height: 220px; " />
+                        <p class="mt-2">Uploaded at : {{doc.createdAt | dateFormat}}</p>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="card mt-5">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Images after intervention</h2>
+            <button nz-button nzType="primary" class="ms-2">
+                <label for="ticket-image" style="display: block; width: 100%; height: 100%; cursor: pointer;">
+                    Upload
+                    <input id="ticket-image" type="file" style="visibility: hidden; width: 0; height: 0;"
+                        (change)="onFileSelected($event)" accept="image/*">
+                </label>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            
+                <div *ngFor="let doc of ticket?.documents" class="col-4">
+                    <div class="card card-body mt-3">
+                        <img [src]="doc.imageData" class="img-fluid" style="height: 220px; " />
+                        <p class="mt-2">Uploaded at : {{doc.createdAt | dateFormat}}</p>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

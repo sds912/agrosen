@@ -18,6 +18,7 @@
           <th>IDC Tenant1</th>
           <th>AC UL_1/UL_2/UL_3</th>
           <th>Nom Alarme</th>
+          <th>Satus</th>
           <th>Début Alarme</th>
           <th>Fin Alarme</th>
         </tr>
@@ -30,6 +31,7 @@
           <td>{{ a.iDcStart }}</td>
           <td>{{ a.uL1Start }}  {{ a.uL2Start }} {{ a.uL3Start }}</td>
           <td>{{ a.name }}</td>
+          <td>{{ a.status | ticketStateTransform }}</td>
           <td>{{ a.dateEnd | dateFormat }}</td>
           <td>{{ a.dateStart | dateFormat }}</td>
         </tr>
@@ -56,7 +58,19 @@
              (input)="onAlarmSearch($event.target)" 
              style="min-width: 120px;" />
     </div>
-    
+    <div class="mx-3">
+     
+      <nz-form-control  nzErrorTip="The input is not valid">
+       <nz-select 
+       [(ngModel)]="selectedStatus" 
+       (ngModelChange)="onStatusSearch($event)"
+       
+       style="width: 160px;"
+       name="status" nzPlaceHolder="Search by status">
+           <nz-option *ngFor="let status of alarmStatus" [nzValue]="status?.value" [nzLabel]="status?.label??''">{{status?.label}}</nz-option>
+       </nz-select>
+   </nz-form-control>
+</div>
 
     <div>
       <nz-form-control  nzerrortip="The input is not valid">

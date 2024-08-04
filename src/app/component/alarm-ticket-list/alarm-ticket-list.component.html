@@ -28,7 +28,7 @@
           <td nzLeft>{{ a.site?.siteName}}</td>
           <td>{{ getPriority(a.priority) }}</td>
           <td>{{ a.createdAt | dateFormat }}</td>
-          <td>{{ a.status }}</td>
+          <td>{{ a.status | ticketStateTransform}}</td>
           <td>{{ a.user?.firstName + ' ' + a.user?.lastName}}</td>
           <td>{{ a.closedAt??'N/A' }}</td>
           <td>{{ a.shortDescription??'N/A'}}</td>
@@ -43,5 +43,42 @@
   </div>
 </nz-card>
 <ng-template #extraTemplate>
-  <button nz-button nzType="primary" (click)="navigateToNewTicket()">New</button>
+  <div class="text-end">
+    <button nz-button nzType="primary" (click)="navigateToNewTicket()">New</button>
+  </div>
+  <div class="justify-content-between d-flex align-items-center mt-5 ">
+    <div class="me-2 fw-bold">Filtre: </div>
+    <div>
+      <input nz-input 
+             placeholder="Search by site Id" 
+             [(ngModel)]="siteId" 
+             (input)="onSiteSearch($event.target)" 
+             style="min-width: 120px;" />
+    </div>
+    
+    <div class="mx-3">
+     
+             <nz-form-control  nzErrorTip="The input is not valid">
+              <nz-select 
+              [(ngModel)]="selectedStatus" 
+              (ngModelChange)="onStatusSearch($event)"
+              
+              style="width: 160px;"
+              name="status" nzPlaceHolder="Search by status">
+                  <nz-option *ngFor="let status of ticketStatus" [nzValue]="status?.value" [nzLabel]="status?.label??''">{{status?.label}}</nz-option>
+              </nz-select>
+          </nz-form-control>
+    </div>
+    
+
+    <div>
+      <nz-form-control  nzerrortip="The input is not valid">
+				<nz-date-picker  [(ngModel)]="date" (ngModelChange)="onDateSearch($event)"   style="width: 100%;"  nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
+      </nz-form-control>
+    </div>
+    <button class="ms-3" (click)="reloadData()" nz-button class="btn btn-outline-warning ms-5 me-2"><span class="fa fa-refresh"></span></button>
+    <button class="ms-3" (click)="applayFilter()" nz-button nzType="primary"><span class="fa fa-search"></span></button>
+    
+  </div>
+
 </ng-template>

@@ -49,7 +49,7 @@
 </ng-template>
 
 <nz-modal [(nzVisible)]="isVisible" nzWidth="640px" [nzMaskClosable]="false" [nzStyle]="{ top: '20px' }"
-  nzCancelText="Cancel" nzOkText="Save" [nzTitle]=" selectedUser ? 'Update '+selectedUser.username : 'Create New User'" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  nzCancelText="Cancel"  nzOkText="Save" [nzTitle]=" selectedUser ? 'Update '+selectedUser.username : 'Create New User'" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
   <ng-container *nzModalContent>
     <form nz-form [formGroup]="userForm" style="width: 100%;">
       <div class="row">

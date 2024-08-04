@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../service/user.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { phoneNumberValidator } from '../../shared/validators/phoneNumberValidator';
 
 interface User {
   id: string;
@@ -46,16 +47,16 @@ export class UserManagementComponent implements OnInit {
 
 
   onChange(result: Date): void {
-    console.log('onChange: ', result);
+   // console.log('onChange: ', result);
   }
   constructor(private fb: FormBuilder, private userService: UserService, private message: NzMessageService) {
     this.userForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      email: [''],
-      phoneNumber: [''],
-      role: [''],
-      username: [''],
+      firstName: ['',[Validators.required]],
+      lastName: ['',[Validators.required]],
+      email: ['',[Validators.required, Validators.email]],
+      phoneNumber: ['',[Validators.required,  phoneNumberValidator]],
+      role: ['',[Validators.required]],
+      username: ['',[Validators.required]],
       lastLogin: [''],
       createdAt: [''],
       updatedAt: [''],
@@ -72,67 +73,88 @@ export class UserManagementComponent implements OnInit {
 
   showModal(user?: User): void {
     this.isEditing = !!user;
-    this.selectedUser = user || null;
-    if (user) {
-      this.userForm.patchValue(user);
+    this.selectedUser = user ?? null;
+
+    
+    
+    if (this.selectedUser !== null && this.selectedUser !== undefined) {
+      this.userForm?.disable();
+    this.userForm?.get('role')?.enable();
+      this.userForm.patchValue(this.selectedUser);
     } else {
+      this.userForm?.enable();
       this.userForm.reset();
     }
     this.isVisible = true;
   }
 
   handleCancel(): void {
+    this.selectedUser = null;
     this.isVisible = false;
+    console.log(this.selectedUser);
+    
   }
 
   handleOk(): void {
-    if (this.isEditing && this.selectedUser) {
-      // Update user
-      const index = this.users.findIndex(u => u.id === this.selectedUser!.id);
-      this.users[index] = { ...this.selectedUser, ...this.userForm.value, updatedAt: new Date().toISOString() };
-      console.log(this.selectedUser);
+    if(this.userForm?.valid){
+      if (this.isEditing && this.selectedUser) {
+     
+        // Update user
+        const index = this.users.findIndex(u => u.id === this.selectedUser!.id);
+        this.users[index] = { ...this.selectedUser, ...this.userForm.value, updatedAt: new Date().toISOString() };
+        
+        
+        this.userService.updateUser(this.selectedUser.id, this.selectedUser)
+        .subscribe(
+          response => {
+            this.message.success('Updated Successfully !');
+            this.loadUsers();
+          },
+          error => {
+             this.message.error(error?.error?.messages??[0]??'Unknown Error !')
+             
+          }
+        )
+      } else {
+        // Add new user
+        const newUser: User = {
+          ...this.userForm.value,
+          id: '',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          createdBy: null,
+          isDeleted: false,
+          lastLogin: '',
+          isVerified: false,
+          isBlocked: false,
+          isLocked: false,
+          dateOfBirth: null,
+          placeOfBirth: null,
+          enabled: true
+        };
+        //console.log(newUser);
+        
+        this.userService.createUser(newUser)
+        .subscribe(
+          response => {
+            this.message.success('Created Successfully !');
+            this.loadUsers();
+          },
+          error => {
+           // console.log(error.error);
+            
+             this.message.error(error.error?.message??'Unknown Error !')
+             
+          }
+        )
+      }
+      this.isVisible = false;
+    } else{
+      console.log(this.userForm.controls['phoneNumber']);
       
-      this.userService.updateUser(this.selectedUser.id, this.selectedUser)
-      .subscribe(
-        response => {
-          this.message.success('Updated Successfully !');
-          this.loadUsers();
-        },
-        error => {
-           this.message.error(error?.error?.messages??[0]??'Unknown Error !')
-           
-        }
-      )
-    } else {
-      // Add new user
-      const newUser: User = {
-        ...this.userForm.value,
-        id: '',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        createdBy: null,
-        isDeleted: false,
-        lastLogin: '',
-        isVerified: false,
-        isBlocked: false,
-        isLocked: false,
-        dateOfBirth: null,
-        placeOfBirth: null,
-        enabled: true
-      };
-      this.userService.createUser(newUser)
-      .subscribe(
-        response => {
-          this.message.success('Created Successfully !');
-          this.loadUsers();
-        },
-        error => {
-           this.message.error(error.error?.messages[0]??'Unknown Error !')
-           
-        }
-      )
+      this.message.warning('Form invalid')
     }
-    this.isVisible = false;
+    
   }
 
   loadUsers(): void {
@@ -155,7 +177,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
+   // console.log(params);
     const { pageSize, pageIndex, sort, filter } = params;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;

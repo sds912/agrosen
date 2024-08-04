@@ -74,5 +74,26 @@ export class TicketService {
 
   }
 
+  filterTickets(page: number, limit: number, type: string, params: any): Observable<any> {
+    // Start with the base URL and mandatory query parameters
+    let url = `${baseAPI}/tickets/current-user?page=${page}&limit=${limit}&type=${type}`;
+
+    // Conditionally add optional parameters
+    if (params.site !== null && params.site !== '') {
+        url += `&siteId=${params.site}`;
+    }
+    if (params.status !== null && params.status !== '') {
+        url += `&status=${params.status}`;
+    }
+    if (params.date !== null) {
+        url += `&createdDate=${params.date}`;
+    }
+
+    // Make the HTTP GET request
+    console.log(url);
+    
+    return this.http.get(url);
+}
+
   
 }

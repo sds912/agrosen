@@ -12,8 +12,8 @@
        <li nz-submenu nzTitle="Alarmes" nzIcon="notification">
          <ul>
            <li nz-menu-item routerLink="/admin/alarmes">Toutes les alarmes</li>
-           <li nz-menu-item routerLink="/admin/alarmes?state=active">Alarmes en cours</li>
-           <li nz-menu-item routerLink="/admin/alarmes?state=closed">Alarmes fermées</li>
+           <li nz-menu-item routerLink="/admin/alarmes" [queryParams]="{ status: alarmStatus.INPROGRESS}">Alarmes en cours</li>
+           <li nz-menu-item routerLink="/admin/alarmes" [queryParams]="{ status: alarmStatus.CLOSED}">Alarmes fermées</li>
          </ul>
        </li>
        <li nz-submenu nzTitle="Tickets" nzIcon="alert">

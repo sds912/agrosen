@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SiteService } from '../../service/site.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { Router } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { SiteDetailsComponent } from '../site-details/site-details.component';
 
 @Component({
   selector: 'app-site-list',
@@ -17,7 +18,9 @@ export class SiteListComponent implements OnInit {
   pageSize = 10;
   pageIndex = 1;
 
-  constructor(private siteService: SiteService, private message: NzMessageService, private router: Router) {}
+  constructor(private siteService: SiteService,
+     private message: NzMessageService, 
+     private modal: NzModalService) {}
 
   ngOnInit(): void {
     this.loadSites();
@@ -92,6 +95,13 @@ export class SiteListComponent implements OnInit {
   }
 
   viewSiteDetails(siteId: string): void {
-    this.router.navigate(['/admin/sites', siteId]);
+    const site = this.sites.filter((site: any) => site.id === siteId)[0];
+    this.modal.create({
+      nzTitle: 'Site Details',
+      nzContent: SiteDetailsComponent,
+      nzData: {site},
+      nzFooter: null,
+      nzWidth: 800
+    });
   }
 }

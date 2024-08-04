@@ -60,13 +60,13 @@ export class TicketTaskListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
+     //console.log(this.listOfTicketTasks)
   }
 
   public handleOk(): void {
     if (this.taskForm.valid) {
       // handle form submission
-      console.log('Form submitted:', this.taskForm.value);
+    //  console.log('Form submitted:', this.taskForm.value);
       this.isVisible = false;
     } else {
       // handle form validation errors
@@ -95,10 +95,11 @@ export class TicketTaskListComponent implements OnInit {
   onStatusChange(task: any) {
   
       // Perform any necessary action when status is "OPEN"
-      console.log(`Task ${task.number} status changed to OPEN`);
+     // console.log(`Task ${task.number} status changed to OPEN`);
       this.taskService.upateTaskByStatus(task.id, task.status).subscribe(
         response => { 
-          this.loadTasks();
+         // this.loadTasks();
+          location.reload();
         },
         error => { console.log(error)}
       )
@@ -112,6 +113,7 @@ export class TicketTaskListComponent implements OnInit {
     this.loading = true;
     this.taskService.getTasks(this.ticket.id).subscribe(
       response => {
+      //  console.log(response?.data)
         this.listOfTicketTasks = response?.data;
         this.loading = false;
       }

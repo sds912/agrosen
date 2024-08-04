@@ -33,7 +33,7 @@ export class TicketTaskFormComponent {
          .subscribe(
           response => {
             const data = response;
-
+            
             this.taskForm.patchValue({
               number: data.number,
               site: data.ticket?.siteAccessRequest || null,
@@ -47,7 +47,8 @@ export class TicketTaskFormComponent {
               description: data.description,
               resolution: data.resolution,
               additionalComments: data.additionalComments,
-              sourceTask: data?.ticket?.reference
+              sourceTask: data?.ticket?.reference,
+              createdAt: data?.createdAt
             });
             
           },
@@ -67,7 +68,8 @@ export class TicketTaskFormComponent {
       shortDescription: ['', Validators.required],
       description: ['', Validators.required],
       resolution: ['', Validators.required],
-      additionalComments: ['']
+      additionalComments: [''],
+      createdAt: []
     });
   }
 

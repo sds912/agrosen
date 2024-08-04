@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SiteService } from '../../service/site.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-site-details',
@@ -11,13 +12,16 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class SiteDetailsComponent {
   siteForm: FormGroup;
   loading: boolean = false;
+  site: any;
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private siteService: SiteService,
-    private router: Router
+    private router: Router,
+    private modalRef: NzModalRef
   ) {
+    this.site = this.modalRef.getConfig()?.nzData?.site;
     this.siteForm = this.fb.group({
       siteId: [{ value: '', disabled: true }],
       customerId: [{ value: '', disabled: true }],
@@ -42,12 +46,12 @@ export class SiteDetailsComponent {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const siteId = params.get('id');
-      if (siteId) {
-        this.getSiteDetails(siteId);
-      }
-    });
+
+    if(this.site){
+      this.getSiteDetails(this.site?.id);
+    }
+    
+   
   }
 
   getSiteDetails(siteId: string): void {

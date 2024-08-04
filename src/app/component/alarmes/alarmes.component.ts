@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../service/login.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlarmesService } from '../../service/alarmes.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { SiteService } from '../../service/site.service';
 import { formatDate } from '../../shared/date-formater';
+import { TiCKET_STATE } from '../../shared/app-constants';
 
 
 
@@ -16,6 +17,11 @@ import { formatDate } from '../../shared/date-formater';
 })
 export class AlarmesComponent implements OnInit {
 
+alarmStatus: { label: string, value: string }[] = [
+  { label: 'WORK IN PROGRESS', value: TiCKET_STATE.WORKINPROGRESS },
+  { label: 'CLOSED', value: TiCKET_STATE.CLOSED },
+  { label: 'CANCEL', value: TiCKET_STATE.CANCEL }
+];
 
   expandIndex: number | null = null; // Expand row index, if needed
   alarmes: any[] = [];
@@ -37,12 +43,14 @@ export class AlarmesComponent implements OnInit {
     date: null
   };
   loading: boolean = false;
+  status:any = null;
+  selectedStatus: any;
 
 
   
   constructor(public authservice: LoginService,
     private alarmeService: AlarmesService, private fb: FormBuilder,
-    private router: Router, private message: NzMessageService, private siteService: SiteService) { 
+    private route: ActivatedRoute, private message: NzMessageService, private siteService: SiteService) { 
       this.formGroup = this.fb.group({
         siteFilter: ['Sites'] // Default selected value
       });
@@ -56,12 +64,23 @@ export class AlarmesComponent implements OnInit {
 
 
   ngOnInit(): void {
-      //this.getOccurence()
+   this.route.queryParams.subscribe((param) => {
+    if(param && param['status'] !== null &&param['status'] !== undefined ){
+      this.status = param['status'];
+      this.alarmeService.getAlarmsByStatus(this.status)
+      .subscribe(
+        res => {
+        this.alarmes= res?.data;
+        },
+        error => {}
+      )
+    } else{
     this.getAlarmes();
-    //this.getSitess();
-    this.formGroup = this.fb.group({
-      keyword: this.fb.control("")
-    });
+
+    }
+    
+   })
+    
 
   }
   public getAlarmes() {
@@ -147,10 +166,21 @@ export class AlarmesComponent implements OnInit {
       this.filterParams.siteId = null;
       this.filterParams.alarmName = null;
       this.filterParams.date = null;
+      this.filterParams.status = null;
       this.date = null;
       this.alarmName = null;
       this.siteId = null;
+      this.selectedStatus = null;
       this.getAlarmes();
     }
+
+    onStatusSearch(value: any) {
+      console.log(value);
+      
+      this.filterParams.status = value;
+  
+      this.applayFilter();
+      
+      }
   
 }

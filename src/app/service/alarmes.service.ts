@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root'
 })
 export class AlarmesService {
+  
 
   private apiBaseUrl = environment.BaseUrl;
   
@@ -92,6 +93,10 @@ export class AlarmesService {
       if (filterParams.date !== null) {
         params.push(`dateStart=${filterParams.date}`);
       }
+
+      if (filterParams.status !== null) {
+        params.push(`status=${filterParams.status}`);
+      }
       
       params.push(`limit=${limit}`);
       params.push(`page=${page}`);
@@ -113,5 +118,8 @@ export class AlarmesService {
   }
   
 
-  
+  getAlarmsByStatus(status: string) {
+   return this.http.get<any>(`${this.apiBaseUrl}/alarms?status=${status}`);
+    
+  }
 }

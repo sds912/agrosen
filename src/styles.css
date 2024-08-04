@@ -61,5 +61,10 @@ html, body{
 .ant-form-item{
     margin-bottom: 3px !important;
   }
+
+  .ant-table-row:hover{
+    background-color: #dadbdc;
+    transition: 0.5s all;
+  }
   
 

@@ -62,6 +62,9 @@ import { SiteDetailsComponent } from './component/site-details/site-details.comp
 import { AlarmTicketPmFormComponent } from './component/alarm-ticket-pm-form/alarm-ticket-pm-form.component';
 import { RoundPipe } from './shared/round.pipe';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { TicketImageManagerComponent } from './component/ticket-image-manager/ticket-image-manager.component';
+import { TicketStateTransformPipe } from './shared/ticket-state-transform';
+import { PriorityPipe } from './shared/priority.pipe';
 
 
 
@@ -90,6 +93,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     AlarmTicketOpenFormComponent,
     TicketManagementSteperComponent,
     DateFormatPipe,
+    TicketStateTransformPipe,
+    PriorityPipe,
     AlarmTicketListComponent,
     UserManagementComponent,
     SiteManagementComponent,
@@ -99,7 +104,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     TicketTaskFormComponent,
     TicketTaskManagementComponent,
     SiteDetailsComponent,
-    AlarmTicketPmFormComponent
+    AlarmTicketPmFormComponent,
+    TicketImageManagerComponent
   ],
   imports: [
     BrowserModule,

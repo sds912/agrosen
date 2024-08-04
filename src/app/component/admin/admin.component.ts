@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../service/login.service';
-import { TICKET_TYPE } from '../../shared/app-constants';
+import { ALARM_STATE, TICKET_TYPE } from '../../shared/app-constants';
 
 @Component({
   selector: 'app-admin',
@@ -13,6 +13,7 @@ export class AdminComponent implements OnInit{
   currentUser: any = null;
   
   ticketType = TICKET_TYPE;
+  alarmStatus = ALARM_STATE;
 
   constructor(private loginService: LoginService){
 

@@ -1,0 +1,89 @@
+
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div style="font-size: 22px; font-weight: 800;">Données lues</div>
+    <div>
+    </div>
+  </div>
+  
+  <div >
+    <nz-card  [nzBordered]="false" nzTitle="Données lues" >
+      <nz-table *ngIf="alarmes.length > 0" #basicTable [nzData]="alarmes">
+        <thead>
+          <tr>
+            <th>Cluster-SiteID</th>
+            <th>Nom du site</th>
+            <th>IL_1 / IL_2 / IL_3</th>
+            <th>IDC Tenant1</th>
+            <th>AC UL_1/UL_2/UL_3</th>
+            <th>IGL_1 / IGL_2 / IGL_3</th>
+            <th>Début</th>
+            <th>Modifiée le </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of basicTable.data">
+            <td>{{ a.siteId }}</td>
+            <td>{{ a.siteName}}</td>
+            <td>{{ a?.iL1}} / {{ a?.iL2}} / {{ a?.iL3}}</td>
+            <td>{{ a.idc1 }}</td>
+            <td>{{ a.uL1 }} / {{ a.uL2 }} / {{ a.uL3 }}</td>
+            <td>{{ a.igl1 }} / {{ a.igl2 }} / {{ a.igl3 }}</td>
+            <td>{{ a.createdAt | dateFormat }}</td>
+            <td>{{ a.updatedAt | dateFormat }}</td>
+            <td  nzRight class="text-end">
+              <button (click)="viewSiteDetails(a?.id)" nz-button nzType="primary"><span class="fa fa-eye"></span></button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+  <ng-template #extraTemplate *ngIf="false">
+    
+    <div class="justify-content-between d-flex align-items-center  ">
+      <div class="me-2 fw-bold">Filtre: </div>
+      <div>
+        <input nz-input 
+               placeholder="Search by site Id" 
+               [(ngModel)]="siteId" 
+               (input)="onSiteSearch($event.target)" 
+               style="min-width: 120px;" />
+      </div>
+      
+      <div class="mx-3">
+        <input nz-input 
+               placeholder="Search by alarm name" 
+               [(ngModel)]="alarmName" 
+               (input)="onAlarmSearch($event.target)" 
+               style="min-width: 120px;" />
+      </div>
+     <!-- <div class="mx-3">
+       
+        <nz-form-control  nzErrorTip="The input is not valid">
+         <nz-select 
+         [(ngModel)]="selectedStatus" 
+         (ngModelChange)="onStatusSearch($event)"
+         
+         style="width: 160px;"
+         name="status" nzPlaceHolder="Search by status">
+             <nz-option *ngFor="let status of alarmStatus" [nzValue]="status?.value" [nzLabel]="status?.label??''">{{status?.label}}</nz-option>
+         </nz-select>
+     </nz-form-control>
+  </div> -->
+  
+      <div>
+        <nz-form-control  nzerrortip="The input is not valid">
+                  <nz-date-picker  [(ngModel)]="date" (ngModelChange)="onDateSearch($event)"   style="width: 100%;"  nzformat="yyyy-MM-dd" nzshowtime></nz-date-picker>
+        </nz-form-control>
+      </div>
+      <button class="ms-3" (click)="reloadData()" nz-button class="btn btn-outline-warning ms-5 me-2"><span class="fa fa-refresh"></span></button>
+      <button class="ms-3" (click)="applayFilter()" nz-button nzType="primary"><span class="fa fa-search"></span></button>
+      
+    </div>
+  
+  </ng-template>
+  
+  

@@ -21,7 +21,7 @@
         <td>
           <nz-form-item style="width: 110px;">
             <nz-form-control>
-              <nz-select [nzDisabled]="task.status === 'CLOSED'" [(ngModel)]="task.status" (ngModelChange)="onStatusChange(task)">
+              <nz-select [nzDisabled]="task.status === 'CLOSED' || this.currentUser !== null || this.currentUser?.role !== ROLE.NOC || this.currentUser?.role !== ROLE.ADMIN" [(ngModel)]="task.status" (ngModelChange)="onStatusChange(task)">
                 <nz-option *ngFor="let status of statusOptions" [nzDisabled]="task.status === status" [nzValue]="status" [nzLabel]="status"></nz-option>
               </nz-select>
             </nz-form-control>

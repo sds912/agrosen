@@ -1,18 +1,17 @@
 <div class="container p-3 pt-0 px-5" style="width: 100%;" *ngIf="displayForm">
-    <div class="d-flex justify-content-between align-items-center ">
-        <div *ngIf="ticket && ticket.status !== TICKETSTATE.ASSIGNED">{{!ticket ? 'NEW TICKET': 'TICKET : '+
-            ticket.reference}}</div>
-        <div *ngIf="ticket?.status === TICKETSTATE.WORKINPROGRESS"
-            class="d-flex justify-content-end align-items-center " style="margin-bottom: 10px;">
-            <button nz-button nzType="primary" (click)="saveStatus(TICKETSTATE.CLOSED)">Close SWO Complete</button>
-            <button class="mx-2 btn-outline-warning" nz-button nzType="primary"
-                (click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)">Close SWO Incomplete</button>
-            <button [disabled]="ticket.status === TICKETSTATE.CANCEL || ticket.status === TICKETSTATE.CLOSED" nz-button
-                nzType="default" nzDanger (click)="saveStatus(TICKETSTATE.CANCEL)">Cancel SWO</button>
+  
+        <div class="d-flex justify-content-end align-items-center">
+                <div *ngIf="ticket?.status === TICKETSTATE.WORKINPROGRESS"class="d-flex justify-content-end align-items-center " style="margin-bottom: 10px;">
+                <button  [disabled]="taskController()"  nz-button nzType="primary" (click)="saveStatus(TICKETSTATE.CLOSED)">Close SWO Complete</button>
+                <button  [disabled]="taskController()"  class="mx-2 btn-outline-warning" nz-button nzType="primary"(click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)">Close SWO Incomplete</button>
+                <button  [disabled]="taskController()"  nz-button nzType="default" nzDanger (click)="saveStatus(TICKETSTATE.CANCEL)">Cancel SWO</button>
+                </div>
             
-
-        </div>
-    </div>
+            <button *ngIf="!displaySubmit && (ticket?.status === TICKETSTATE.ASSIGNED || ticket?.status === TICKETSTATE.WORKINPROGRESS )&& this.currentUser && this.currentUser?.role === ROLE.NOC"
+                        nz-button nzType="primary" type="button"(click)="updateTicket()">Save</button>
+        </div>    
+           
+      
 
     <form style="width: 100%;" nz-form [formGroup]="ticketForm!" (ngSubmit)="submitForm()">
         <div class="d-flex justify-content-between align-items-center">
@@ -22,6 +21,7 @@
                 <button
                     *ngIf="!displaySubmit && ticket?.status === TICKETSTATE.ASSIGNED && this.currentUser && this.currentUser?.role !== ROLE.NOC"
                     nz-button nzType="primary">Accept</button>
+                    
                 <button *ngIf="displaySubmit" nz-button nzType="primary">Submit</button>
             </div>
 
@@ -134,7 +134,7 @@
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
                         <nz-input-group nzPrefixIcon="search">
                             <input type="text" nz-input [nzAutocomplete]="assignmentGroup"
-                                [disabled]="this.ticket !== undefined"
+                                [disabled]="this.ticket !== undefined && (this.ticket.status === TICKETSTATE.CLOSED || this.ticket.status === TICKETSTATE.WAITFORCLOSURE)"
                                 [ngModel]="ticketForm!.get('assignmentGroup')?.value?.name??''"
                                 [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignmentGroupInput($event)"
                                 [value]="ticketForm!.get('assignmentGroup')?.value?.name??''" placeholder="Search...">
@@ -151,7 +151,7 @@
                     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
                         <nz-input-group nzPrefixIcon="search">
                             <input type="text" nz-input [nzAutocomplete]="assignedTo"
-                                [disabled]="this.ticket !== undefined"
+                            [disabled]="this.ticket !== undefined && (this.ticket.status === TICKETSTATE.CLOSED || this.ticket.status === TICKETSTATE.WAITFORCLOSURE)"
                                 [ngModel]="ticketForm!.get('assignedTo')?.value?.firstName !== undefined ? ticketForm!.get('assignedTo')?.value?.firstName??'' +' '+ ticketForm?.get('assignedTo')?.value?.lastName??'':''"
                                 [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignedToInput($event)"
                                 [value]=" ticketForm!.get('assignedTo')?.value?.firstName !== undefined ? ticketForm!.get('assignedTo')?.value?.firstName??'' +' '+ ticketForm?.get('assignedTo')?.value?.lastName??'': ''"
@@ -338,7 +338,7 @@
 
     </form>
    
-    <app-ticket-image-manager *ngIf="this.ticket && this.ticket?.status != TICKETSTATE.OPEN"  [ticket]="this.ticket!"></app-ticket-image-manager>
+    <app-ticket-image-manager *ngIf="this.ticket && this.ticket?.status !== TICKETSTATE.OPEN && this.ticket?.status !== TICKETSTATE.ASSIGNED"  [ticket]="this.ticket!"></app-ticket-image-manager>
 </div>
 <app-ticket-task-list *ngIf="tasks.length > 0" [listOfTicketTasks]="tasks" [ticket]="ticket"></app-ticket-task-list>
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../service/login.service';
-import { ALARM_STATE, TICKET_TYPE } from '../../shared/app-constants';
+import { ALARM_STATE, ROLE, TICKET_TYPE } from '../../shared/app-constants';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -11,11 +12,12 @@ export class AdminComponent implements OnInit{
 
   isCollapsed = false;
   currentUser: any = null;
-  
   ticketType = TICKET_TYPE;
   alarmStatus = ALARM_STATE;
+  ROLE: any = ROLE;
+  currentTicketId?: string ;
 
-  constructor(private loginService: LoginService){
+  constructor(private loginService: LoginService, private route: ActivatedRoute){
 
   }
 
@@ -25,6 +27,16 @@ export class AdminComponent implements OnInit{
       this.loginService.loardProfile(localStorage.getItem('access_token'))
       this.currentUser = this.loginService.currentUser;
     }
+
+  this.route.queryParams.subscribe((param) => {
+    console.log(param['ticketId'] );
+    
+    this.currentTicketId = undefined;
+    if( (param['type'] !== undefined && param['id'] !== undefined ) || param['ticketId'] !== undefined){
+   this.currentTicketId = param['id'] !== undefined ? param['id'] :param['ticketId'];
+    }
+    
+  })
     
     
   }

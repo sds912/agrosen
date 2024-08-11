@@ -128,11 +128,16 @@ loading: boolean = false;
 
   ngOnInit(): void {
     this.currentUser = this.loginService.currentUser;
+   
     this.fetchSites();
     this.ticketForm?.get('number')?.disable();
     this.ticketForm?.get('shortDescription')?.disable();
-    this.ticketForm?.get('siteAccessRequest')?.disable();
-    this.ticketForm!.get('state')?.disable();
+   this.ticketForm?.get('siteAccessRequest')?.disable();
+   this.ticketForm!.get('state')?.disable();
+
+
+   console.log(this.filteredAssignedTo);
+   
   }
 
  
@@ -172,7 +177,8 @@ loading: boolean = false;
       .subscribe(
         (response: any) => {
           this.filteredSites = response.data;
-
+    
+          
           this.route.queryParamMap.subscribe(params => {
             const id = params.get('id');
             this.type = params.get('type')!;
@@ -181,6 +187,8 @@ loading: boolean = false;
             if (id !== undefined && id !== null) {
 
               this.loadTicketById(id);
+              
+              
               
 
 
@@ -211,7 +219,9 @@ loading: boolean = false;
       .subscribe(
         response => {
           this.ticket = response;
-          console.log(this.ticket)
+       // console.log(response);
+        
+          this.onSiteInput(this.filteredSites?.filter((v) => v.id === this.ticket?.site?.id)[0]);
           this.fetchTicketTasks(this.ticket.id);
           this.getFullImageURL();
 
@@ -319,7 +329,7 @@ loading: boolean = false;
 
       const data: any = this.ticket;
       data.type = this.type;
-      console.log(data)
+     // console.log(data)
       this.ticketService.acceptAssign(data).subscribe(
         response => {
           this.createMessage('success', "Ticket accepté avec succès");
@@ -339,33 +349,35 @@ loading: boolean = false;
 
       this.ticketService.create(data1)
         .subscribe(ticket => {
-          console.log(ticket)
-          this.ticketService.fetchRefNumber()
-            .subscribe(
-              data => {  },
-              error => {
+          this.createMessage('success', "Ticket créé avec succès");
+          this.router.navigate(['admin/alarms/tickets'], { queryParams: { type: this.type } });
+           this.loading = false;
+          // this.ticketService.fetchRefNumber()
+          //   .subscribe(
+          //     data => {  },
+          //     error => {
 
-                const data = {
-                  ticketId: ticket.id,
-                  user: ticket?.user?.id,
-                  userGroup: ticket?.userGroup?.id,
-                  siteAccessRequest: error.error.text
-                }
-                this.ticketService.assign(data).subscribe((response: any) => {
-                  console.log(response)
-                  this.createMessage('success', "Ticket créé avec succès");
-                  this.router.navigate(['admin/alarms/tickets'], { queryParams: { type: this.type } });
-                   this.loading = false;
+          //       const data = {
+          //         ticketId: ticket.id,
+          //         user: ticket?.user?.id,
+          //         userGroup: ticket?.userGroup?.id,
+          //         siteAccessRequest: error.error.text
+          //       }
+          //       this.ticketService.assign(data).subscribe((response: any) => {
+          //         console.log(response)
+          //         this.createMessage('success', "Ticket créé avec succès");
+          //         this.router.navigate(['admin/alarms/tickets'], { queryParams: { type: this.type } });
+          //          this.loading = false;
 
-                },
-                  error => {
-                    this.createMessage('error', error?.error?.messages[0] ?? 'Unknown Error');
-          this.loading = false;
+          //       },
+          //         error => {
+          //           this.createMessage('error', error?.error?.messages[0] ?? 'Unknown Error');
+          // this.loading = false;
 
-                  })
+          //         })
 
-              }
-            );
+          //     }
+          //   );
 
 
         },
@@ -452,4 +464,32 @@ loading: boolean = false;
 
   }
 
+  updateTicket = () => {
+    const data: any = {
+      ticketId: this.ticket.id,
+      user:  this.ticketForm!.get('assignedTo')?.value?.id,
+      userGroup:  this.ticketForm!.get('assignmentGroup')?.value?.id
+    }
+   
+    this.ticketService.reassignedTicket(data).subscribe(
+      response => {
+        this.createMessage('success', "Ticket réassigné avec succès");
+        window.location.reload();
+        this.loading = false;
+
+
+      },
+      error => {
+        this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
+        this.loading = false;
+
+
+      }
+    )
+  }
+
+  taskController(): boolean{
+		var result =  this.tasks.find((t) => t.status === 'OPEN');
+		return !(result === undefined && this.tasks.length == 2);
+	}
 }

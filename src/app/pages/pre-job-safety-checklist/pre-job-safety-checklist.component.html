@@ -1,0 +1,93 @@
+<div class="container mb-5" *ngIf="!this.loading">
+  <div class="row">
+    <div class="col-9">
+      <form *ngIf="safetyChecklistForm" [formGroup]="safetyChecklistForm!" (ngSubmit)="saveForm()">
+        <div class="card mt-4">
+          <div class="card-header bg-warning text-white">
+            Pre-Job Safety Checklist
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-bordered mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-start">Questions</th>
+                    <th class="text-center">Réponse 1</th>
+                    <th class="text-center">Réponse 2</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="checklistItems" *ngIf="checklistItems">
+                  <tr *ngFor="let item of checklistItems.controls; let i = index" [formGroupName]="i">
+                    <td>{{ item.get('label')?.value }}</td>
+                    <td>
+                      <nz-select formControlName="response" class="w-100">
+                        <nz-option nzValue="Oui" nzLabel="Oui"></nz-option>
+                        <nz-option nzValue="Non" nzLabel="Non"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td>
+                      <nz-select formControlName="response" class="w-100">
+                        <nz-option nzValue="Oui" nzLabel="Oui"></nz-option>
+                        <nz-option nzValue="Non" nzLabel="Non"></nz-option>
+                      </nz-select>
+                    </td>
+                    <td [width]="40">
+                      <button nz-button nzType="primary" type="submit" (click)="saveRespone(item)" >Save</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+    <div class="col-3">
+      <div style="width: 100%; height: 100%; position: relative;" >
+        <div class="d-flex justify-content-around align-items-center mt-4">
+          <button nz-button nzType="primary" type="submit">+ Photo</button>
+          <button nz-button nzType="primary" type="submit">Télécharger</button>
+        </div>
+  
+        <div style="position: absolute; bottom: 0; margin-bottom: 30px;">
+          <h6 class="fw-bold">Signatures</h6>
+          <div class="row" >
+         
+            <div class="col-6">
+               <div class="technicien">
+                  <span class="text-muted fw-bold">Technicien</span>
+               </div>
+            </div>
+            <div class="col-6">
+              <div class="facture">
+                 <span class="text-muted fw-bold">Fature</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+ 
+  <h4 class="fw-bold mt-5">Photos</h4>
+  <div class="row">
+    <div class="col-2">
+      <div class="photo-item"></div>
+    </div>
+    <div class="col-2">
+      <label class="photo-upload" for="upload-image" >
+        <input type="file" accept="png" name="upload-image" id="upload-image">
+        <span class="text-muted">+</span>
+      </label>
+    </div>
+  </div>
+
+</div>
+
+<ngx-loading [show]="this.loading"></ngx-loading>
+
+
+  

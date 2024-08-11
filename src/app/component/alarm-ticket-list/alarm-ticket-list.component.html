@@ -1,10 +1,16 @@
 <nz-card style="width: 100%;" nzTitle="Tickets" [nzBodyStyle]="{padding: '0'}" [nzExtra]="extraTemplate">
   
   <div>
-    <nz-table nzShowSizeChanger [nzScroll]="{ x: '2000px' }" 
+    <nz-table 
+     nzShowSizeChanger
+      [nzScroll]="{ x: '2000px' }" 
       (nzQueryParams)="onQueryParamsChange($event)" 
-      [nzLoading]="loading" [nzTotal]="total" [nzPageSize]="pageSize"
-      [nzPageIndex]="pageIndex" #basicTable [nzData]="tickets">
+      [nzLoading]="loading" 
+      [nzTotal]="total" 
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex" 
+      #basicTable 
+      [nzData]="tickets">
       <thead>
         <tr>
           <th nzLeft>Number</th>
@@ -44,7 +50,7 @@
 </nz-card>
 <ng-template #extraTemplate>
   <div class="text-end">
-    <button nz-button nzType="primary" (click)="navigateToNewTicket()">New</button>
+    <button *ngIf="this.currentUser !== null && (this.currentUser.role === ROLE.ADMIN || this.currentUser?.role === ROLE.NOC)" nz-button nzType="primary" (click)="navigateToNewTicket()">New</button>
   </div>
   <div class="justify-content-between d-flex align-items-center mt-5 ">
     <div class="me-2 fw-bold">Filtre: </div>

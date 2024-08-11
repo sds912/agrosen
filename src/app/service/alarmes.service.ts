@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root'
 })
 export class AlarmesService {
+ 
   
 
   private apiBaseUrl = environment.BaseUrl;
@@ -120,6 +121,12 @@ export class AlarmesService {
 
   getAlarmsByStatus(status: string) {
    return this.http.get<any>(`${this.apiBaseUrl}/alarms?status=${status}`);
+    
+  }
+
+
+  getReadData() {
+   return this.http.get<any>(`${this.apiBaseUrl}/last-data`);
     
   }
 }

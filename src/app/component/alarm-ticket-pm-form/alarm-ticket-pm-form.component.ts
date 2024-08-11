@@ -291,7 +291,8 @@ export class AlarmTicketPmFormComponent {
 	loadTicketById(id : string) {
 		this.ticketService.fetchTicketById(id !).subscribe(response => {
 			this.ticket = response;
-			console.log(this.ticket)
+			//console.log(this.filteredSites)
+			this.onSiteInput(this.filteredSites?.filter((v) => v.id === this.ticket?.site?.id)[0]);
 			this.fetchTicketTasks(this.ticket.id);
 			this.getFullImageURL();
 
@@ -446,7 +447,7 @@ export class AlarmTicketPmFormComponent {
 
 			const data: any = this.ticket;
 			data.type = this.type;
-			console.log(data)
+			//console.log(data)
 			this.ticketService.acceptAssign(data).subscribe(response => {
 				this.createMessage('success', "Ticket accepté avec succès");
 				window.location.reload();
@@ -462,32 +463,54 @@ export class AlarmTicketPmFormComponent {
 		} else {
 
 			this.ticketService.create(ticketData).subscribe(ticket => {
-				console.log(ticket)
-				this.ticketService.fetchRefNumber().subscribe(data => {}, error => {
 
-					const data = {
-						ticketId: ticket.id,
-						user: ticket ?. user ?. id,
-						userGroup: ticket ?. userGroup ?. id,
-						siteAccessRequest: error.error.text
-					}
-					this.ticketService.assign(data).subscribe((response : any) => {
-						console.log(response)
-						this.createMessage('success', "Ticket créé avec succès");
+				this.createMessage('success', "Ticket créé avec succès");
 						this.router.navigate(['admin/alarms/tickets'], {
 							queryParams: {
 								type: this.type
 							}
 						});
 						this.loading = false;
+				
+				// this.ticketService.fetchRefNumber().subscribe(res => {
+				// 	const data = {
+				// 		ticketId: ticket.id,
+				// 		user: ticket ?. user ?. id,
+				// 		userGroup: ticket ?. userGroup ?. id,
+				// 		siteAccessRequest: res?.number
+				// 	}
+				// 	console.log(data);
+				// 	this.createMessage('success', "Ticket créé avec succès");
+				// 		this.router.navigate(['admin/alarms/tickets'], {
+				// 			queryParams: {
+				// 				type: this.type
+				// 			}
+				// 		});
+				// 		this.loading = false;
+					
+				// 	this.ticketService.assign(data).subscribe((response : any) => {
+				// 		console.log(response)
+				// 		this.createMessage('success', "Ticket créé avec succès");
+				// 		this.router.navigate(['admin/alarms/tickets'], {
+				// 			queryParams: {
+				// 				type: this.type
+				// 			}
+				// 		});
+				// 		this.loading = false;
 
-					}, error => {
-						this.createMessage('error', error ?. error ?. messages[0] ?? 'Unknown Error');
-						this.loading = false;
+				// 	}, error => {
+				// 		this.createMessage('error', error ?. error ?. messages[0] ?? 'Unknown Error');
+				// 		this.loading = false;
 
-					})
+				// 	})
+						
+				// }, error => {
+               
+				// 	this.createMessage('error', error ?. error ?. message ?? "Erreur inconnue");
+				// console.log(error);
+				// this.loading = false;
 
-				});
+				// });
 
 
 			}, error => {
@@ -531,14 +554,14 @@ export class AlarmTicketPmFormComponent {
 		})
 	}
 
-	onFileSelected(event : any) {
+	onFileSelected(event : any, afterMaintenance: boolean) {
 		this.selectedFile = event.target.files[0];
 
-		this.onUpload(this.ticket ?. id);
+		this.onUpload(this.ticket ?. id, afterMaintenance);
 
 	}
 
-	onUpload(id : string) {
+	onUpload(id : string, afterMaintenance: boolean) {
 		this.loading = true;
 		if (!this.selectedFile) {
 			alert('Please select a file first');
@@ -548,7 +571,7 @@ export class AlarmTicketPmFormComponent {
 		const uploadData = new FormData();
 		uploadData.append('file', this.selectedFile, this.selectedFile.name);
 
-		this.ticketService.uploadImage(uploadData, id).subscribe(response => {
+		this.ticketService.uploadImage(uploadData, id, afterMaintenance).subscribe(response => {
 			console.log(response);
 			this.message.success('Uploaded Successfully !');
 			this.loadTicketById(this.ticket.id)
@@ -593,6 +616,30 @@ export class AlarmTicketPmFormComponent {
 		var result =  this.tasks.find((t) => t.status === 'OPEN');
 		return !(result === undefined && this.tasks.length == 2);
 	}
+
+	updateTicket = () => {
+		const data: any = {
+		  ticketId: this.ticket.id,
+		  user:  this.ticketForm!.get('assignedTo')?.value?.id,
+		  userGroup:  this.ticketForm!.get('assignmentGroup')?.value?.id
+		}
+	   
+		this.ticketService.reassignedTicket(data).subscribe(
+		  response => {
+			this.createMessage('success', "Ticket réassigné avec succès");
+			window.location.reload();
+			this.loading = false;
+	
+	
+		  },
+		  error => {
+			this.createMessage('error', error?.error?.message ?? "Erreur inconnue");
+			this.loading = false;
+	
+	
+		  }
+		)
+	  }
 
 
 }

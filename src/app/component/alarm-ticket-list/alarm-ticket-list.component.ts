@@ -3,9 +3,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { TicketService } from '../../service/ticket.service';
-import { TICKET_TYPE, TiCKET_STATE } from '../../shared/app-constants';
+import { ROLE, TICKET_TYPE, TiCKET_STATE } from '../../shared/app-constants';
 import { formatDate } from '../../shared/date-formater';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { LoginService } from '../../service/login.service';
 
 @Component({
   selector: 'app-alarm-ticket-list',
@@ -53,21 +54,28 @@ export class AlarmTicketListComponent implements OnInit {
   ]
 
   tickets: any[] = [];
-alarmName: any;
-siteId: any;
+  alarmName: any;
+  siteId: any;
+  currentUser: any = null;
+  ROLE = ROLE;
 
   constructor(
     private route: ActivatedRoute, 
     private router: Router, 
     private ticketService: TicketService,
-   private message: NzMessageService) {
+    private loginService: LoginService,
+    private message: NzMessageService) {
 
   }
 
   ngOnInit(): void {
-    
+   
+    this.currentUser = this.loginService.currentUser;
    this.route.queryParamMap.subscribe(params => {
     this.type = params.get('type')!;
+    this.date = null;
+    this.siteId = null;
+    this.selectedStatus = null;
     this.fetchTicket(this.pageIndex, this.pageSize, this.type);
 
    })
@@ -106,10 +114,12 @@ siteId: any;
 
   onQueryParamsChange(params: NzTableQueryParams): void {
     const { pageSize, pageIndex, sort, filter } = params;
+    this.pageSize = pageSize;
+    this.pageIndex= pageIndex;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
     const sortOrder = (currentSort && currentSort.value) || null;
-    this.fetchTicket(pageIndex,pageSize, this.type);
+    this.fetchTicket(this.pageIndex,this.pageSize, this.type);
    // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
   }
 

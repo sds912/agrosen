@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../../service/task.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { LoginService } from '../../service/login.service';
 
 @Component({
   selector: 'app-ticket-task-form',
@@ -18,12 +19,14 @@ export class TicketTaskFormComponent {
   public filteredParents: any[] = [];
   public sourceTasks: any[] = [];
   public task: any;
+  public currentUser: any = null;
 
   constructor(
     private fb: FormBuilder, 
     private route: ActivatedRoute,
     private taskService: TaskService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private loginService: LoginService
   ) {
 
     this.route.queryParamMap.subscribe(param => {
@@ -74,6 +77,10 @@ export class TicketTaskFormComponent {
   }
 
   ngOnInit(): void {
+
+    this.currentUser = this.loginService?.currentUser;
+    console.log(this.currentUser);
+    
     
   }
 

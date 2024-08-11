@@ -13,23 +13,33 @@ export class TicketImageManagerComponent implements OnInit{
   @Input() ticket: any;
   selectedFile: any | null = null;
   imgURL: any;
+  docAfterMaints: any[] = [];
+  docBeforeMaints: any[] = [];
+  scrollPosition: number = 0;
   
   constructor(private ticketService: TicketService, private message: NzMessageService){
 
   }
 
   ngOnInit(): void {
-    
+
+     if(this.ticket && this.ticket.documents){
+      console.log(this.ticket.documents);
+      
+      this.docDispatcher(this.ticket?.documents);
+     }
   }
 
-  onFileSelected(event: any) {
+  onFileSelected(event: any, afterMaint: boolean) {
+    console.log(afterMaint);
+    
     this.selectedFile = event.target.files[0];
 
-    this.onUpload(this.ticket?.id);
+    this.onUpload(this.ticket?.id, afterMaint);
 
   }
 
-  onUpload(id: string) {
+  onUpload(id: string, afterMaint: boolean) {
     if (!this.selectedFile) {
       alert('Please select a file first');
       return;
@@ -38,13 +48,13 @@ export class TicketImageManagerComponent implements OnInit{
     const uploadData = new FormData();
     uploadData.append('file', this.selectedFile, this.selectedFile.name);
 
-    this.ticketService.uploadImage(uploadData, id)
+
+    this.ticketService.uploadImage(uploadData, id, afterMaint)
       .subscribe(
         response => {
-          console.log(response);
           this.message.success('Uploaded Successfully !');
          // this.loadTicketById(this.ticket.id)
-         location.reload()
+        location.reload()
         },
         error => {
           console.error(error);
@@ -77,6 +87,15 @@ export class TicketImageManagerComponent implements OnInit{
     }
     return 'data:image/png;base64,' + btoa(binary);
   }
+
+
+  docDispatcher = (docs: any[]) => {
+    this.docBeforeMaints = docs?.filter((v) => !v.afterMaintenance );
+    this.docAfterMaints = docs?.filter((v) => v.afterMaintenance );
+
+  }
+
+
 
   
 }

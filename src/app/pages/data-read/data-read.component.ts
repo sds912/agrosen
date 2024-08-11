@@ -7,15 +7,17 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SiteService } from '../../service/site.service';
 import { formatDate } from '../../shared/date-formater';
 import { TiCKET_STATE } from '../../shared/app-constants';
+import { LastDataDetailComponent } from '../../component/last-data-detail/last-data-detail.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 
 
 @Component({
-  selector: 'app-alarmes',
-  templateUrl: './alarmes.component.html',
-  styleUrl: './alarmes.component.css'
+  selector: 'data-read',
+  templateUrl: './data-read.component.html',
+  styleUrl: './data-read.component.css'
 })
-export class AlarmesComponent implements OnInit {
+export class DataReadComponent implements OnInit {
 
 alarmStatus: { label: string, value: string }[] = [
   { label: 'WORK IN PROGRESS', value: TiCKET_STATE.WORKINPROGRESS },
@@ -49,8 +51,12 @@ alarmStatus: { label: string, value: string }[] = [
 
   
   constructor(public authservice: LoginService,
-    private alarmeService: AlarmesService, private fb: FormBuilder,
-    private route: ActivatedRoute, private message: NzMessageService, private siteService: SiteService) { 
+    private alarmeService: AlarmesService, 
+    private fb: FormBuilder,
+    private route: ActivatedRoute, 
+    private message: NzMessageService, 
+    private siteService: SiteService,
+    private modal: NzModalService) { 
       this.formGroup = this.fb.group({
         siteFilter: ['Sites'] // Default selected value
       });
@@ -65,11 +71,9 @@ alarmStatus: { label: string, value: string }[] = [
 
   ngOnInit(): void {
    this.route.queryParams.subscribe((param) => {
-    this.resetFilter();
     if(param && param['status'] !== null &&param['status'] !== undefined ){
       this.status = param['status'];
-
-      this.alarmeService.getAlarmsByStatus(this.status)
+      this.alarmeService.getReadData()
       .subscribe(
         res => {
         this.alarmes= res?.data;
@@ -85,23 +89,13 @@ alarmStatus: { label: string, value: string }[] = [
     
 
   }
-
-
-  resetFilter(){
-    this.filterParams.siteId = null;
-    this.filterParams.alarmName = null;
-    this.filterParams.date = null;
-    this.filterParams.status = null;
-    this.date = null;
-    this.alarmName = null;
-    this.siteId = null;
-    this.selectedStatus = null;
-  }
   public getAlarmes() {
     this.loading = true;
-    this.alarmeService.getAlarmes(this.Currentpage, this.size).subscribe(
+    this.alarmeService.getReadData().subscribe(
       (response: any) => {
         this.alarmes =  response.data;
+       console.log(this.alarmes);
+        
         this.loading = false;
         this.message.success('Alarms loaded successfuly !')
       },
@@ -177,7 +171,14 @@ alarmStatus: { label: string, value: string }[] = [
     }
 
     reloadData(){
-     this.resetFilter();
+      this.filterParams.siteId = null;
+      this.filterParams.alarmName = null;
+      this.filterParams.date = null;
+      this.filterParams.status = null;
+      this.date = null;
+      this.alarmName = null;
+      this.siteId = null;
+      this.selectedStatus = null;
       this.getAlarmes();
     }
 
@@ -188,6 +189,17 @@ alarmStatus: { label: string, value: string }[] = [
   
       this.applayFilter();
       
+      }
+
+      viewSiteDetails(siteId: string): void {
+        const site = this.alarmes.filter((site: any) => site.id === siteId)[0];
+        this.modal.create({
+          nzTitle: 'Site Details',
+          nzContent: LastDataDetailComponent,
+          nzData: {site},
+          nzFooter: null,
+          nzWidth: 800
+        });
       }
   
 }

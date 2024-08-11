@@ -65,6 +65,9 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { TicketImageManagerComponent } from './component/ticket-image-manager/ticket-image-manager.component';
 import { TicketStateTransformPipe } from './shared/ticket-state-transform';
 import { PriorityPipe } from './shared/priority.pipe';
+import { DataReadComponent } from './pages/data-read/data-read.component';
+import { LastDataDetailComponent } from './component/last-data-detail/last-data-detail.component';
+import { PreJobSafetyChecklistComponent } from './pages/pre-job-safety-checklist/pre-job-safety-checklist.component';
 
 
 
@@ -105,7 +108,10 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     TicketTaskManagementComponent,
     SiteDetailsComponent,
     AlarmTicketPmFormComponent,
-    TicketImageManagerComponent
+    TicketImageManagerComponent,
+    DataReadComponent,
+    LastDataDetailComponent,
+    PreJobSafetyChecklistComponent
   ],
   imports: [
     BrowserModule,

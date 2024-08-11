@@ -1,0 +1,63 @@
+.container {
+    max-width: 100%;
+  }
+  
+  .card {
+    border: 1px solid #ddd;
+  }
+  
+  .table thead {
+    background-color: #e9ecef;
+  }
+  
+  .signature-box, .photo-box {
+    width: 100%;
+    height: 150px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+  }
+  
+  .photo-box.add-photo {
+    cursor: pointer;
+  }
+
+  .technicien, .facture{
+    width: 160px;
+    height: 160px;
+    background-color: #C6E4FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .photo-item{
+    width: 100%;
+    height: 160px;
+    background-color: #C6E4FF;
+  }
+  .photo-upload{
+    width: 100%;
+    height: 160px;
+    background-color: #acacac;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: 800;
+    cursor:pointer;
+  }
+  .photo-upload:hover{
+    transition: .5s;
+    opacity: .7;
+  }
+
+  .photo-upload input{
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+  
+  

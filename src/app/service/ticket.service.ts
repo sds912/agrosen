@@ -37,7 +37,7 @@ export class TicketService {
 
   fetchRefNumber(): Observable<any> {
 
-   return this.http.get<any>(`${baseAPI}/tickets/generate/site-access-request`, { responseType: "json" });
+   return this.http.get<any>(`${baseAPI}/generate/site-access-request-id`, { responseType: "json" });
     
   }
 
@@ -49,8 +49,10 @@ export class TicketService {
     return this.http.get(`${baseAPI}/site-access-request-task/${id}`);
   }
 
-  uploadImage(image: any, id: string){
-    return this.http.post(`${baseAPI}/files/upload/${id}`, image);
+  uploadImage(image: any, id: string, afterMaintenance: boolean){
+    console.log(`${baseAPI}/files/upload/${id}?afterMaintenance=${afterMaintenance}`);
+    
+    return this.http.post(`${baseAPI}/files/upload/${id}?afterMaintenance=${afterMaintenance}`, image);
 
   }
 
@@ -95,5 +97,10 @@ export class TicketService {
     return this.http.get(url);
 }
 
+
+reassignedTicket(data: any){
+  return this.http.post(`${baseAPI}/tickets/reassigned`, data);
+
+}
   
 }

@@ -80,8 +80,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
-      <div class="row">
         <div class="col-6">
           <nz-form-item>
             <nz-form-label [nzSpan]="6" nzRequired>Battery</nz-form-label>
@@ -92,10 +90,17 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-       
         <div class="col-6">
           <nz-form-item>
-            <nz-form-label [nzSpan]="6" nzRequired>GE</nz-form-label>
+            <nz-form-label [nzSpan]="6" >Solaire</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input HTS Site ID">
+              <input nz-input formControlName="solar" placeholder="Solaire" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" >GE</nz-form-label>
             <nz-form-control [nzSpan]="14" nzErrorTip="Please select GE">
               <nz-select formControlName="ge" placeholder="Site Class" nzPlaceHolder="GE">
                 <nz-option *ngFor="let ge of ges" [nzValue]="ge" [nzLabel]="ge"></nz-option>
@@ -113,7 +118,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-
         <div class="col-6">
           <nz-form-item >
             <nz-form-label [nzSpan]="6" nzRequired>FE</nz-form-label>
@@ -124,9 +128,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-       
       </div>
-      <fieldset style="margin: 4px 20px;">
+      
+      <fieldset style="margin: 8px 5%;" class="border p-2">
         <legend>Address</legend>
         <div class="row">
           <div class="col-6">

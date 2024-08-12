@@ -73,10 +73,19 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
+        <div class="col-6">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Solaire</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input Solaire">
+              <input nz-input formControlName="solar" placeholder="Solaire"  />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
        
         <div class="col-6">
           <nz-form-item>
-            <nz-form-label [nzSpan]="6" nzRequired>GE</nz-form-label>
+            <nz-form-label [nzSpan]="6" >GE</nz-form-label>
             <nz-form-control [nzSpan]="14" nzErrorTip="Please input GE">
               <input nz-input formControlName="ge" placeholder="GE"  />
             </nz-form-control>

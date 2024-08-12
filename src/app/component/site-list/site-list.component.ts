@@ -41,6 +41,7 @@ export class SiteListComponent implements OnInit {
           customerId: site.customerId ?? 'N/A',
           genset: site.genset ?? 'N/A',
           battery: site.battery ?? 'N/A',
+          solar: site.solar ?? 'N/A',
           location: {
             city: site.address.city ?? 'N/A',
             country: site.address.country ?? 'N/A',

@@ -31,6 +31,7 @@ export class SiteDetailsComponent {
       clusterNumber: [{ value: '', disabled: true }],
       userGroup: [{ value: '', disabled: true }],
       battery: [{ value: '', disabled: true }],
+      solar: [{ value: '', disabled: true }],
       ge: [{ value: '', disabled: true }],
       fs: [{ value: '', disabled: true }],
       fe: [{ value: '', disabled: true }],

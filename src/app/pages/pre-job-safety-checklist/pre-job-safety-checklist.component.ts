@@ -15,7 +15,10 @@ export class PreJobSafetyChecklistComponent implements OnInit {
   checklistData: any[] = [];
   loading: boolean = false;
   currentTicketId?: string;
-  
+  selectedFile: any | null = null;
+  imgURL: any;
+  images: any[] = [];
+  docs: any[] = [];
 
   constructor(
     private fb: FormBuilder, 
@@ -26,6 +29,7 @@ export class PreJobSafetyChecklistComponent implements OnInit {
   ngOnInit(): void {
     this.loadCheckList();
     this.loadCheckListResponse();
+    this.loadDocs();
   }
 
   createForm() {
@@ -112,6 +116,25 @@ export class PreJobSafetyChecklistComponent implements OnInit {
    
   }
 
+  loadDocs(){
+    this.checkListService.loadDocs(this.currentTicketId!)
+    .subscribe(
+      res => {
+
+       this.docs = res;
+      if(this.docs?.length > 0){
+        this.getFullImageURL(this.docs)
+
+      }
+       
+      },
+      error => {
+
+      }
+    )
+    
+  }
+
   saveForm() {
     if (this.safetyChecklistForm!.valid) {
       console.log(this.safetyChecklistForm!.value);
@@ -161,5 +184,68 @@ export class PreJobSafetyChecklistComponent implements OnInit {
     })
 
     
+    }
+
+
+    onFileSelected(event: any,) {
+      
+      this.selectedFile = event.target.files[0];
+  
+      this.onUpload(this.currentTicketId!);
+  
+    }
+  
+    onUpload(id: string) {
+      if (!this.selectedFile) {
+        alert('Please select a file first');
+        return;
+      }
+  
+      const uploadData = new FormData();
+      uploadData.append('file', this.selectedFile, this.selectedFile.name);
+  
+  
+      this.checkListService.uploadImage(uploadData, this.currentTicketId)
+        .subscribe(
+          response => {
+            this.message.success('Uploaded Successfully !');
+            this.loadDocs();
+          
+          },
+          error => {
+            console.error(error);
+            this.message.error(error?.error?.messages[0] ?? 'Upload Failed')
+          }
+        );
+    }
+  
+    getFullImageURL(docs: any[]) {
+    docs.map((data: any) => {
+      console.log(data);
+      
+        this.checkListService.loadImage(data.fileName)
+          .subscribe(image => {
+
+            console.log(image);
+            
+            data.imageData = this.convertToBase64(image);
+          },
+            error => {
+  
+              this.message.error('Flail to load images');
+  
+            })
+      })
+      
+    }
+  
+    convertToBase64(buffer: ArrayBuffer): any {
+      let binary = '';
+      const bytes = new Uint8Array(buffer);
+      const len = bytes.byteLength;
+      for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return 'data:image/png;base64,' + btoa(binary);
     }
 }

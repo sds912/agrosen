@@ -94,6 +94,8 @@ export class AlarmTicketListComponent implements OnInit {
       .subscribe(
         (response: any) => {
           this.tickets = response.data;
+          console.log(this.tickets);
+          
           this.total = response.count;
           this.loading = false;
         },
@@ -119,6 +121,8 @@ export class AlarmTicketListComponent implements OnInit {
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
     const sortOrder = (currentSort && currentSort.value) || null;
+    console.log(pageIndex);
+    
     this.fetchTicket(this.pageIndex,this.pageSize, this.type);
    // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
   }

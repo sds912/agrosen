@@ -121,7 +121,7 @@ export class TicketTaskListComponent implements OnInit {
     this.loading = true;
     this.taskService.getTasks(this.ticket.id).subscribe(
       response => {
-      //  console.log(response?.data)
+      console.log(response?.data)
         this.listOfTicketTasks = response?.data;
         this.loading = false;
       }

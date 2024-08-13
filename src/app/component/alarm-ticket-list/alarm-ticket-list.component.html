@@ -19,7 +19,7 @@
           <th [nzSortFn]="true">Created</th>
           <th nzWidth="165px">State</th>
           <th>Assigned to</th>
-          <th>Closed</th>
+          <th>Closed by</th>
           <th>Short description</th>
           <th>Created by</th>
           <th>Description</th>
@@ -36,7 +36,7 @@
           <td>{{ a.createdAt | dateFormat }}</td>
           <td>{{ a.status | ticketStateTransform}}</td>
           <td>{{ a.user?.firstName + ' ' + a.user?.lastName}}</td>
-          <td>{{ a.closedAt??'N/A' }}</td>
+          <td>{{ a.userClosedTicket ? a.userClosedTicket?.firstName + ' ' + a.userClosedTicket?.lastName : 'N/A'}}</td>
           <td>{{ a.shortDescription??'N/A'}}</td>
           <td>{{ a.noc?.firstName + a.noc?.lastName}}</td>
           <td>{{ a.description??'N/A' }}</td>

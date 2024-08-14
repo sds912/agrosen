@@ -35,7 +35,7 @@
          <span nz-icon nzType="product"></span>
          <span>Equipements</span>
        </li>
-       <li *ngIf="this.currentUser !== null && (this.currentUser?.role === ROLE.ADMIN || this.currentUser?.role === ROLE.NOC)"    nz-menu-item [routerLink]="['/admin/sites']" [queryParams]="{type: 'list'}">
+       <li *ngIf="this.currentUser !== null && this.currentUser?.role === ROLE.ADMIN"    nz-menu-item [routerLink]="['/admin/sites']" [queryParams]="{type: 'list'}">
          <span nz-icon nzType="home"></span>
          <span>Sites en service</span>
        </li>

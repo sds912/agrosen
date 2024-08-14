@@ -81,11 +81,11 @@ export class PreJobSafetyChecklistComponent implements OnInit {
       item.get('response')?.setValue(found.response)
      }
      
-    //  console.log(item.value);
       
     })
     
-    //responses.map((v) => this.checklistItems?.controls?['id'] )
+    console.log(this.checklistItems?.controls);
+    
   }
   loadCheckListResponse (){
     this.loading = true;

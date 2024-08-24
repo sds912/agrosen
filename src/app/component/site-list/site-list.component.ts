@@ -4,6 +4,7 @@ import { SiteService } from '../../service/site.service';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { SiteDetailsComponent } from '../site-details/site-details.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-site-list',
@@ -17,6 +18,17 @@ export class SiteListComponent implements OnInit {
   total: number = 0;
   pageSize = 10;
   pageIndex = 1;
+  siteName: string | null = null;
+  siteId: string | null = null;
+  selectedCluster: any = null;
+  clusters: any[] = [];
+  fliterParams = {
+    siteId: null,
+    cluster: null,
+    siteName: null
+  }
+
+
 
   constructor(private siteService: SiteService,
      private message: NzMessageService, 
@@ -24,14 +36,14 @@ export class SiteListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSites();
+    this.loadClusters();
   }
 
-  loadSites(): void {
+  loadSites(limit: number = 10, pageIndex: number = 1): void {
     this.loading = true;
-    this.siteService.getSites().subscribe(
+    this.siteService.getSites(limit, pageIndex).subscribe(
       (response: any) => {
-        console.log(response);
-        
+        this.total = response?.count;
         this.sites = response?.data?.map((site: any) => ({
           siteId: site.siteId ?? 'N/A',
           id: site.id,
@@ -61,6 +73,18 @@ export class SiteListComponent implements OnInit {
     );
   }
 
+  loadClusters(): void{
+  this.siteService.getCulsters().
+  subscribe(
+    (res: any) => {
+     this.clusters = res?.data
+    }
+    ,error => {
+      console.log(error);
+      this.message.error('Loading Data Failled !')
+    }
+  )
+  }
   deleteSite(id: string): void {
     this.siteService.deleteSite(id).subscribe(
       () => {
@@ -85,14 +109,18 @@ export class SiteListComponent implements OnInit {
     );
   }
 
+  showEditSite(site:any){
+
+  }
+
   onQueryParamsChange(params: NzTableQueryParams): void {
     console.log(params);
     const { pageSize, pageIndex, sort, filter } = params;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
     const sortOrder = (currentSort && currentSort.value) || null;
-    this.loadSites()
-   // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
+    this.pageIndex = pageIndex;
+    this.loadSites(pageSize, pageIndex)
   }
 
   viewSiteDetails(siteId: string): void {
@@ -104,5 +132,45 @@ export class SiteListComponent implements OnInit {
       nzFooter: null,
       nzWidth: 800
     });
+  }
+
+  // search site by siteId
+  onSiteIdSearch($target: any) {
+    this.fliterParams.siteId = $target.value;
+ 
+  }
+  applayFilter() {
+    this.siteService.filter(this.fliterParams)
+    .subscribe(
+      (res:any) => {
+        this.sites = res?.data;
+      },
+      error => {
+        console.log(error);
+        this.message.error('Loading Data failled')
+      }
+    )
+    
+  }
+  reloadData() {
+   this.resetFilter();
+   this.loadSites();
+  }
+  onSiteNameSearch($event: any) {
+    this.fliterParams.siteName = $event.value;
+  }
+
+  onClusterSearch($event: any){
+    this.fliterParams.cluster = $event;
+
+  }
+
+  resetFilter(){
+    this.siteName = null;
+    this.siteId = null;
+    this.selectedCluster = null;
+    this.fliterParams.cluster = null;
+    this.fliterParams.siteId = null;
+    this.fliterParams.siteName = null;
   }
 }

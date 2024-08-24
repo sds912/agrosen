@@ -44,6 +44,18 @@ export class UserManagementComponent implements OnInit {
   selectedUser: User | null = null;
   userForm: FormGroup;
   date = null;
+  lastName: any;
+  firstName: any;
+  username: any;
+  selectedRole: any;
+  filteredRole: any;
+  filterParams = {
+    username: null,
+    role: null,
+    fn: null,
+    ln: null
+  }
+
 
 
   onChange(result: Date): void {
@@ -187,5 +199,63 @@ export class UserManagementComponent implements OnInit {
   }
 
 
+    applayFilter() {
+      this.loading = true;
+      this.userService.filterByParams(this.filterParams)
+      .subscribe(
+        (res: any) => {
+          //console.log(res);
+          
+          this.users = res?.data;
+           this.loading = false;
 
+        },
+        error => {
+          this.message.error('Loading data failed');
+          this.loading = false;
+
+        }
+      )
+    }
+    reloadData() {
+       this.resetFilter();
+       this.loadUsers();
+    }
+    onLastNameSearch(target: any) {
+     this.filterParams.ln = target.value;
+     
+    }
+    onUsernameSearch(target: any) {
+     this.filterParams.username = target.value;
+      
+    }
+    onFirstNameSearch(target: any) {
+     this.filterParams.fn = target.value;
+    }
+    onRoleSearch(value: any) {
+     this.filterParams.role = value;
+      this.loading = true;
+      this.userService.getUsersByRole(value)
+      .subscribe((res: any)=> {
+        console.log(res);
+        
+        this.users = res?.data;
+        this.loading = false;
+      },
+    error =>{ 
+      this.message.error('Loading data failed !');
+      this.loading = false;
+    })
+      }
+
+    resetFilter (){
+      this.username = null;
+      this.lastName = null;
+      this.firstName = null;
+      this.filteredRole = null;
+      this.filterParams.fn = null;
+      this.filterParams.ln = null;
+      this.filterParams.role = null;
+      this.filterParams.username = null;
+    }
 }

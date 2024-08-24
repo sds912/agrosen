@@ -9,6 +9,7 @@ import { formatDate } from '../../shared/date-formater';
 import { TiCKET_STATE } from '../../shared/app-constants';
 import { LastDataDetailComponent } from '../../component/last-data-detail/last-data-detail.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
 
 
 
@@ -47,6 +48,9 @@ alarmStatus: { label: string, value: string }[] = [
   loading: boolean = false;
   status:any = null;
   selectedStatus: any;
+  total: number = 0;
+  pageSize = 10;
+  pageIndex = 1;
 
 
   
@@ -70,32 +74,14 @@ alarmStatus: { label: string, value: string }[] = [
 
 
   ngOnInit(): void {
-   this.route.queryParams.subscribe((param) => {
-    if(param && param['status'] !== null &&param['status'] !== undefined ){
-      this.status = param['status'];
-      this.alarmeService.getReadData()
-      .subscribe(
-        res => {
-        this.alarmes= res?.data;
-        },
-        error => {}
-      )
-    } else{
     this.getAlarmes();
-
-    }
-    
-   })
-    
-
   }
-  public getAlarmes() {
+  public getAlarmes(limit: number =10, pageIndex: number = 1) {
     this.loading = true;
-    this.alarmeService.getReadData().subscribe(
+    this.alarmeService.getReadData(limit, pageIndex).subscribe(
       (response: any) => {
         this.alarmes =  response.data;
-       console.log(this.alarmes);
-        
+        this.total = response?.total;
         this.loading = false;
         this.message.success('Alarms loaded successfuly !')
       },
@@ -168,6 +154,16 @@ alarmStatus: { label: string, value: string }[] = [
         error => this.message.error(error?.error?.message)
       )
       
+    }
+
+    onQueryParamsChange(params: NzTableQueryParams): void {
+      console.log(params);
+      const { pageSize, pageIndex, sort, filter } = params;
+      const currentSort = sort.find(item => item.value !== null);
+      const sortField = (currentSort && currentSort.key) || null;
+      const sortOrder = (currentSort && currentSort.value) || null;
+      this.pageIndex = pageIndex;
+      this.getAlarmes(pageSize, pageIndex)
     }
 
     reloadData(){

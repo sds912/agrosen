@@ -32,7 +32,10 @@ export class TicketService {
   }
 
   fetchTickets(page: number, limit: number, type: string): Observable<any>{
-    return this.http.get(`${baseAPI}/tickets/current-user?page=${page}&limit=${limit}&type=${type}`);
+    const url = `${baseAPI}/tickets/current-user?page=${page}&limit=${limit}&type=${type}`;
+    console.log(url);
+    
+    return this.http.get(url);
   }
 
   fetchRefNumber(): Observable<any> {

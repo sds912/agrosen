@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TaskService } from '../../service/task.service';
 import { LoginService } from '../../service/login.service';
-import { ROLE } from '../../shared/app-constants';
+import { ROLE, TiCKET_STATE } from '../../shared/app-constants';
 
 interface TicketTask {
   id: string;
@@ -45,6 +45,7 @@ export class TicketTaskListComponent implements OnInit {
   public loading: boolean = false;
   public currentUser: any = null;
   public ROLE = ROLE;
+  public TICKETSTATUS = TiCKET_STATE;
 
   constructor(private fb: FormBuilder, public router: Router,
     private loginService: LoginService,

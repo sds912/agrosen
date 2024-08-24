@@ -125,8 +125,8 @@ export class AlarmesService {
   }
 
 
-  getReadData() {
-   return this.http.get<any>(`${this.apiBaseUrl}/last-data`);
+  getReadData(limit: number = 10, pageIndex: number = 1) {
+   return this.http.get<any>(`${this.apiBaseUrl}/last-data?limit=${limit}&page=${pageIndex}`);
     
   }
 }

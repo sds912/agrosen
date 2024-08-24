@@ -7,6 +7,8 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root'
 })
 export class SiteService {
+ 
+ 
 
   private apiUrl = environment.BaseUrl; // Your backend API URL
 
@@ -20,8 +22,8 @@ export class SiteService {
 
 
 
-  getSites(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/sites`);
+  getSites(limit: number = 10, pageIndex: number = 1): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/sites?limit=${limit}&page=${pageIndex}`);
   }
 
   getSiteById(id: string): Observable<any> {
@@ -33,13 +35,42 @@ export class SiteService {
   }
 
   updateSite(id: string, site: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, site);
+    return this.http.put<any>(`${this.apiUrl}/sites/${id}`, site);
   }
 
   deleteSite(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+
+  getCulsters(limit: number = 10, page: number = 1) {
+    return this.http.get<any>(`${this.apiUrl}/clusters?limit=${limit}&page=${page}`);
+  }
+
+  filter(filterParams: { siteId: string | null; cluster: string | null; siteName: string | null; }) {
+    let url = `${this.apiUrl}/sites`;
+  
+    // Initialize an array to hold query parameters
+    const queryParams: string[] = [];
+  
+    // Check each parameter and add it to the queryParams array if it has a value
+    if (filterParams.siteId) {
+      queryParams.push(`siteId=${encodeURIComponent(filterParams.siteId)}`);
+    }
+    if (filterParams.cluster) {
+      queryParams.push(`cluster=${encodeURIComponent(filterParams.cluster)}`);
+    }
+    if (filterParams.siteName) {
+      queryParams.push(`siteName=${encodeURIComponent(filterParams.siteName)}`);
+    }
+  
+    // If there are any query parameters, append them to the URL
+    if (queryParams.length) {
+      url += `?${queryParams.join('&')}`;
+    }
+  
+    return this.http.get<any>(url);
+  }
   
 
 }

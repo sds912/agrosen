@@ -32,7 +32,7 @@ export class AdminComponent implements OnInit{
     console.log(param['ticketId'] );
     
     this.currentTicketId = undefined;
-    if( (param['type'] !== undefined && param['id'] !== undefined ) || param['ticketId'] !== undefined){
+    if( (param['type'] === TICKET_TYPE.PM && param['id'] !== undefined ) || param['ticketId'] !== undefined){
    this.currentTicketId = param['id'] !== undefined ? param['id'] :param['ticketId'];
     }
     

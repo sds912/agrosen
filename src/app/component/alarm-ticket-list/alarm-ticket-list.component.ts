@@ -73,12 +73,23 @@ export class AlarmTicketListComponent implements OnInit {
     this.currentUser = this.loginService.currentUser;
    this.route.queryParamMap.subscribe(params => {
     this.type = params.get('type')!;
+    this.pageIndex = 1; // Reset or preserve the page index based on logic
+    this.pageSize = 10; // Set the page size
     this.date = null;
     this.siteId = null;
     this.selectedStatus = null;
     this.fetchTicket(this.pageIndex, this.pageSize, this.type);
-
    })
+
+  //  this.router.navigate([], {
+  //   relativeTo: this.route,
+  //   queryParams: {
+  //     pageIndex: this.pageIndex,
+  //     pageSize: this.pageSize,
+  //     type: this.type
+  //   },
+  //   queryParamsHandling: 'merge' // preserve existing query params
+  // });
 
 
   }
@@ -92,11 +103,12 @@ export class AlarmTicketListComponent implements OnInit {
     this.loading = true;
     this.ticketService.fetchTickets(page,limit, type)
       .subscribe(
+        
         (response: any) => {
           this.tickets = response.data;
-          console.log(this.tickets);
-          
-          this.total = response.count;
+          this.total = response.count;  // Update total count for pagination
+          this.pageSize = limit;        // Ensure pageSize is correctly set
+          this.pageIndex = page;        // Update pageIndex based on the current page
           this.loading = false;
         },
         error =>{ 
@@ -115,15 +127,16 @@ export class AlarmTicketListComponent implements OnInit {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
+    console.log(params);
+    
     const { pageSize, pageIndex, sort, filter } = params;
     this.pageSize = pageSize;
     this.pageIndex= pageIndex;
-    const currentSort = sort.find(item => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;
-    console.log(pageIndex);
+   // const currentSort = sort.find(item => item.value !== null);
+   // const sortField = (currentSort && currentSort.key) || null;
+   // const sortOrder = (currentSort && currentSort.value) || null;
     
-    this.fetchTicket(this.pageIndex,this.pageSize, this.type);
+    this.fetchTicket(pageIndex,pageSize, this.type);
    // this.loadDataFromServer(pageIndex, pageSize, sortField, sortOrder, filter);
   }
 

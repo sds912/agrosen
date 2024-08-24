@@ -1,16 +1,18 @@
 <nz-card style="width: 100%;" nzTitle="Tickets" [nzBodyStyle]="{padding: '0'}" [nzExtra]="extraTemplate">
   
-  <div>
+  <div >
     <nz-table 
-     nzShowSizeChanger
+      *ngIf="this.tickets!.length > 0"
       [nzScroll]="{ x: '2000px' }" 
-      (nzQueryParams)="onQueryParamsChange($event)" 
-      [nzLoading]="loading" 
-      [nzTotal]="total" 
+      nzShowSizeChanger
+      [nzData]="this.tickets"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+      [nzTotal]="total"
       [nzPageSize]="pageSize"
-      [nzPageIndex]="pageIndex" 
-      #basicTable 
-      [nzData]="tickets">
+      [nzPageIndex]="pageIndex"
+      (nzQueryParams)="onQueryParamsChange($event)"
+      #ticketTable>
       <thead>
         <tr>
           <th nzLeft>Number</th>
@@ -29,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let a of basicTable.data">
+        <tr *ngFor="let a of ticketTable.data">
           <td nzLeft> <a href="{{'admin/alarms/tickets?id='+ a.id+'&type='+type}}">{{ a.reference }}</a> </td>
           <td nzLeft>{{ a.site?.siteName}}</td>
           <td>{{ getPriority(a.priority) }}</td>

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TicketService } from '../../service/ticket.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { window } from 'rxjs';
+import { TiCKET_STATE } from '../../shared/app-constants';
 
 @Component({
   selector: 'app-ticket-image-manager',
@@ -16,6 +16,7 @@ export class TicketImageManagerComponent implements OnInit{
   docAfterMaints: any[] = [];
   docBeforeMaints: any[] = [];
   scrollPosition: number = 0;
+  TICKETSTATUS = TiCKET_STATE;
   
   constructor(private ticketService: TicketService, private message: NzMessageService){
 

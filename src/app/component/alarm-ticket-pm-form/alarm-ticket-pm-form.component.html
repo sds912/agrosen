@@ -2,7 +2,7 @@
 	
 	
 		<div class="d-flex justify-content-end align-items-center">
-			<div *ngIf="ticket?.status === TICKETSTATE.WORKINPROGRESS && (this.currentUser?.role === this.ROLE.FE || this.currentUser?.role === this.ROLE.FS )" class="d-flex justify-content-end align-items-center " >
+			<div *ngIf="ticket?.status === TICKETSTATE.WORKINPROGRESS && (this.currentUser?.role === this.ROLE.FE || this.currentUser?.role === this.ROLE.FS || this.currentUser?.role === this.ROLE.ADMIN  || this.currentUser?.role === this.ROLE.NOC)" class="d-flex justify-content-end align-items-center " >
 				<button [disabled]="taskController()" nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.CLOSED)">Close {{this.type === TICKETTYPE.PM ? 'PM' : 'PMA'}} Complete</button>
 				<button [disabled]="taskController()" class="mx-2 btn-outline-warning" nz-button nztype="primary" (click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)">Close {{this.type === TICKETTYPE.PM ? 'PM' : 'PMA'}}  Incomplete</button>
 				<button [disabled]="taskController()" nz-button nztype="default" nzdanger (click)="saveStatus(TICKETSTATE.CANCEL)">Cancel {{this.type === TICKETTYPE.PM ? 'PM' : 'PMA'}} </button>

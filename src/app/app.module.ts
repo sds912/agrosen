@@ -9,7 +9,6 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { AlarmesComponent } from './component/alarmes/alarmes.component';
 import { MenuComponent } from './component/menu/menu.component';
-import { DonnesluesComponent } from './component/donneslues/donneslues.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FilterpipePipe } from './filterpipe.pipe';
 import { AdminComponent } from './component/admin/admin.component';
@@ -85,7 +84,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     AppComponent,
     AlarmesComponent,
     MenuComponent,
-    DonnesluesComponent,
     FilterpipePipe,
     AdminComponent,
     MapComponent,

@@ -70,13 +70,14 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="6" nzRequired>User Group</nz-form-label>
             <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid">
-              <nz-input-group nzPrefixIcon="search">
-                <input type="text" nz-input formControlName="userGroup" [nzAutocomplete]="userGroup" placeholder="Search..." />
-              </nz-input-group>
-              <nz-autocomplete #userGroup>
-                <nz-auto-option *ngFor="let option of userGroups" [nzValue]="option.id"
-                  [nzLabel]="option.name">{{option.name}}</nz-auto-option>
-              </nz-autocomplete>
+              <nz-select
+                formControlName="userGroup"
+                nzPlaceHolder="Select User Group"
+              >
+                <nz-option *ngFor="let ug of userGroups" [nzValue]="ug.id" [nzLabel]="ug.name">
+                  {{ ug.name }}
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -129,6 +130,200 @@
           </nz-form-item>
         </div>
       </div>
+
+         <!-- Additional Fields -->
+         <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Maintenance Partner</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="maintenancePartner" nzPlaceHolder="Maintenance Partner">
+                  <nz-option *ngFor="let partner of maintenancePartners" [nzValue]="partner" [nzLabel]="partner"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Transition Maintenance Partner</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="transitionMaintenancePartner" nzPlaceHolder="Transition Maintenance Partner">
+                  <nz-option *ngFor="let partner of transitionMaintenancePartners" [nzValue]="partner" [nzLabel]="partner"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Fuel Transporter</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="fuelTransporter" nzPlaceHolder="Fuel Transporter">
+                  <nz-option *ngFor="let transporter of fuelTransporters" [nzValue]="transporter" [nzLabel]="transporter"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Transition Fuel Transporter</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="transitionFuelTransporter" nzPlaceHolder="Transition Fuel Transporter">
+                  <nz-option *ngFor="let transporter of transitionFuelTransporters" [nzValue]="transporter" [nzLabel]="transporter"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Security Partner</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="securityPartner" nzPlaceHolder="Security Partner">
+                  <nz-option *ngFor="let partner of securityPartners" [nzValue]="partner" [nzLabel]="partner"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Transition Security Partner</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="transitionSecurityPartner" nzPlaceHolder="Transition Security Partner">
+                  <nz-option *ngFor="let partner of transitionSecurityPartners" [nzValue]="partner" [nzLabel]="partner"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Security Partner Representative</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="securityPartnerRepresentative" placeholder="Security Partner Representative" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Structure Height (m)</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input type="number" nz-input formControlName="structureHeight" placeholder="Structure Height" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Available For Co-location</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="availableForColocation" nzPlaceHolder="Available For Co-location">
+                  <nz-option [nzValue]="true" nzLabel="Yes"></nz-option>
+                  <nz-option [nzValue]="false" nzLabel="No"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Hybrid</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="hybrid" nzPlaceHolder="Hybrid">
+                  <nz-option [nzValue]="true" nzLabel="Yes"></nz-option>
+                  <nz-option [nzValue]="false" nzLabel="No"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">RFI Date</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-date-picker formControlName="rfiDate" nzPlaceHolder="Select RFI Date"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">On Air Date</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-date-picker formControlName="onAirDate" nzPlaceHolder="Select On Air Date"></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Landlord Name</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="landlordName" placeholder="Landlord Name" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Ground Lease Status</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="groundLeaseStatus" nzPlaceHolder="Ground Lease Status">
+                  <nz-option *ngFor="let status of groundLeaseStatuses" [nzValue]="status" [nzLabel]="status"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Population Density</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="populationDensity" placeholder="Population Density" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">District</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="district" placeholder="District" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Zone</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="zone" placeholder="Zone" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Regional Head</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="regionalHead" placeholder="Regional Head" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6">Regional Head Phone Number</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="regionalHeadPhoneNumber" placeholder="Regional Head Phone Number" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
       
       <fieldset style="margin: 8px 5%;" class="border p-2">
         <legend>Address</legend>
@@ -200,4 +395,7 @@
     </ng-template>
     
   </form>
+
+<ngx-loading [show]="this.isLoading"></ngx-loading>
+
   

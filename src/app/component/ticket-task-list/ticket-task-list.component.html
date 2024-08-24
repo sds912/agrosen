@@ -38,7 +38,7 @@
 </nz-card>
 
 <ng-template #extraTemplate>
-  <button nz-button nzType="primary" (click)="router.navigate(['/admin/ticket/task'])">New</button>
+  <button nz-button nzType="primary" (click)="router.navigate(['/admin/ticket/task'])" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED">New</button>
 </ng-template>
 <ngx-loading [show]="loading"></ngx-loading>
 

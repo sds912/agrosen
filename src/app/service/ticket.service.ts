@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
+import { IMAGE_TYPES } from '../shared/app-constants';
 
 const baseAPI = environment.BaseUrl;
 
@@ -52,12 +53,43 @@ export class TicketService {
     return this.http.get(`${baseAPI}/site-access-request-task/${id}`);
   }
 
-  uploadImage(image: any, id: string, afterMaintenance: boolean){
-    console.log(`${baseAPI}/files/upload/${id}?afterMaintenance=${afterMaintenance}`);
-    
-    return this.http.post(`${baseAPI}/files/upload/${id}?afterMaintenance=${afterMaintenance}`, image);
+ // Service Method: Adjusted to only include true parameters
+uploadImage(
+  image: any, 
+  id: string, 
+  type: string
+) {
 
+ 
+  const url = `${baseAPI}/files/upload/${id}`;
+  
+  // Initialize query parameters
+  let params = new HttpParams();
+
+  // Conditionally add parameters
+  if (type === IMAGE_TYPES.BEFORE_MAINTAIN) {
+    params = params.set('afterMaintenance', 'false');
   }
+  if (type === IMAGE_TYPES.AFTERM_MAINTAIN) {
+    params = params.set('afterMaintenance', 'true');
+  }
+  if (type === IMAGE_TYPES.SENELECMETER) {
+    params = params.set('senelecMeter', 'true');
+  }
+  if (type === IMAGE_TYPES.FLUENT_BETTERY) {
+    params = params.set('fluentBattery', 'true');
+  }
+  if (type === IMAGE_TYPES.BETTERY_VOLTAGE) {
+    params = params.set('batteryVoltage', 'true');
+  }
+
+  // Construct the complete URL with query parameters
+  const fullUrl = `${url}?${params.toString()}`;
+  console.log(fullUrl);
+
+  // Perform the HTTP POST request
+  return this.http.post(fullUrl, image);
+}
 
   loadImage(fileName: string): Observable<ArrayBuffer>{
     return this.http.get(`${baseAPI}/files/${fileName}`, { responseType: 'arraybuffer' });

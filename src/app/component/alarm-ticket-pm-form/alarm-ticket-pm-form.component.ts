@@ -294,7 +294,6 @@ export class AlarmTicketPmFormComponent {
 			//console.log(this.filteredSites)
 			this.onSiteInput(this.filteredSites?.filter((v) => v.id === this.ticket?.site?.id)[0]);
 			this.fetchTicketTasks(this.ticket.id);
-			this.getFullImageURL();
 
 			if (this.ticket !== undefined && this.ticket !== '' && this.ticket !== null) {
 				const priority = this.priorities.find(v => v.value === this.ticket.priority);
@@ -554,59 +553,7 @@ export class AlarmTicketPmFormComponent {
 		})
 	}
 
-	onFileSelected(event : any, afterMaintenance: boolean) {
-		this.selectedFile = event.target.files[0];
-
-		this.onUpload(this.ticket ?. id, afterMaintenance);
-
-	}
-
-	onUpload(id : string, afterMaintenance: boolean) {
-		this.loading = true;
-		if (!this.selectedFile) {
-			alert('Please select a file first');
-			return;
-		}
-
-		const uploadData = new FormData();
-		uploadData.append('file', this.selectedFile, this.selectedFile.name);
-
-		this.ticketService.uploadImage(uploadData, id, afterMaintenance).subscribe(response => {
-			console.log(response);
-			this.message.success('Uploaded Successfully !');
-			this.loadTicketById(this.ticket.id)
-		    this.loading = false;
-
-		}, error => {
-			console.error(error);
-			this.message.error(error ?. error ?. messages[0] ?? 'Upload Failed');
-		this.loading = false;
-
-		});
-	}
-
-	getFullImageURL() {
-		this.ticket.documents.map((data : any) => {
-			this.ticketService.loadImage(data.fileName).subscribe(image => {
-				data.imageData = this.convertToBase64(image);
-			}, error => {
-
-				this.message.error('Flail to load images');
-
-			})
-		})
-
-	}
-
-	convertToBase64(buffer : ArrayBuffer): any {
-		let binary = '';
-		const bytes = new Uint8Array(buffer);
-		const len = bytes.byteLength;
-		for (let i = 0; i < len; i++) {
-			binary += String.fromCharCode(bytes[i]);
-		}
-		return 'data:image/png;base64,' + btoa(binary);
-	}
+	
 
 
 	openTask(): void {}

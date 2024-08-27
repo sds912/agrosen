@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TicketService } from '../../service/ticket.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { TiCKET_STATE } from '../../shared/app-constants';
+import { IMAGE_TYPES, TiCKET_STATE } from '../../shared/app-constants';
 
 @Component({
   selector: 'app-ticket-image-manager',
@@ -17,6 +17,11 @@ export class TicketImageManagerComponent implements OnInit{
   docBeforeMaints: any[] = [];
   scrollPosition: number = 0;
   TICKETSTATUS = TiCKET_STATE;
+  docSenelectMeter: any[] = [];
+  docFluentBattery: any[] = [];
+  docBattryVoltage: any[] = [];
+
+  IMAGE_TYPE = IMAGE_TYPES;
   
   constructor(private ticketService: TicketService, private message: NzMessageService){
 
@@ -31,16 +36,17 @@ export class TicketImageManagerComponent implements OnInit{
      }
   }
 
-  onFileSelected(event: any, afterMaint: boolean) {
-    console.log(afterMaint);
+
+  onFileSelected(event: any, type: string) {
     
-    this.selectedFile = event.target.files[0];
+    const fileInput =  event.target;
+    this.selectedFile = fileInput.files[0];
 
-    this.onUpload(this.ticket?.id, afterMaint);
-
+   this.onUpload(this.ticket?.id, type);
+    fileInput.value = '';
   }
 
-  onUpload(id: string, afterMaint: boolean) {
+  onUpload(id: string, type: string) {
     if (!this.selectedFile) {
       alert('Please select a file first');
       return;
@@ -50,7 +56,7 @@ export class TicketImageManagerComponent implements OnInit{
     uploadData.append('file', this.selectedFile, this.selectedFile.name);
 
 
-    this.ticketService.uploadImage(uploadData, id, afterMaint)
+    this.ticketService.uploadImage(uploadData, id, type)
       .subscribe(
         response => {
           this.message.success('Uploaded Successfully !');
@@ -91,8 +97,11 @@ export class TicketImageManagerComponent implements OnInit{
 
 
   docDispatcher = (docs: any[]) => {
-    this.docBeforeMaints = docs?.filter((v) => !v.afterMaintenance );
-    this.docAfterMaints = docs?.filter((v) => v.afterMaintenance );
+    this.docBeforeMaints = docs?.filter((v) => v.afterMaintenance === false );
+    this.docAfterMaints = docs?.filter((v) =>   v.afterMaintenance === true );
+    this.docSenelectMeter = docs?.filter((v) => v.senelecMeter === true);
+    this.docFluentBattery = docs?.filter((v) => v.fluentBattery === true );
+    this.docBattryVoltage = docs?.filter((v) => v.batteryVoltage === true );
 
   }
 

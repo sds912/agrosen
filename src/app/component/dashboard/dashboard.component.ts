@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AlarmesService } from '../../service/alarmes.service';
 import { TicketService } from '../../service/ticket.service';
 import { ALARM_STATE, TiCKET_STATE } from '../../shared/app-constants';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { DonutService } from '../../service/donut.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,12 +24,17 @@ export class DashboardComponent implements OnInit {
 
   cleared:any;
   active:any;
-  constructor(private alarmeService:AlarmesService, private ticketService: TicketService){}
+  loading: boolean = false;
+  alarmes: any[] = [];
+  Currentpage: number = 1;
+  size: number = 10;
+  donne:any
+  constructor(private alarmeService:AlarmesService, private ticketService: TicketService,private message: NzMessageService,private dnt:DonutService){}
 
   ngOnInit(): void {
     this.getOccurencDTU_NO_Response();
     this.getOccurenceMain_AC_OUT();
-    this.  getAllAlarmesCleared();
+    this.getAllAlarmesCleared();
     this.getAllAlarmesActive();
     this.getAlarmTotal();
     this.getAlarmClosed();
@@ -35,6 +42,7 @@ export class DashboardComponent implements OnInit {
     this.getTicketClosed();
     this.getTicketWorking();
     this.getTicketTotal();
+    this.getData();
   }
   getOccurenceMain_AC_OUT(){
     return this.alarmeService.getOcurrenceMain_AC_OUT().subscribe(
@@ -100,6 +108,7 @@ export class DashboardComponent implements OnInit {
     this.alarmeService.countAlarmByStatus(ALARM_STATE.INPROGRESS).subscribe(
       data => {
         this.alarmWorking = data.count;
+        
       }
     );
   }
@@ -123,7 +132,7 @@ export class DashboardComponent implements OnInit {
   getTicketWorking() {
     this.ticketService.countTickerByStatus(TiCKET_STATE.INPROGRESS).subscribe(
       data => {
-        console.log(data)
+       // console.log(data)
         this.ticketWorking = data.count;
       }
     );
@@ -136,4 +145,26 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+  public getAlarmes() {
+    this.loading = true;
+    this.alarmeService.getAlarmes(this.Currentpage, this.size).subscribe(
+      (response: any) => {
+        this.alarmes =  response.data;
+        console.log(this.alarmes)
+        this.loading = false;
+        this.message.success('Alarms loaded successfuly !')
+      },
+    error => {
+      this.message.error(error.error.message);
+      this.loading = false;
+    })
 }
+ public getData(){
+   this.dnt.getData().subscribe(data=>{
+     this.donne=data
+    console.log("dataa",this.donne)
+   })
+   
+ }
+}
+

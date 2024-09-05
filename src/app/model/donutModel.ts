@@ -1,4 +1,4 @@
 export interface donutModel{
-    nomAlarme:String
-    nomBreOcurence:number
+    name:String
+    occurence:number
 }

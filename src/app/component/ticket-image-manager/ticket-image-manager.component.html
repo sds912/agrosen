@@ -4,7 +4,7 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>Images before intervention</h2>
-                <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED">
+                <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED || this.ticket.status === TICKETSTATUS.WAITFORCLOSURE">
                     <label for="ticket-image-before" style="display: block; width: 100%; height: 100%; cursor: pointer;">
                         Upload
                         <input id="ticket-image-before" type="file" style="visibility: hidden; width: 0; height: 0;"
@@ -38,7 +38,7 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>Images after intervention</h2>
-                <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED">
+                <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED || this.ticket.status === TICKETSTATUS.WAITFORCLOSURE">
                     <label for="ticket-image-after" style="display: block; width: 100%; height: 100%; cursor: pointer;">
                         Upload
                         <input id="ticket-image-after" type="file" style="visibility: hidden; width: 0; height: 0;"
@@ -76,7 +76,7 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h2>Index compteur Sénélec</h2>
-                <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED">
+                <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED || this.ticket.status === TICKETSTATUS.WAITFORCLOSURE">
                     <label for="ticket-image-senelec" style="display: block; width: 100%; height: 100%; cursor: pointer;">
                         Upload
                         <input id="ticket-image-senelec" type="file" style="visibility: hidden; width: 0; height: 0;"
@@ -110,7 +110,7 @@
       <div class="card-header">
           <div class="d-flex justify-content-between align-items-center">
               <h2>Tension Batterie</h2>
-              <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED">
+              <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED || this.ticket.status === TICKETSTATUS.WAITFORCLOSURE">
                   <label for="ticket-image-fluent" style="display: block; width: 100%; height: 100%; cursor: pointer;">
                       Upload
                       <input id="ticket-image-fluent" type="file" style="visibility: hidden; width: 0; height: 0;"
@@ -145,7 +145,7 @@
       <div class="card-header">
           <div class="d-flex justify-content-between align-items-center">
               <h2>Courant Batterie</h2>
-              <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED">
+              <button nz-button nzType="primary" class="ms-2" [disabled]="this.ticket.status === TICKETSTATUS.CLOSED || this.ticket.status === TICKETSTATUS.WAITFORCLOSURE">
                   <label for="ticket-image-voltage" style="display: block; width: 100%; height: 100%; cursor: pointer;">
                       Upload
                       <input id="ticket-image-voltage" type="file" style="visibility: hidden; width: 0; height: 0;"

@@ -164,16 +164,16 @@ export class AlarmTicketPmFormComponent {
 					rectifier: [false],
 					solar: [false],
 					rms: [false],
-					janTab: [],
-					acpgTab: [],
-					rectifierTab: [],
-					acTab: [],
-					towerTab: [],
-					metricsTab: [],
-					solarTab: [],
-					alarmTab: [],
-					acService: [],
-					dgService: [],
+					janTab: [''],
+					acpgTab: [''],
+					rectifierTab: [''],
+					acTab: [''],
+					towerTab: [''],
+					metricsTab: [''],
+					solarTab: [''],
+					alarmTab: [''],
+					acService: [''],
+					dgService: [''],
 					whenTakingTheseReading: [''],
 					fuelProbType: [''],
 					fuelProbManufacturer: [''],
@@ -587,6 +587,74 @@ export class AlarmTicketPmFormComponent {
 		  }
 		)
 	  }
+
+
+	  update(ticketId: string): void {
+		
+			// Construct the JSON object as per your requirements
+			const ticketData = {
+				type: this.type,
+				reference: this.ticketForm?.get('number')?.value,
+				siteId: this.ticketForm?.get('site')?.value?.id,
+				user: this.ticketForm?.get('assignedTo')?.value?.id,
+				userGroup: this.ticketForm?.get('assignmentGroup')?.value?.id,
+				description: this.ticketForm?.get('description')?.value,
+				shortDescription: this.ticketForm?.get('shortDescription')?.value,
+				siteAccessRequest: this.ticketForm?.get('siteAccessRequest')?.value,
+				taskReference: this.ticketForm?.get('taskReference')?.value,
+				sheduleDate: this.ticketForm?.get('sheduleDate')?.value,
+				reSheduleDate: this.ticketForm?.get('reSheduleDate')?.value,
+				workNotes: this.ticketForm?.get('workNote')?.value,
+				additionalInfo: {
+					acPowerAndGenerator: this.ticketForm?.get('additionalInfo.acPowerAndGenerator')?.value,
+					alarmCheckList: this.ticketForm?.get('additionalInfo.alarmCheckList')?.value,
+					recordedMetricsReadingAndRemarks: this.ticketForm?.get('additionalInfo.recordedMetricsReadingAndRemarks')?.value,
+					tower: this.ticketForm?.get('additionalInfo.tower')?.value,
+					airConditioning: this.ticketForm?.get('additionalInfo.airConditioning')?.value,
+					janitorial: this.ticketForm?.get('additionalInfo.janitorial')?.value,
+					rectifier: this.ticketForm?.get('additionalInfo.rectifier')?.value,
+					solar: this.ticketForm?.get('additionalInfo.solar')?.value,
+					rms: this.ticketForm?.get('additionalInfo.rms')?.value,
+					janTab: this.ticketForm?.get('additionalInfo.janTab')?.value,
+					acpgTab: this.ticketForm?.get('additionalInfo.acpgTab')?.value,
+					rectifierTab: this.ticketForm?.get('additionalInfo.rectifierTab')?.value,
+					acTab: this.ticketForm?.get('additionalInfo.acTab')?.value,
+					towerTab: this.ticketForm?.get('additionalInfo.towerTab')?.value,
+					metricsTab: this.ticketForm?.get('additionalInfo.metricsTab')?.value,
+					solarTab: this.ticketForm?.get('additionalInfo.solarTab')?.value,
+					alarmTab: this.ticketForm?.get('additionalInfo.alarmTab')?.value,
+					acService: this.ticketForm?.get('additionalInfo.acService')?.value,
+					dgService: this.ticketForm?.get('additionalInfo.dgService')?.value,
+					whenTakingTheseReading: this.ticketForm?.get('additionalInfo.whenTakingTheseReading')?.value,
+					fuelProbType: this.ticketForm?.get('additionalInfo.fuelProbType')?.value,
+					fuelProbManufacturer: this.ticketForm?.get('additionalInfo.fuelProbManufacturer')?.value,
+					fuelProbModelNumber: this.ticketForm?.get('additionalInfo.fuelProbModelNumber')?.value,
+					fuelLevelDgController: this.ticketForm?.get('additionalInfo.fuelLevelDgController')?.value,
+					fuelLevelRms: this.ticketForm?.get('additionalInfo.fuelLevelRms')?.value,
+					generatorRunHours: this.ticketForm?.get('additionalInfo.generatorRunHours')?.value,
+					dgOutput: this.ticketForm?.get('additionalInfo.dgOutput')?.value,
+					gridMeterUnit: this.ticketForm?.get('additionalInfo.gridMeterUnit')?.value,
+					gridMeterConfigured: this.ticketForm?.get('additionalInfo.gridMeterConfigured')?.value,
+					gridMeterType: this.ticketForm?.get('additionalInfo.gridMeterType')?.value,
+					gridMeterManufacturer: this.ticketForm?.get('additionalInfo.gridMeterManufacturer')?.value,
+					gridMeterModelNumber: this.ticketForm?.get('additionalInfo.gridMeterModelNumber')?.value
+				}
+			};
+	
+			// Call your service to update the ticket data
+			this.ticketService.update(ticketId, ticketData).subscribe(
+				(response) => {
+					this.message.success('Ticket updated successfully');
+					this.router.navigate(['/tickets']); // Navigate to another page after success, if needed
+				},
+				(error) => {
+					this.message.error('Error updating ticket');
+					console.error('Error:', error);
+				}
+			);
+		
+	}
+	
 
 
 }

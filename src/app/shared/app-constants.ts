@@ -25,6 +25,7 @@ export const ROLE = {
   NOC: 'NOC',
   FE: 'FE',
   FS: 'FS',
+  ZM: 'ZM',
   ADMIN: 'ADMIN'
 }
 

@@ -5,6 +5,7 @@
                 <button  [disabled]="taskController()"  nz-button nzType="primary" (click)="saveStatus(TICKETSTATE.CLOSED)">Close SWO Complete</button>
                 <button  [disabled]="taskController()"  class="mx-2 btn-outline-warning" nz-button nzType="primary"(click)="saveStatus(TICKETSTATE.WAITFORCLOSURE)">Close SWO Incomplete</button>
                 <button  [disabled]="taskController()"  nz-button nzType="default" nzDanger (click)="saveStatus(TICKETSTATE.CANCEL)">Cancel SWO</button>
+                <button   nz-button nzType="primary" (click)="update(ticket?.id)" class="ms-2">Save</button>
                 </div>
             
             <button *ngIf="!displaySubmit && (ticket?.status === TICKETSTATE.ASSIGNED || ticket?.status === TICKETSTATE.WORKINPROGRESS )&& this.currentUser && this.currentUser?.role === ROLE.NOC"

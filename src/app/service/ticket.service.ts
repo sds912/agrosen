@@ -11,6 +11,7 @@ const baseAPI = environment.BaseUrl;
   providedIn: 'root'
 })
 export class TicketService {
+ 
 
 
   constructor(private http: HttpClient) { }
@@ -136,6 +137,11 @@ uploadImage(
 reassignedTicket(data: any){
   return this.http.post(`${baseAPI}/tickets/reassigned`, data);
 
+}
+
+update(id: any, data: any) {
+  return this.http.put(`${baseAPI}/tickets/${id}`, data);
+  
 }
   
 }

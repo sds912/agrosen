@@ -7,6 +7,7 @@ import { SiteService } from '../../service/site.service';
 import { ClusterService } from '../../service/cluster.service';
 import { UserGroupService } from '../../service/user-group.service';
 import { UserService } from '../../service/user.service';
+import { ROLE } from '../../shared/app-constants';
 
 @Component({
   selector: 'app-site-form',
@@ -42,7 +43,10 @@ export class SiteFormComponent implements OnInit {
   transitionFuelTransporters: string[] = ['Transporter D', 'Transporter E', 'Transporter F'];
   securityPartners: string[] = ['Security A', 'Security B', 'Security C'];
   transitionSecurityPartners: string[] = ['Security D', 'Security E', 'Security F'];
-  groundLeaseStatuses: string[] = ['Active', 'Pending', 'Expired', 'Terminated'];
+  groundLeaseStatuses: string[] = ['--Non--','Active', 'Pending', 'Expired', 'Terminated'];
+  structureTypes: string[] = [];
+  siteStatus: string[] = ['Active', 'Pending', 'Expired', 'Terminated'];
+  zms: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -60,8 +64,6 @@ export class SiteFormComponent implements OnInit {
       siteType: ['', Validators.required],
       siteId: ['', Validators.required],
       genset: [0],
-      ge: [''],
-      solar: [''],
       customerId: [''],
       address: this.fb.group({
         city: [''],
@@ -71,26 +73,30 @@ export class SiteFormComponent implements OnInit {
         lat: [0],
         lng: [0]
       }),
-      clusterNumber: ['', Validators.required],
+      clusterNumber: [0, Validators.required],
       fe: [[], Validators.required],
       fs: [[], Validators.required],
       userGroup: [''],
+      ge: [''],
       battery: [''],
-      
-      // Additional fields from the image
-      maintenancePartner: [''],
-      transitionMaintenancePartner: [''],
-      fuelTransporter: [''],
-      transitionFuelTransporter: [''],
+      solar: [''],
+      zm: [''],  
+      partnerMaintenance: [''],  
+      transitionPartnerMaintenance: [''],  
       securityPartner: [''],
       transitionSecurityPartner: [''],
       securityPartnerRepresentative: [''],
+      structureType: [''],  
       structureHeight: [''],
-      availableForColocation: [''],
       hybrid: [''],
+      availableForLocation: [''],  
+      status: [''],  
+      fuelTransporter: [''],
+      transitionFuelTransporter: [''],
+      financialSiteId: [''],  
       rfiDate: [''],
       onAirDate: [''],
-      landlordName: [''],
+      landlorName: [''],   
       groundLeaseStatus: [''],
       populationDensity: [''],
       district: [''],
@@ -100,16 +106,18 @@ export class SiteFormComponent implements OnInit {
       fieldSupervisor: [''],
       mpFieldEngineer: [''],
       fpFieldEngineer: [''],
-      nocManagerNotification: ['']
+      nocManagernotification: ['']  
     });
+    
     
     
   }
 
   ngOnInit(): void {
     this.loadClusters();
-    this.loadFE();
-    this.loadFS();
+    this.loadUserByRole(ROLE.FE);
+    this.loadUserByRole(ROLE.FS);
+    this.loadUserByRole(ROLE.ZM);
     this.loadUserGroup();
     //this.siteId = this.route.snapshot.paramMap.get('id')!;
     
@@ -124,34 +132,67 @@ export class SiteFormComponent implements OnInit {
    
   }
 
+  userByRole (role: string , data: any): any  {
+   return data.users.filter((user: any )=> user.role === role).map((user: any) => user.id)
+  }
+
   loadSite(id: string): void {
     this.siteService.getSiteById(id).subscribe(
+      
       data => {
-        console.log(data);
-        
+      console.log(data);
+
         this.siteForm.patchValue({
           siteName: data.siteName,
           siteClass: data.siteClass,
           siteId: data.siteId,
           siteType: data.siteType,
           genset: data.genset,
-          ge: data.ge,
-          battery: data.battery,
           customerId: data.customerId,
-          solar: data?.solar,
           address: {
-              city: data.address.city,
-              region: data.address.region,
-              country: data.address.country,
-              street: data.address.street,
-              lat: data.address.lat,
-              lng: data.address.lng,
+            city: data.address.city,
+            region: data.address.region,
+            country: data.address.country,
+            street: data.address.street,
+            lat: data.address.lat,
+            lng: data.address.lng,
           },
           clusterNumber: data.cluster.clusterNumber,
-          fe: data.users.filter((user: any )=> user.role === 'FE').map((user: any) => user.id),
-          fs: data.users.filter((user: any )=> user.role === 'FS').map((user: any) => user.id),
-          userGroup: data.userGroups[0].id
-      });
+          fe: this.userByRole(ROLE.FE, data),
+          fs: this.userByRole(ROLE.FS, data),
+          userGroup:  data.userGroups[0].id,
+          ge: data.ge,
+          battery: data.battery,
+          solar: data.solar,
+          zm: data.zm,
+          partnerMaintenance: data.partnerMaintenance,
+          transitionPartnerMaintenance: data.transitionPartnerMaintenance,
+          securityPartner: data.securityPartner,
+          transitionSecurityPartner: data.transitionSecurityPartner,
+          securityPartnerRepresentative: data.securityPartnerRepresentative,
+          structureType: data.structureType,
+          structureHeight: data.structureHeight,
+          hybrid: data.hybrid,
+          availableForLocation: data.availableForLocation,
+          status: data.status,
+          fuelTransporter: data.fuelTransporter,
+          transitionFuelTransporter: data.transitionFuelTransporter,
+          financialSiteId: data.financialSiteId,
+          rfiDate: data.rfiDate,
+          onAirDate: data.onAirDate,
+          landlorName: data.landlorName,
+          groundLeaseStatus: data.groundLeaseStatus,
+          populationDensity: data.populationDensity,
+          district: data.district,
+          zone: data.zone,
+          regionalHead: data.regionalHead,
+          zonalHead: data.zonalHead,
+          fieldSupervisor: data.fieldSupervisor,
+          mpFieldEngineer: data.mpFieldEngineer,
+          fpFieldEngineer: data.fpFieldEngineer,
+          nocManagernotification: data.nocManagernotification
+        });
+        
       },
       error => {
         this.message.error('Failed to load site.');
@@ -174,17 +215,7 @@ export class SiteFormComponent implements OnInit {
     );
   }
 
-  loadFE(): void {
-    this.userService.getUsersByRole('FE').subscribe(
-      (response: any) => {
-       // console.log(response)
-        this.fes = response?.data;
-      },
-      error => {
-        this.message.error('Failed to load site.');
-      }
-    );
-  }
+ 
 
   loadUserGroup(): void {
     this.userService.getUserGroups().subscribe(
@@ -199,11 +230,21 @@ export class SiteFormComponent implements OnInit {
   }
 
 
-  loadFS(): void {
-    this.userService.getUsersByRole('FS').subscribe(
+  
+
+  loadUserByRole(role: string ): void {
+    this.userService.getUsersByRole(role).subscribe(
       (response: any) => {
-       // console.log(response)
+       if(role === ROLE.FS){
         this.fss = response?.data;
+       }
+       if(role === ROLE.FE){
+        this.fes = response?.data;
+       }
+       if(role === ROLE.ZM){
+        this.zms = response?.data;
+
+       }
       },
       error => {
         this.message.error('Failed to load site.');
@@ -225,6 +266,9 @@ export class SiteFormComponent implements OnInit {
         ],
         cluster: { clusterNumber: site.clusterNumber }
     };
+
+    console.log(updatedSite);
+    
 
     if (this.isEditing) {
         this.siteService.updateSite(this.siteId, updatedSite).subscribe(

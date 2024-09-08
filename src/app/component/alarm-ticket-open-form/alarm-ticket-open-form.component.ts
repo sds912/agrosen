@@ -9,6 +9,7 @@ import { TicketService } from '../../service/ticket.service';
 import { LoginService } from '../../service/login.service';
 import { ROLE, TiCKET_STATE } from '../../shared/app-constants';
 import { DomSanitizer } from '@angular/platform-browser';
+import { error } from '@ant-design/icons-angular';
 
 
 
@@ -464,6 +465,43 @@ loading: boolean = false;
 
   }
 
+  update(id: any){
+    const data1 = {
+      priority: this.ticketForm!.get('priority')?.value?.name,
+      type: this.type,
+      reference: this.ticketForm!.get('number')?.value,
+      alarmCheckList: false,
+      popFourTab: false,
+      siteId: this.ticketForm!.get('site')?.value?.id,
+      shortDescription: this.ticketForm!.get('shortDescription')?.value,
+      user: this.ticketForm!.get('assignedTo')?.value?.id,
+      userGroup: this.ticketForm!.get('assignmentGroup')?.value?.id,
+      faultCodePrefix: this.ticketForm!.get('faultCodePrefix')?.value,
+      faultCategory: this.ticketForm!.get('faultCategory')?.value,
+      faultGroup: this.ticketForm!.get('faultGroup')?.value,
+      fault: this.ticketForm!.get('fault')?.value,
+      faultCode: this.ticketForm!.get('faultCode')?.value,
+      partType: this.ticketForm!.get('partType')?.value,
+      separes: this.ticketForm!.get('spheres')?.value,
+      partCategory: this.ticketForm!.get('partCategory')?.value,
+      partGroup: this.ticketForm!.get('partGroup')?.value,
+      part: this.ticketForm!.get('part')?.value,
+      partCode: this.ticketForm!.get('partCode')?.value,
+      quantity: this.ticketForm!.get('quantity')?.value
+    }
+    this.ticketService.update(id,data1)
+    .subscribe(
+      res => 
+      this.message.success('Updated successfuly !'),
+
+      error => {
+        this.message.error('Error !');
+        console.log(error);
+        
+      }
+      
+    )
+  }
   updateTicket = () => {
     const data: any = {
       ticketId: this.ticket.id,

@@ -67,6 +67,7 @@ import { PriorityPipe } from './shared/priority.pipe';
 import { DataReadComponent } from './pages/data-read/data-read.component';
 import { LastDataDetailComponent } from './component/last-data-detail/last-data-detail.component';
 import { PreJobSafetyChecklistComponent } from './pages/pre-job-safety-checklist/pre-job-safety-checklist.component';
+import { GrapheComponent } from './graphe/graphe.component';
 
 
 
@@ -109,7 +110,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     TicketImageManagerComponent,
     DataReadComponent,
     LastDataDetailComponent,
-    PreJobSafetyChecklistComponent
+    PreJobSafetyChecklistComponent,
+    GrapheComponent
   ],
   imports: [
     BrowserModule,

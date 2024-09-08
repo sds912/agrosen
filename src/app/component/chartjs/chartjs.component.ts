@@ -52,6 +52,7 @@ export class ChartjsComponent implements OnInit{
     google.charts.load("current", { packages: ["corechart"] });
     google.charts.setOnLoadCallback(() => {
       this.donutService.getData().subscribe(dataDonut => {
+        console.log(dataDonut)
         this.buildChart(dataDonut);
       });
     });

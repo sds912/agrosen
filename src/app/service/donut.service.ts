@@ -27,6 +27,7 @@ export class DonutService {
     
   } */
   getData(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiBaseUrl + '/alarmes/occurrences');
+    return this.http.get<any[]>(this.apiBaseUrl + '/alarms/occurences');
   }
+ // http://62.171.177.19:3001/api/alarms/occurences
 }

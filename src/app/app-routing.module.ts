@@ -15,10 +15,12 @@ import { AuthGuard } from './shared/auth.guard';
 import { SiteDetailsComponent } from './component/site-details/site-details.component';
 import { DataReadComponent } from './pages/data-read/data-read.component';
 import { PreJobSafetyChecklistComponent } from './pages/pre-job-safety-checklist/pre-job-safety-checklist.component';
+import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: '', redirectTo:"login", pathMatch:"full" },
   { path: 'login', component: LoginComponent},
+  { path: 'reset-password', component: ResetPasswordComponent},
   { path: 'admin', component:AdminComponent,
     children:[
   { path: 'alarmes', component: AlarmesComponent},

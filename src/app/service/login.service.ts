@@ -12,6 +12,7 @@ const apiBaseUrl = environment.BaseUrl;
   providedIn: 'root'
 })
 export class LoginService {
+ 
   isAuthenticate :boolean=false;
   roles:any
   username:any
@@ -56,6 +57,9 @@ export class LoginService {
    this.username=decodedJwt.username;
    this.roles=decodedJwt.role;
    this.currentUser = decodedJwt;
+   this.loadUserInfo()
+
+   
    
  }
  public logout(){
@@ -82,11 +86,29 @@ getRefreshToken(): string {
 }
 
 refreshAccessToken(): Observable<any> {
-  return this.http.post(`${apiBaseUrl}/api/auth/refresh-token`, { token: this.refreshToken })
+  return this.http.post(`${apiBaseUrl}/auth/refresh-token`, { token: this.refreshToken })
     .pipe(tap((response: any) => {
       this.accessToken = response.accessToken;
     }));
 }
 
+
+resetPassword(password: string) {
+  return this.http.post(`${apiBaseUrl}/users/credentials/resetpassword`, {
+    password: password,
+    token: this.accessToken
+  })
+}
+
+
+loadUserInfo() {
+  return this.http.get(`${apiBaseUrl}/users/profile`)
+  .subscribe((response: any) => {
+    if(!response?.firstCredentialUpdated){
+       this.router.navigate(['/reset-password'])
+    }
+    
+  });
+}
  
 }

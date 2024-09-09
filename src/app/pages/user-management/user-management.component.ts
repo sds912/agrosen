@@ -68,7 +68,7 @@ export class UserManagementComponent implements OnInit {
       email: ['',[Validators.required, Validators.email]],
       phoneNumber: ['',[Validators.required,  phoneNumberValidator]],
       role: ['',[Validators.required]],
-      username: ['',[Validators.required]],
+      username: ['',[]],
       lastLogin: [''],
       createdAt: [''],
       updatedAt: [''],
@@ -79,7 +79,11 @@ export class UserManagementComponent implements OnInit {
       isLocked: [''],
       dateOfBirth: [''],
       placeOfBirth: [''],
-      enabled: ['']
+      enabled: [''],
+      credential: this.fb.group({
+        type:  ["PASSWORD"],
+        value: ["", Validators.required]
+      }),
     });
   }
 
@@ -142,7 +146,8 @@ export class UserManagementComponent implements OnInit {
           isLocked: false,
           dateOfBirth: null,
           placeOfBirth: null,
-          enabled: true
+          enabled: true,
+          
         };
         //console.log(newUser);
         

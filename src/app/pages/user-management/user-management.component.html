@@ -134,10 +134,10 @@
           </nz-form-item>
         </div>
         <div class="col-6">
-          <nz-form-item>
-            <nz-form-label [nzSpan]="10" nzRequired>Username</nz-form-label>
-            <nz-form-control [nzSpan]="14" nzErrorTip="Please input Username">
-              <input nz-input formControlName="username" />
+          <nz-form-item formGroupName="credential">
+            <nz-form-label [nzSpan]="10" nzRequired>Default password</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzErrorTip="Please input password">
+              <input nz-input type="password" formControlName="value" />
             </nz-form-control>
           </nz-form-item>
         </div>

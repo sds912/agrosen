@@ -68,6 +68,7 @@ import { DataReadComponent } from './pages/data-read/data-read.component';
 import { LastDataDetailComponent } from './component/last-data-detail/last-data-detail.component';
 import { PreJobSafetyChecklistComponent } from './pages/pre-job-safety-checklist/pre-job-safety-checklist.component';
 import { GrapheComponent } from './graphe/graphe.component';
+import { ResetPasswordComponent } from './component/reset-password/reset-password.component';
 
 
 
@@ -111,7 +112,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     DataReadComponent,
     LastDataDetailComponent,
     PreJobSafetyChecklistComponent,
-    GrapheComponent
+    GrapheComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

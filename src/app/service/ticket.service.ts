@@ -11,6 +11,9 @@ const baseAPI = environment.BaseUrl;
   providedIn: 'root'
 })
 export class TicketService {
+  uploadSiteMaintenance(selectedFile: any) {
+    return this.http.post(`${baseAPI}/sites/update-schedule-date-maintenance`, selectedFile);
+  }
  
 
 

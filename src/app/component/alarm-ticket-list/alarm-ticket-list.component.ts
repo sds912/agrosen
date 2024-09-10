@@ -14,6 +14,8 @@ import { LoginService } from '../../service/login.service';
   styleUrl: './alarm-ticket-list.component.css'
 })
 export class AlarmTicketListComponent implements OnInit {
+
+	TICKETTYPE = TICKET_TYPE;
   selectedStatus: any;
   date: Date | null = null;
   ticketStatus: { label: string, value: string }[] = [
@@ -194,5 +196,32 @@ export class AlarmTicketListComponent implements OnInit {
           this.applayFilter();
           }
 
+
+          onFileSelected(event: any) {
+    
+            const fileInput =  event.target;
+            var selectedFile = fileInput.files[0];
+            const uploadData = new FormData();
+            uploadData.append('file', selectedFile, selectedFile.name);
+        
+        
+            this.ticketService.uploadSiteMaintenance(uploadData)
+            .subscribe(
+              (res) => {
+                console.log(res);
+                this.message.success('Maintenance file uploaded succesfuly !')
+                
+              },
+              (error) => {
+                this.message.success('Error during uploading file');
+                console.log(error);
+                
+
+              }
+            )
+            console.log(selectedFile);
+            
+          }
+        
 
 }

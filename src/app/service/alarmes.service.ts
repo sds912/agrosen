@@ -129,4 +129,44 @@ export class AlarmesService {
    return this.http.get<any>(`${this.apiBaseUrl}/last-data?limit=${limit}&page=${pageIndex}`);
     
   }
+  filterLastRead(filterParams: any = null, page: number = 1, limit: number = 10): Observable<any> {
+    // Initialize the query string
+    let queryParams = '';
+  
+    // Check each parameter and append to the query string if not null
+    if (filterParams) {
+      const params = [];
+      
+      if (filterParams.siteId !== null) {
+        params.push(`siteId=${filterParams.siteId}`);
+      }
+      if (filterParams.alarmName !== null) {
+        params.push(`siteName=${filterParams.alarmName}`);
+      }
+      if (filterParams.date !== null) {
+        params.push(`date=${filterParams.date}`);
+      }
+
+      if (filterParams.status !== null) {
+        params.push(`status=${filterParams.status}`);
+      }
+      
+      params.push(`limit=${limit}`);
+      params.push(`page=${page}`);
+
+      
+      // Join all parameters with '&' and prepend with '?'
+
+      if (params.length > 0) {
+        queryParams = '?' + params.join('&');
+      }
+    }
+  
+    // Construct the complete URL
+    const url = `${this.apiBaseUrl}/last-data/${queryParams}`;
+    console.log(url);
+    
+    // Return the HTTP GET request
+    return this.http.get<any>(url);
+  }
 }

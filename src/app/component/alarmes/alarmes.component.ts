@@ -18,7 +18,7 @@ import { TiCKET_STATE } from '../../shared/app-constants';
 export class AlarmesComponent implements OnInit {
 
 alarmStatus: { label: string, value: string }[] = [
-  { label: 'WORK IN PROGRESS', value: TiCKET_STATE.WORKINPROGRESS },
+  { label: 'WORK IN PROGRESS', value: TiCKET_STATE.INPROGRESS },
   { label: 'CLOSED', value: TiCKET_STATE.CLOSED },
   { label: 'CANCEL', value: TiCKET_STATE.CANCEL }
 ];

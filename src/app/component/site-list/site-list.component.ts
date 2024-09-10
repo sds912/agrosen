@@ -162,6 +162,7 @@ export class SiteListComponent implements OnInit {
 
   onClusterSearch($event: any){
     this.fliterParams.cluster = $event;
+    this.applayFilter();
 
   }
 

@@ -139,12 +139,13 @@ alarmStatus: { label: string, value: string }[] = [
   onDateSearch(date: any) {
    if(date !== null){
     this.filterParams.date =formatDate(date);
+    this.applayFilter();
    }
     }
  
   applayFilter() {
     console.log(this.filterParams)
-      this.alarmeService.filter(this.filterParams)
+      this.alarmeService.filterLastRead(this.filterParams)
       .subscribe(
         res => {
           this.message.success('filtered sucessfuly !');

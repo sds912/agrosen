@@ -31,7 +31,7 @@
     <tbody>
       <tr *ngFor="let site of basicTable.data">
         <td nzLeft>{{ site.siteId }}</td>
-        <td nzLeft>{{ site.cluster }}</td>
+        <td nzLeft>{{ site.cluster?.clusterNumber !== undefined ? site.cluster?.clusterNumber: site.cluster  }}</td>
         <td>{{ site.zm??'N/A' }}</td>
         <td >{{ site.siteName }}</td>
         <td>{{ site.siteType }}</td>
@@ -39,10 +39,10 @@
         <td>{{ site.genset }}</td>
         <td>{{ site.battery }}</td>
         <td>{{ site.solar }}</td>
-        <td>{{ site.location.city }}, {{ site.location.country }}, {{ site.location.region }}</td>
+        <td>{{ site.location?.city }}, {{ site.location?.country }}, {{ site.location?.region }}</td>
         <td>{{ site.GE}}</td>
-        <td>{{ site.FS.join(', ') }}</td>
-        <td>{{ site.FE.join(', ') }}</td>
+        <td>{{ site.FS?.join(', ') }}</td>
+        <td>{{ site.FE?.join(', ') }}</td>
         <td nzRight >
           <div class="d-flex justify-content-between">
             <button (click)="viewSiteDetails(site?.id)" nz-button  class="btn btn-info"><span class="fa fa-eye "></span></button>

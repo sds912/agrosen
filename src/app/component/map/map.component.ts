@@ -8,6 +8,7 @@ import { AlarmesService } from '../../service/alarmes.service';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit{
+  
   @ViewChild(MapInfoWindow, { static: false })
   //infoWindow!: MapInfoWindow;
   center: google.maps.LatLngLiteral = { lat: 14.7645042, lng: -17.3660286 };

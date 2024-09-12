@@ -28,9 +28,9 @@ export class AlarmesService {
    public getSiteName(motCle:String,page:number,size:number){
     return this.http.get(this.apiBaseUrl+"/cherchersite?mc="+motCle+"&size="+size+"&page="+page+"")
    }
-  public rechercheAlarmes(keyword:String){
-    return this.http.get(this.apiBaseUrl+"/alarmes?nomAlarme="+keyword)
-  }
+  // public rechercheAlarmes(keyword:String){
+  //   return this.http.get(this.apiBaseUrl+"/alarmes?nomAlarme="+keyword)
+  // }
    public getOcurrenceMain_AC_OUT(){
     return this.http.get(this.apiBaseUrl+"/alarmes/count/Main_AC_OUT")
    }
@@ -53,7 +53,7 @@ export class AlarmesService {
     return this.http.get(this.apiBaseUrl+"/alarmes/count/alarmCleared/0")
    }
    getMarkers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiBaseUrl}/listeAlarmes`);
+    return this.http.get<any[]>(`${this.apiBaseUrl}/alarms`);
   }
 
   countAlarmByStatus(status: any = null): Observable<any> {

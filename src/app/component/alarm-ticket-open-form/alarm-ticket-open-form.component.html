@@ -311,7 +311,7 @@
                         <nz-form-label nzRequired [nzSpan]="10" nzFor="part">Part</nz-form-label>
                         <nz-form-control [nzXs]="14" nzErrorTip="The input is not valid">
                             <nz-select name="part" nzPlaceHolder="Part" formControlName="part">
-                                <nz-option *ngFor="let p of parts" [nzValue]="p" [nzLabel]="p">{{p}}</nz-option>
+                                <nz-option *ngFor="let p of getParts()" [nzValue]="p" [nzLabel]="p">{{p}}</nz-option>
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>

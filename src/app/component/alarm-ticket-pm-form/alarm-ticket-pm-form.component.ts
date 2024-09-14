@@ -645,7 +645,9 @@ export class AlarmTicketPmFormComponent {
 			this.ticketService.update(ticketId, ticketData).subscribe(
 				(response) => {
 					this.message.success('Ticket updated successfully');
-					this.router.navigate(['/tickets']); // Navigate to another page after success, if needed
+					//this.router.navigate(['/tickets']); // Navigate to another page after success, if needed
+
+					this.loadTicketById(ticketId);
 				},
 				(error) => {
 					this.message.error('Error updating ticket');

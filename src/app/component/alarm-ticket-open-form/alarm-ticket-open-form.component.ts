@@ -66,9 +66,9 @@ loading: boolean = false;
   faults: string[] = ['--None--', 'Others RMS', 'Low cooling', 'AVS', 'Compressor 24000BTU'];
   faultCodes: string[] = ['--None--', 'AN-01', 'AN-02', 'AN-03', 'AN-04'];
   types: string[] = ['--None--', 'Service',];
-  spheres: string[] = ['--None--', 'PM'];
-  partCategories: string[] = ['--None--'];
-  partGroups: string[] = ['--None--'];
+  spheres: string[] = ['--None--', 'PM', 'HT'];
+  partCategories: string[] = ['--None--', 'HPO', 'IBS', 'Janitorial', 'Rectifier', 'RMS', 'Site','Solar','Tower'];
+  partGroups: string[] = ['--None--', 'Part DC Cooling Spare'];
   parts: string[] = ['--None--'];
   partCodes: string[] = ['--None--'];
 
@@ -171,7 +171,13 @@ loading: boolean = false;
 
   }
 
-
+  getParts(): string [] {
+    const output: string[] = [];
+    for(var i = 1; i < 200; i++){
+      output.push(`${i} Watt AC Site light`)
+    }
+    return output;
+  }
   fetchSites(): void {
     this.loading = true;
      this.siteService.getSites()

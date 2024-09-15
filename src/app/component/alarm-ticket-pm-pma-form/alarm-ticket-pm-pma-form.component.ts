@@ -9,8 +9,8 @@ import {LoginService} from '../../service/login.service';
 import {SiteService} from '../../service/site.service';
 import {DomSanitizer} from '@angular/platform-browser';
 
-@Component({selector: 'app-alarm-ticket-pm-form', templateUrl: './alarm-ticket-pm-form.component.html', styleUrl: './alarm-ticket-pm-form.component.css'})
-export class AlarmTicketPmFormComponent {
+@Component({selector: 'app-alarm-ticket-pm-pma-form', templateUrl: './alarm-ticket-pm-pma-form.component.html', styleUrl: './alarm-ticket-pm-pma-form.component.css'})
+export class AlarmTicketPmPmaFormComponent {
 
 	loading : boolean = false;
 	priorities : any[] = [

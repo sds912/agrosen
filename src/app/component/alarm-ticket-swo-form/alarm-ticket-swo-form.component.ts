@@ -15,11 +15,11 @@ import { error } from '@ant-design/icons-angular';
 
 
 @Component({
-  selector: 'app-alarm-ticket-open-form',
-  templateUrl: './alarm-ticket-open-form.component.html',
-  styleUrls: ['./alarm-ticket-open-form.component.css']
+  selector: 'app-alarm-ticket-swo-form',
+  templateUrl: './alarm-ticket-swo-form.component.html',
+  styleUrls: ['./alarm-ticket-swo-form.component.css']
 })
-export class AlarmTicketOpenFormComponent implements OnInit {
+export class AlarmTicketSwoFormComponent implements OnInit {
 
 loading: boolean = false;
   priorities: any[] = [

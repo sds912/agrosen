@@ -21,7 +21,7 @@ import { GoogleMap } from '@angular/google-maps';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AlarmePipe } from './alarme.pipe';
 import { AlarmTicketManagementComponent } from './pages/alarm-ticket-management/alarm-ticket-management.component';
-import { AlarmTicketOpenFormComponent } from './component/alarm-ticket-open-form/alarm-ticket-open-form.component';
+import { AlarmTicketSwoFormComponent } from './component/alarm-ticket-swo-form/alarm-ticket-swo-form.component';
 import { TicketManagementSteperComponent } from './component/ticket-management-steper/ticket-management-steper.component';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -58,7 +58,7 @@ import { TicketTaskFormComponent } from './component/ticket-task-form/ticket-tas
 import { TicketTaskManagementComponent } from './pages/ticket-task-management/ticket-task-management.component';
 import { NgxLoadingModule } from 'ngx-loading';
 import { SiteDetailsComponent } from './component/site-details/site-details.component';
-import { AlarmTicketPmFormComponent } from './component/alarm-ticket-pm-form/alarm-ticket-pm-form.component';
+import { AlarmTicketPmPmaFormComponent } from './component/alarm-ticket-pm-pma-form/alarm-ticket-pm-pma-form.component';
 import { RoundPipe } from './shared/round.pipe';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { TicketImageManagerComponent } from './component/ticket-image-manager/ticket-image-manager.component';
@@ -93,7 +93,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     ChartjsComponent,
     AlarmePipe,
     AlarmTicketManagementComponent,
-    AlarmTicketOpenFormComponent,
+    AlarmTicketSwoFormComponent,
     TicketManagementSteperComponent,
     DateFormatPipe,
     TicketStateTransformPipe,
@@ -107,7 +107,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     TicketTaskFormComponent,
     TicketTaskManagementComponent,
     SiteDetailsComponent,
-    AlarmTicketPmFormComponent,
+    AlarmTicketPmPmaFormComponent,
     TicketImageManagerComponent,
     DataReadComponent,
     LastDataDetailComponent,

@@ -66,5 +66,9 @@ html, body{
     background-color: #dadbdc;
     transition: 0.5s all;
   }
+
+  .ant-layout-content{
+    padding: 10px !important;
+  }
   
 

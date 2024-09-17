@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container-fluid p-0">
     <div *ngIf="displayMode === 'form'">
-        <app-alarm-ticket-open-form *ngIf="type === TICCKETTYPE.SWO" ></app-alarm-ticket-open-form>
-        <app-alarm-ticket-pm-form *ngIf="type === TICCKETTYPE.PM" ></app-alarm-ticket-pm-form>
-        <app-alarm-ticket-pm-form *ngIf="type === TICCKETTYPE.PMA" ></app-alarm-ticket-pm-form>
+        <app-alarm-ticket-swo-form *ngIf="type === TICCKETTYPE.SWO" ></app-alarm-ticket-swo-form>
+        <app-alarm-ticket-pm-pma-form *ngIf="type === TICCKETTYPE.PM" ></app-alarm-ticket-pm-pma-form>
+        <app-alarm-ticket-pm-pma-form *ngIf="type === TICCKETTYPE.PMA" ></app-alarm-ticket-pm-pma-form>
     </div>
 
     <div *ngIf="displayMode === 'list'">

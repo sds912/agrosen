@@ -9,10 +9,10 @@
                 <button   nz-button nzType="primary" (click)="update(ticket?.id)" class="ms-2">Save</button>
 
 			</div>
-			<div class="ms-3">
+			<!-- <div class="ms-3" >
 				<button *ngIf="!displaySubmit && (ticket?.status === TICKETSTATE.ASSIGNED || ticket?.status === TICKETSTATE.WORKINPROGRESS )&& this.currentUser && this.currentUser?.role === ROLE.NOC"
 				nz-button nzType="primary" type="button"(click)="updateTicket()">Save</button>
-			</div>
+			</div> -->
 			
 		</div>	
 		
@@ -84,7 +84,7 @@
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
 						<nz-input-group nzprefixicon="search">
 							<input type="text" nz-input [nzAutocomplete]="assignmentGroup"
-							 [disabled]="this.ticket !== undefined && (this.ticket.status === TICKETSTATE.CLOSED || this.ticket.status === TICKETSTATE.WAITFORCLOSURE)"
+							 [disabled]="this.ticket !== undefined && (this.ticket.status === TICKETSTATE.CLOSED || this.ticket.status === TICKETSTATE.WAITFORCLOSURE ||  (this.currentUser?.role !== ROLE.ADMIN && this.currentUser?.role !== ROLE.NOC))"
 							  [ngModel]="ticketForm!.get('assignmentGroup')?.value?.name??''" [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignmentGroupInput($event)" [value]="ticketForm!.get('assignmentGroup')?.value?.name??''" placeholder="Search...">
 						</nz-input-group>
 						<nz-autocomplete #assignmentGroup>
@@ -98,7 +98,9 @@
 					<nz-form-control [nzSm]="14" [nzXs]="24" nzerrortip="The input is not valid">
 						<nz-input-group nzprefixicon="search">
 							<input type="text" nz-input [nzAutocomplete]="assignedTo"
-							 [disabled]="this.ticket !== undefined && (this.ticket.status === TICKETSTATE.CLOSED || this.ticket.status === TICKETSTATE.WAITFORCLOSURE)"
+							 [disabled]="this.ticket !== undefined && (this.ticket.status === TICKETSTATE.CLOSED || this.ticket.status === TICKETSTATE.WAITFORCLOSURE || 
+							 (this.currentUser?.role !== ROLE.ADMIN && this.currentUser?.role !== ROLE.NOC)
+							 )"
 							 [ngModel]="(this.ticketForm?.get('assignedTo')?.value?.firstName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.firstName: '')+ ' '+ (this.ticketForm?.get('assignedTo')?.value?.lastName !== undefined ? this.ticketForm?.get('assignedTo')?.value?.lastName: '')" [ngModelOptions]="{standalone: true}" (ngModelChange)="onAssignedToInput($event)"
 							 [value]="'ok'" placeholder="Search...">
 						</nz-input-group>

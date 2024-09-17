@@ -37,13 +37,13 @@
           <td>{{ getPriority(a.priority) }}</td>
           <td>{{ a.createdAt | dateFormat }}</td>
           <td>{{ a.status | ticketStateTransform}}</td>
-          <td>{{ a.user?.firstName + ' ' + a.user?.lastName}}</td>
-          <td>{{ a.userClosedTicket ? a.userClosedTicket?.firstName + ' ' + a.userClosedTicket?.lastName : 'N/A'}}</td>
+          <td>{{ a.user?.firstName + a.user?.lastName !== 0 ? a.user?.firstName + ' '+ a.user?.lastName: 'N/A'}}</td>
+          <td>{{ a.userClosedTicket?.firstName + a.userClosedTicket?.lastName !== 0 ? a.userClosedTicket?.firstName +' '+ a.userClosedTicket?.lastName : 'N/A'}}</td>
           <td>{{ a.shortDescription??'N/A'}}</td>
-          <td>{{ a.noc?.firstName + a.noc?.lastName}}</td>
+          <td>{{ a.noc?.firstName + a.noc?.lastName !== 0 ?a.noc?.firstName  + ' '+  a.noc?.lastName :'N/A'}}</td>
           <td>{{ a.description??'N/A' }}</td>
           <td>{{ a.partDescription??'N/A' }}</td>
-          <td>{{ 'N/A' }}</td>
+          <td>{{ a?.spare??'N/A' }}</td>
           <td nzRight>{{ a.type??'N/A' }}</td>
         </tr>
       </tbody>
@@ -53,7 +53,7 @@
 <ng-template #extraTemplate>
   <div class="text-end">
     <div class="d-flex align-items-center justify-content-end">
-      <button nz-button nzType="primary" class="ms-2" *ngIf="this.type === TICKETTYPE.PM">
+      <button nz-button nzType="primary" class="ms-2" *ngIf="this.type === TICKETTYPE.PM && (this.currentUser?.role === ROLE.ADMIN || this.currentUser?.role === ROLE.NOC)">
         <label for="ticket-image-voltage" style="display: block; width: 100%; height: 100%; cursor: pointer;">
             Upload
             <input (change)="onFileSelected($event)" id="ticket-image-voltage" type="file"  style="visibility: hidden; width: 0; height: 0;"

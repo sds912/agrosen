@@ -53,7 +53,7 @@ export class AlarmesService {
     return this.http.get(this.apiBaseUrl+"/alarmes/count/alarmCleared/0")
    }
    getMarkers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiBaseUrl}/alarms`);
+    return this.http.get<any[]>(`${this.apiBaseUrl}/site`);
   }
 
   countAlarmByStatus(status: any = null): Observable<any> {

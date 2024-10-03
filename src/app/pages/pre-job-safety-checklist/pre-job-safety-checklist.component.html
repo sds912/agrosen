@@ -82,7 +82,7 @@
   <div class="row">
     <div class="col-2" *ngFor="let doc of this.docs">
       <div class="border d-flex justify-content-center align-items-center" style="height: 160px;">
-        <img class="img-fluid" style="height: 150px;" [src]="doc.imageData" />
+        <img class="img-fluid" style="height: 150px;" [src]="doc.imageData" loading="lazy" />
       </div>
     </div>
     <div class="col-2">

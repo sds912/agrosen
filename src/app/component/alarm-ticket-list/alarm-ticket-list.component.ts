@@ -98,7 +98,7 @@ export class AlarmTicketListComponent implements OnInit {
 
 
   getPriority(value: string): string {
-    return this.priorities.find(v => v.key === value).label;
+    return this.priorities.find(v => v.key === value)?.label??'N/A';
   }
 
   fetchTicket(page: number=1, limit:number=10, type: string): void {

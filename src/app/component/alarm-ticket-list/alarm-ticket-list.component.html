@@ -33,16 +33,16 @@
       <tbody>
         <tr *ngFor="let a of ticketTable.data">
           <td nzLeft> <a href="{{'admin/alarms/tickets?id='+ a.id+'&type='+type}}">{{ a.reference }}</a> </td>
-          <td nzLeft>{{ a.site?.siteName}}</td>
-          <td>{{ getPriority(a.priority) }}</td>
-          <td>{{ a.createdAt | dateFormat }}</td>
-          <td>{{ a.status | ticketStateTransform}}</td>
-          <td>{{ a.user?.firstName + a.user?.lastName !== 0 ? a.user?.firstName + ' '+ a.user?.lastName: 'N/A'}}</td>
-          <td>{{ a.userClosedTicket?.firstName + a.userClosedTicket?.lastName !== 0 ? a.userClosedTicket?.firstName +' '+ a.userClosedTicket?.lastName : 'N/A'}}</td>
-          <td>{{ a.shortDescription??'N/A'}}</td>
-          <td>{{ a.noc?.firstName + a.noc?.lastName !== 0 ?a.noc?.firstName  + ' '+  a.noc?.lastName :'N/A'}}</td>
-          <td>{{ a.description??'N/A' }}</td>
-          <td>{{ a.partDescription??'N/A' }}</td>
+          <td nzLeft>{{ a?.site?.siteName}}</td>
+          <td>{{ getPriority(a?.priority) }}</td>
+          <td>{{ a?.createdAt | dateFormat }}</td>
+          <td>{{ a?.status | ticketStateTransform}}</td>
+          <td>{{ a?.user?.firstName + a.user?.lastName !== 0 ? a.user?.firstName + ' '+ a.user?.lastName: 'N/A'}}</td>
+          <td>{{ a?.userClosedTicket?.firstName + a.userClosedTicket?.lastName !== 0 ? a.userClosedTicket?.firstName +' '+ a.userClosedTicket?.lastName : 'N/A'}}</td>
+          <td>{{ a?.shortDescription??'N/A'}}</td>
+          <td>{{ a?.noc?.firstName + a.noc?.lastName !== 0 ?a.noc?.firstName  + ' '+  a.noc?.lastName :'N/A'}}</td>
+          <td>{{ a?.description??'N/A' }}</td>
+          <td>{{ a?.partDescription??'N/A' }}</td>
           <td>{{ a?.spare??'N/A' }}</td>
           <td nzRight>{{ a.type??'N/A' }}</td>
         </tr>

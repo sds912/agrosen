@@ -1,6 +1,6 @@
 <google-map height="800px" width="100%" [center]="center" [zoom]="zoom">
   <map-marker  #markerElem="mapMarker" *ngFor="let marker of markers; let i = index" 
-  [position]="{lat:marker.sites.latitude,lng:marker.sites.longitude}"
+  [position]="{lat:marker.latitude,lng:marker.longitude}"
   [options]="marker.options"
   (mapClick)="openInfo(markerElem,infoWindow)"
   [id]="marker.id">
@@ -19,12 +19,12 @@
         </thead>
         <tbody>
           <tr >
-            <td>{{ marker.sites.siteId}}</td>
-            <td>{{ marker.sites.siteName }}</td>
+            <td>{{ marker.siteName}}</td>
+            <td>{{ marker.siteName }}</td>
             <td>{{ marker.dateDebut}}</td>
-            <td>{{ marker.u_DC_start}}</td>
-            <td>{{ marker.i_DC_start}}</td>
-            <td>{{ marker.alarm_severity}}</td>
+            <td>{{ marker.uL1}}</td>
+            <td>{{ marker.uL2}}</td>
+            <td>{{ marker.uL1}}</td>
           </tr>
         </tbody>
       </table>

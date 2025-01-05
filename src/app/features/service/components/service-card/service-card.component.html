@@ -1,0 +1,21 @@
+
+<div class="service-card">
+  <a [href]="'/service/' + service.id">
+    <div class="image-container">
+      <img
+        [src]="service.image"
+        alt="{{ service.title }}"
+        class="service-image"
+      />
+      <div class="card-info">
+        <h3 class="title">{{ service.title }}</h3>
+        <p class="availability">
+          <nz-tag [nzColor]="service.available ? 'green' : 'red'">
+            {{ service.available ? "Disponible" : "Indisponible" }}
+          </nz-tag>
+        </p>
+        <p class="location">{{ service.address }}</p>
+      </div>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,14 @@
+<a  [href]="'/product/'+product.id"
+style="cursor: pointer;">
+<nz-card nzHoverable style="width:auto; margin-bottom: 16px;" [nzCover]="coverTemplate">
+    <div class="card-details">
+        <nz-card-meta [nzTitle]="product.title" [nzDescription]="product.price"></nz-card-meta>
+        <button nz-button nzType="primary">
+            <i nz-icon nzType="plus" nzTheme="outline" ></i>
+        </button>
+    </div>
+</nz-card>
+</a>
+<ng-template #coverTemplate>
+    <img [alt]="product.title" [src]="product.image" />
+</ng-template>

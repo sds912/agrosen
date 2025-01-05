@@ -1,0 +1,33 @@
+.product-actions{
+    margin-top: 50px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+
+}
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Optional: space between button and heading */
+    margin-bottom: 20px;
+  }
+  
+  .topbar h6 {
+    margin: 0; /* Remove any default margin for perfect alignment */
+    font-size: 16px; /* Adjust font size if needed */
+  }
+  
+  img{
+    border-radius: 7px;
+  }
+
+  .product-sub-info {
+    padding: 4px;
+    display: flex;
+    justify-content: space-between; /* Creates space between availability and price */
+    align-items: center; /* Aligns items vertically */
+  }
+  
+  .price {
+    font-weight: bold; /* Makes price text bold */
+  }

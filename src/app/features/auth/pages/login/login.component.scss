@@ -1,0 +1,63 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f0f2f5;
+
+  .login-card {
+    width: 360px;
+    text-align: center;
+
+    .brand-logo {
+      margin-bottom: 16px;
+
+      img {
+        width: 120px;
+        height: auto;
+      }
+    }
+
+    .login-title {
+      margin-bottom: 24px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .form-actions {
+      margin-top: 16px;
+
+      .forgot-password {
+        display: block;
+        margin-top: 8px;
+        color: #1890ff;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .social-login {
+      margin-top: 24px;
+
+      button {
+        margin-bottom: 8px;
+      }
+    }
+
+    .register-section {
+      margin-top: 16px;
+
+      a {
+        color: #1890ff;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

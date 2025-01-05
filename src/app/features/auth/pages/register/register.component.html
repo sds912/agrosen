@@ -1,0 +1,120 @@
+<div class="register-container">
+    <nz-card class="register-card" nzHoverable>
+      <h3 class="title">Créer un compte</h3>
+  
+      <!-- Form -->
+      <form nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Phone -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="phoneErrorTpl">
+            <nz-input-group nzPrefixIcon="phone" nzSize="large">
+              <input
+                nz-input
+                formControlName="phone"
+                placeholder="Téléphone"
+                type="tel"
+              />
+            </nz-input-group>
+          </nz-form-control>
+          <ng-template #phoneErrorTpl>
+            <span *ngIf="registerForm.controls['phone'].hasError('required')">
+              Téléphone obligatoire.
+            </span>
+          </ng-template>
+        </nz-form-item>
+  
+        <!-- Email -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="emailErrorTpl">
+            <nz-input-group nzPrefixIcon="mail" nzSize="large">
+              <input
+                nz-input
+                formControlName="email"
+                placeholder="Email"
+                type="email"
+              />
+            </nz-input-group>
+          </nz-form-control>
+          <ng-template #emailErrorTpl>
+            <span *ngIf="registerForm.controls['email'].hasError('required')">
+              Email obligatoire.
+            </span>
+            <span *ngIf="registerForm.controls['email'].hasError('email')">
+              Entrer un mail valide.
+            </span>
+          </ng-template>
+        </nz-form-item>
+  
+        <!-- Password -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="passwordErrorTpl">
+            <nz-input-group nzPrefixIcon="lock" nzSize="large">
+              <input
+                nz-input
+                formControlName="password"
+                placeholder="Mot de passe"
+                type="password"
+              />
+            </nz-input-group>
+          </nz-form-control>
+          <ng-template #passwordErrorTpl>
+            <span *ngIf="registerForm.controls['password'].hasError('required')">
+              Mot de passe obligatoire.
+            </span>
+          </ng-template>
+        </nz-form-item>
+  
+        <!-- Confirm Password -->
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="confirmPasswordErrorTpl">
+            <nz-input-group nzPrefixIcon="lock" nzSize="large">
+              <input
+                nz-input
+                formControlName="confirmPassword"
+                placeholder="Confirmation mot de passe"
+                type="password"
+              />
+            </nz-input-group>
+          </nz-form-control>
+          <ng-template #confirmPasswordErrorTpl>
+            <span
+              *ngIf="registerForm.controls['confirmPassword'].hasError('required')"
+            >
+              Confirmation mot de passe obligatoire.
+            </span>
+            <span
+              *ngIf="registerForm.controls['confirmPassword'].hasError('mismatch')"
+            >
+            Les mots de passe ne correspondent pas.
+            </span>
+          </ng-template>
+        </nz-form-item>
+  
+        <button style="margin-top: 20px;" nz-button nzType="primary" nzBlock nzSize="large" [disabled]="!registerForm.valid">
+          S'inscrire
+        </button>
+      </form>
+  
+      <!-- Social Media Login -->
+      <div class="social-login">
+        <p>ou :</p>
+        <button nz-button nzType="default" nzBlock (click)="onRegisterWithGoogle()">
+          <i nz-icon nzType="google" nzTheme="outline"></i>
+          S'inscrire avec Google
+        </button>
+        <button nz-button nzType="default" nzBlock (click)="onRegisterWithFacebook()">
+          <i nz-icon nzType="facebook" nzTheme="outline"></i>
+          S'inscrire avec Facebook
+        </button>
+      </div>
+
+       <!-- Register Section -->
+    <div class="register-section">
+        <p>
+          J'ai un compte
+          <a href="auth/signin">Se connecter</a>
+        </p>
+      </div>
+    </nz-card>
+  </div>
+  

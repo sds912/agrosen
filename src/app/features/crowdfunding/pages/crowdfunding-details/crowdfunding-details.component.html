@@ -1,0 +1,13 @@
+<div class="details-container">
+    <h2>{{ crowdfunding.title }}</h2>
+    <img nz-image style="width: 100%; height: 240px;" [nzSrc]="crowdfunding.image" alt="Campaign Image" />
+    <p style="margin-top: 20px;"><strong>Publié par :</strong> {{ crowdfunding.author }}</p>
+    <p><strong>le :</strong> {{ crowdfunding.publishedAt | date }}</p>
+    <p><strong>Description:</strong> {{ crowdfunding.description }}</p>
+    <nz-progress
+      [nzPercent]="(crowdfunding.currentFund / crowdfunding.targetFund) * 100"
+    ></nz-progress>
+    <p style="margin-top: 20px;"><strong>Somme visée:</strong> {{ crowdfunding.targetFund | currency }}</p>
+    <p><strong>Somme collectée:</strong> {{ crowdfunding.currentFund | currency }}</p>
+  </div>
+  

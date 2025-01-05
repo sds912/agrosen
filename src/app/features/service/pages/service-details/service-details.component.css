@@ -1,0 +1,61 @@
+.service-details {
+    padding: 20px;
+  }
+  
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .service-info {
+    margin-top: 20px;
+  }
+  
+  .service-sub-info {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  
+  .map-container {
+    height: 400px;
+    margin-top: 20px;
+  }
+  
+  .service-actions button {
+    margin-top: 10px;
+  }
+  
+  h3 {
+    font-size: 24px;
+  }
+  
+  .service-card {
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .google-map-container {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .related-services {
+    margin-top: 30px;
+  }
+  
+  .related-services h4 {
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .related-services .ant-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  

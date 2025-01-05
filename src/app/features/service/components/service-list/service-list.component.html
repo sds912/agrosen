@@ -1,0 +1,11 @@
+<div nz-row nzGutter="16">
+  <div
+    *ngFor="let service of services"
+    nz-col
+    [nzXs]="{ span: 12 }"
+    [nzSm]="{ span: 12 }"
+    [nzLg]="{ span: 6 }"
+  >
+    <app-service-card [service]="service"></app-service-card>
+  </div>
+</div>

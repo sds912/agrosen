@@ -1,0 +1,32 @@
+.progress-container{
+margin-top: 10px;
+}
+
+  
+  .fund-info {
+    margin-top: 10px;
+  }
+  
+  .published-info {
+    margin-top: 15px;
+  }
+
+  .fund-title{
+   display: block;
+   font-size: 11px;
+  }
+
+  .fund-value{
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: bolder;
+    color: black;
+  }
+
+  .ant-card-meta-description{
+    color: black !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+  

@@ -1,0 +1,42 @@
+<div class="cart-details">
+    <h1>Votre Panier</h1>
+    
+    <!-- Cart Items -->
+    <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+      <div class="item-info">
+        <img [src]="item.image" [alt]="item.title" />
+        <div class="details">
+          <h3>{{ item.title }}</h3>
+          <p class="price">{{ item.price | currency }}</p>
+        </div>
+      </div>
+      <div class="item-actions">
+        <!-- Quantity Controls -->
+        <button nz-button nzType="default" (click)="decrementQuantity(i)">
+          <i nz-icon nzType="minus" nzTheme="outline"></i>
+        </button>
+        <span>{{ item.quantity }}</span>
+        <button nz-button nzType="default" (click)="incrementQuantity(i)">
+          <i nz-icon nzType="plus" nzTheme="outline"></i>
+        </button>
+        
+        <!-- Remove Button -->
+        <button nz-button nzType="primary" (click)="removeItem(i)">
+          <i nz-icon nzType="delete" nzTheme="outline"></i>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Total Section -->
+    <div class="cart-total">
+      <h2>Total: {{ getTotalPrice() | currency }}</h2>
+    </div>
+  
+    <!-- Checkout Button -->
+    <div class="checkout">
+      <button nz-button nzType="primary" [disabled]="cartItems.length === 0" (click)="checkout()">
+        Procéder au paiement
+      </button>
+    </div>
+  </div>
+  

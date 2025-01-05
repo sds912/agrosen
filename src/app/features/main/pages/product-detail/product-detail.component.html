@@ -1,0 +1,70 @@
+<!-- Product Details Section -->
+<div class="topbar">
+    <button nz-button nzType="default" (click)="goBackToList()">
+      <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+    </button>
+    <h6>Voir tous les produits</h6>
+  </div>
+  <div class="product-details">
+    <img
+      nz-image
+      width="100%"
+      height="250px"
+      [nzSrc]="product.image"
+      alt=""
+    />
+  
+    <!-- Product Info Section -->
+    <div class="product-info">
+      <h3 style="margin-top: 12px;" nz-typography>{{ product.title }}</h3>
+  
+      <div class="product-sub-info">
+        <span [ngStyle]="{ color: product.available ? 'green' : 'red' }">
+          {{ product.available ? 'En stock' : 'Rupture' }}
+        </span>
+        <span class="price">{{ product.price | currency }}</span>
+      </div>
+  
+      <div class="product-actions" style="margin-top: 10px;">
+        <!-- Increment and Decrement Buttons -->
+        <div>
+          <button nz-button nzType="default" (click)="decrement()">
+            <i nz-icon nzType="minus" nzTheme="outline"></i>
+          </button>
+          <span style="padding: 0 8px;">{{ quantity }}</span>
+          <button nz-button nzType="default" (click)="increment()">
+            <i nz-icon nzType="plus" nzTheme="outline"></i>
+          </button>
+        </div>
+  
+        <!-- Add to Cart and Remove from Cart Buttons -->
+        <div>
+          <button *ngIf="!isInCart" nz-button nzType="primary" (click)="addToCart()">
+            <i nz-icon nzType="shopping-cart" nzTheme="outline"></i>Ajouter au panier
+          </button>
+          <button *ngIf="isInCart" nz-button nzType="primary" (click)="removeFromCart()">
+            <i nz-icon nzType="delete" nzTheme="outline"></i>
+            Retirer du panier
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Description Section -->
+    <h3 nz-typography>Description</h3>
+    <p nz-typography>
+      {{ showFullDescription ? product.description : (product.description | slice:0:100) + '...' }}
+      <a (click)="toggleDescription()" style="cursor: pointer; color: blue;">
+        {{ showFullDescription ? 'Afficher moins' : 'Afficher plus' }}
+      </a>
+    </p>
+  </div>
+  
+  <!-- Related Products Section -->
+  <h3>Produits liés</h3>
+  <div nz-row nzGutter="16">
+    <div *ngFor="let relatedProduct of relatedProducts" nz-col [nzXs]="{ span: 12 }" [nzSm]="{ span: 12 }" [nzLg]="{ span: 6 }">
+      <app-main-product-card [product]="relatedProduct"></app-main-product-card>
+    </div>
+  </div>
+  

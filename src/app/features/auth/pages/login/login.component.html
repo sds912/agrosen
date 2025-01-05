@@ -1,0 +1,75 @@
+<div class="login-container">
+  <nz-card class="login-card" nzHoverable>
+    <div class="brand-logo">
+      <img src="assets/logo.png" alt="Brand Logo" />
+    </div>
+    <h3 class="login-title">Connexion</h3>
+
+    <!-- Login Form -->
+    <form nz-form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="emailErrorTpl">
+          <nz-input-group nzSize="large" nzPrefixIcon="mail">
+            <input
+              nz-input
+              formControlName="emailOrPhone"
+              placeholder="Email ou Téléphone"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #emailErrorTpl>
+          <span *ngIf="loginForm.controls['emailOrPhone'].hasError('required')">
+            Email obligatoire.
+          </span>
+        </ng-template>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="passwordErrorTpl">
+          <nz-input-group nzSize="large" nzPrefixIcon="lock">
+            <input
+              nz-input
+              type="password"
+              formControlName="password"
+              placeholder="Mot de passe"
+            />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #passwordErrorTpl>
+          <span *ngIf="loginForm.controls['password'].hasError('required')">
+            Mot de passe obligatoire.
+          </span>
+        </ng-template>
+      </nz-form-item>
+
+      <div class="form-actions">
+        <button nz-button nzType="primary" nzSize="large" nzBlock [disabled]="!loginForm.valid">
+          Se connecter
+        </button>
+        <a class="forgot-password" (click)="onForgotPassword()">
+          Mot de passe oublié ?
+        </a>
+      </div>
+    </form>
+
+    <!-- Social Media Login -->
+    <div class="social-login">
+      <button nz-button nzType="default" nzSize="large" nzBlock (click)="onLoginWithGoogle()">
+        <i nz-icon nzType="google" nzTheme="outline"></i>
+        Connexion avec Google
+      </button>
+      <button nz-button nzType="default" nzSize="large" nzBlock (click)="onLoginWithFacebook()">
+        <i nz-icon nzType="facebook" nzTheme="outline"></i>
+        Connexion avec Facebook
+      </button>
+    </div>
+
+    <!-- Register Section -->
+    <div class="register-section">
+      <p>
+        J'ai pas encore de compte ?
+        <a (click)="onRegister()">Créer un compte</a>
+      </p>
+    </div>
+  </nz-card>
+</div>

@@ -1,0 +1,41 @@
+<div class="search-bar">
+  <!-- Search Input with Auto-Complete -->
+    <nz-input-group nzSize="large" [nzSuffix]="suffixIcon">
+      <input
+        placeholder="Rechercher ici"
+        nz-input
+        [(ngModel)]="inputValue"
+        (ngModelChange)="onSearchChange($event)"
+        [nzAutocomplete]="auto"
+       
+      />
+    </nz-input-group>
+    <ng-template #suffixIcon>
+      <i nz-icon nzType="search"></i>
+    </ng-template>
+
+    <nz-autocomplete #auto>
+      <nz-auto-optgroup
+        *ngFor="let group of filteredOptionGroups"
+        [nzLabel]="group.title"
+      >
+        <nz-auto-option
+          *ngFor="let option of group.children"
+          [nzValue]="option.title"
+        >
+        <div class="autocomplete-item">
+          <img [src]="option.imageUrl" alt="{{option.title}}" class="product-image"/>
+          <div class="item-details">
+            <span class="item-title">{{ option.title }}</span>
+            <span class="item-price">{{ option.price | currency:'USD' }}</span>
+          </div>
+        </div>
+        </nz-auto-option>
+      </nz-auto-optgroup>
+    </nz-autocomplete>
+
+  <!-- More Filter Button -->
+  <button nz-button nzType="default" class="filter-button" (click)="onFilterClick()">
+    <i nz-icon nzType="filter" nzTheme="outline"></i>
+  </button>
+</div>

@@ -1,0 +1,52 @@
+.service-card {
+    width: 100%;
+    margin-top: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+  
+    &:hover {
+      transform: translateY(-5px);
+    }
+  
+    .image-container {
+      position: relative;
+  
+      .service-image {
+        width: 100%;
+        height: auto;
+        min-height: 240px;
+        display: block;
+      }
+  
+      .card-info {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        padding: 12px;
+        text-align: center;
+  
+        .title {
+          margin: 0;
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: white;
+        }
+  
+        .availability {
+          margin: 8px 0;
+        }
+  
+        .location {
+          margin: 0;
+          font-size: 0.9rem;
+          color: #ddd;
+        }
+      }
+    }
+  }
+  

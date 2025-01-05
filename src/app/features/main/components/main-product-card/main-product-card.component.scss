@@ -1,0 +1,45 @@
+.product-card {
+    width: 240px;
+    text-align: center;
+
+    .image-container {
+      position: relative;
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+      .availability {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 4px;
+
+        &.available {
+          background-color: rgba(0, 128, 0, 0.8);
+        }
+        &.unavailable {
+          background-color: rgba(255, 0, 0, 0.8);
+        }
+      }
+    }
+
+    .actions {
+      margin-top: 16px;
+    }
+  }
+
+  .card-details{
+    position: relative;
+    button{
+      margin-top: 4px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding: 4px !important;
+    }
+  }

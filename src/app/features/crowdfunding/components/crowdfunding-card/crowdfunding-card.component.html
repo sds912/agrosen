@@ -1,0 +1,46 @@
+<a [href]="'/crowdfunding/'+crowdfunding.id">
+<nz-card
+  style="width: auto; margin-bottom: 20px;"
+  [nzCover]="coverTemplate"
+  [nzActions]="[actionDonate, actionShare, actionMore]"
+>
+  <nz-card-meta
+    [nzTitle]="crowdfunding.author"
+    [nzDescription]="crowdfunding.publishedAt | dateFormat"
+    [nzAvatar]="avatarTemplate"
+  ></nz-card-meta>
+  <div class="ant-card-meta-description">
+     {{crowdfunding.title}}
+  </div>
+  <div class="progress-container">
+    <nz-progress
+      [nzPercent]="getProgressPercentage()"
+      [nzStrokeColor]="'#52c41a'"
+      nzStrokeWidth="8"
+    ></nz-progress>
+  </div>
+
+  <ng-template #avatarTemplate>
+    <nz-avatar [nzSrc]="crowdfunding.authorAvatar"></nz-avatar>
+  </ng-template>
+
+  <ng-template #coverTemplate>
+    <img alt="Campaign Image" [src]="crowdfunding.image" />
+  </ng-template>
+
+  <ng-template #actionDonate>
+     <span class="fund-title">Collcté</span>
+     <span class="fund-value">{{crowdfunding.currentFund}} F cfa</span>
+  </ng-template>
+
+  <ng-template #actionShare>
+    <span class="fund-title">Visé</span>
+    <span class="fund-value">{{crowdfunding.targetFund}} F cfa</span>
+  </ng-template>
+
+  <ng-template #actionMore>
+    <span class="fund-title">Restant</span>
+    <span class="fund-value">{{crowdfunding.targetFund - crowdfunding.currentFund}} F cfa</span>
+  </ng-template>
+</nz-card>
+</a>

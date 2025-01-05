@@ -71,4 +71,11 @@ html, body{
     padding: 10px !important;
   }
   
+  .ant-drawer-content {
+    height: 100%;
+    overflow-y: scroll;
+  }
 
+  .ant-card-meta-detail > div:not(:last-child) {
+    margin-bottom: 20px;
+}

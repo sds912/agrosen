@@ -1,0 +1,53 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF;
+    color: #001529;
+    padding: 0 16px;
+  
+    .menu-icon {
+      font-size: 24px;
+      cursor: pointer;
+      color: #001529;
+    }
+  
+    .title {
+      font-size: 20px;
+      color: white;
+    }
+  
+    .actions {
+      display: flex;
+      align-items: center;
+  
+      nz-badge {
+        font-size: 24px;
+        cursor: pointer;
+        color: #001529;
+      }
+    }
+  }
+  
+ 
+
+  .drawer-menu {
+    list-style: none;
+    padding: 0;
+  
+    li {
+      padding: 10px 0;
+  
+      a {
+        text-decoration: none;
+        color: #1890ff;
+        font-size: 16px;
+      }
+    }
+  }
+  
+  
+
+ 
+  
+  
